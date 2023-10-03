@@ -40,16 +40,14 @@ function Login() {
                       <label className="form-label">Contraseña</label>
                     </div>
 
-                    <div className="text-center pt-1 mb-5 pb-1">
+                    <div className="text-center pt-1 mb-5 pb-1 d-flex flex-column">
                       <Button
                         text="Iniciar sesión"
                         bootstrap="btn btn-block fa-lg mb-3"
                         color="#73E2A7"
                         type="submit"
                       />
-                      <a className="link-primary" href="#!">
-                        Olvidé mi contraseña
-                      </a>
+                      <Link to="/recoverpwd">Olvidé mi contraseña</Link>
                     </div>
                   </form>
                 </div>
@@ -58,17 +56,17 @@ function Login() {
                 className="col-lg-6 d-flex flex-column"
                 style={{ backgroundColor: "#1C7C54" }}
               >
-                <div className="px-3 py-3 p-md-5 mx-md-4 align-items-center">
+                <div className="mt-4 img-fluid mx-auto">
                   <img
                     src={photo}
                     alt=""
                     className="rounded"
-                    style={{ width: "325px", height: "325px" }}
+                    style={{ width: "324px", height: "405px" }}
                   />
                 </div>
-                <div className="text-white px-3 py-1 p-md-1 mx-md-4">
+                <div className="px-3 py-1 mt-3">
                   <div className="d-flex flex-column align-items-center justify-content-center pb-4">
-                    <p className="mb-0 me-2 pb-4">
+                    <p className="fw-light text-white mb-1 me-2 pb-4">
                       ¿No tiene una cuenta?
                       <br />
                       Registrese aquí
@@ -76,7 +74,7 @@ function Login() {
                     <Link
                       to="/signup"
                       className="btn"
-                      style={{ backgroundColor: "#73E2A7" }}
+                      style={{ backgroundColor: "#73E2A7", width: "150px" }}
                     >
                       Registrarse
                     </Link>

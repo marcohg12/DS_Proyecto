@@ -9,6 +9,8 @@ const bodyParser = require("body-parser");
 
 const app = express();
 
+const users: Array<JSON> = [];
+
 // Configuraciones ------------------------------------------------------------------------------
 
 const port = 5000;
@@ -37,12 +39,14 @@ app.get("/", async (req: Request, res: Response) => {
   res.send("HOLA MUNDO");
 });
 
-app.post("/login", async (req: Request, res: Response) => {
-  console.log(req.body);
-});
+app.post("/login", async (req: Request, res: Response) => {});
 
 app.post("/signup", async (req: Request, res: Response) => {
-  console.log(req.body);
+  users.push(req.body);
+  console.log(users);
+  res.send(
+    JSON.stringify({ error: false, message: "Usuario registrado exitosamente" })
+  );
 });
 
 // -----------------------------------------------------------------------------------------------
