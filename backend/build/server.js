@@ -35,7 +35,11 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var express = require("express");
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var express_1 = __importDefault(require("express"));
 var cors = require("cors");
 var passport = require("passport");
 var passportLocal = require("passport-local").Strategy;
@@ -43,7 +47,8 @@ var cookieParser = require("cookie-parser");
 var bcrypt = require("bcryptjs");
 var session = require("express-session");
 var bodyParser = require("body-parser");
-var app = express();
+var app = (0, express_1.default)();
+var users = [];
 // Configuraciones ------------------------------------------------------------------------------
 var port = 5000;
 app.use(bodyParser.json());
@@ -65,15 +70,14 @@ app.get("/", function (req, res) { return __awaiter(void 0, void 0, void 0, func
         return [2 /*return*/];
     });
 }); });
-app.post("/login", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    return __generator(this, function (_a) {
-        console.log(req.body);
-        return [2 /*return*/];
-    });
-}); });
+app.post("/login", function (req, res) { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
+    return [2 /*return*/];
+}); }); });
 app.post("/signup", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
-        console.log(req.body);
+        users.push(req.body);
+        console.log(users);
+        res.send(JSON.stringify({ error: false, message: "Usuario registrado exitosamente" }));
         return [2 /*return*/];
     });
 }); });
