@@ -40,6 +40,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = __importDefault(require("express"));
+var constants_1 = __importDefault(require("constants"));
 var cors = require("cors");
 var passport = require("passport");
 var passportLocal = require("passport-local").Strategy;
@@ -47,8 +48,13 @@ var cookieParser = require("cookie-parser");
 var bcrypt = require("bcryptjs");
 var session = require("express-session");
 var bodyParser = require("body-parser");
+var mongoose = require('mongoose');
 var app = (0, express_1.default)();
 var users = [];
+console.log(typeof (constants_1.default));
+mongoose.createConnection('mongodb+srv://nottwithtt:Nicolita1998+@cluster0.gi2w4fi.mongodb.net/DS_Proyect?retryWrites=true&w=majority', { useNewUrlParser: true }).once('open', function () {
+    console.log('CONECTED');
+});
 // Configuraciones ------------------------------------------------------------------------------
 var port = 5000;
 app.use(bodyParser.json());
