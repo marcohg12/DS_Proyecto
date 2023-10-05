@@ -48,12 +48,14 @@ var cookieParser = require("cookie-parser");
 var bcrypt = require("bcryptjs");
 var session = require("express-session");
 var bodyParser = require("body-parser");
-var mongoose = require('mongoose');
+var mongoose = require("mongoose");
 var app = (0, express_1.default)();
 var users = [];
-console.log(typeof (constants_1.default));
-mongoose.createConnection('mongodb+srv://nottwithtt:Nicolita1998+@cluster0.gi2w4fi.mongodb.net/DS_Proyect?retryWrites=true&w=majority', { useNewUrlParser: true }).once('open', function () {
-    console.log('CONECTED');
+console.log(typeof constants_1.default);
+mongoose
+    .createConnection("mongodb+srv://nottwithtt:Nicolita1998+@cluster0.gi2w4fi.mongodb.net/DS_Proyect?retryWrites=true&w=majority", { useNewUrlParser: true })
+    .once("open", function () {
+    console.log("CONECTED");
 });
 // Configuraciones ------------------------------------------------------------------------------
 var port = 5000;
