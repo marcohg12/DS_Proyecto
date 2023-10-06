@@ -1,10 +1,14 @@
-import * as user_controller from "./user_admin";
-import { UserT } from "../schemas/user";
+import * as userController from "./user_admin";
 
 // Funciones de usuario ----------------------------------------------------------------
 
-export async function register_user(user: UserT) {
-  return await user_controller.register_user(user);
+export async function registerUser(
+  name: String,
+  email: String,
+  phone: String,
+  password: String
+) {
+  return await userController.registerUser(name, email, phone, password);
 }
 
 // Funciones de cliente ----------------------------------------------------------------

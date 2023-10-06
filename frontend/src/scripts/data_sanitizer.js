@@ -10,13 +10,13 @@ function capitalize(str) {
 }
 
 // Pone todo el nombre en minúscula expecto las primeras letras de cada palabra
-export function sanitize_name(name) {
+export function sanitizeName(name) {
   name = name.trim().replace(/\s+/g, " ");
   name = capitalize(name);
   return name;
 }
 
 // Pone todo el email en minúscula
-export function sanitize_email(email) {
-  return email.toLowerCase();
+export function sanitizeEmail(email) {
+  return email.trim().toLowerCase();
 }

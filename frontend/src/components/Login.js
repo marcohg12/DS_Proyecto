@@ -1,9 +1,42 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Button from "./Button";
 import photo from "../photos/Login_img_1.jpg";
+import axios from "axios";
+import { BACKEND_ROUTE } from "../scripts/constants";
+import { sanitizeEmail } from "../scripts/data_sanitizer";
+import MessageModal from "./MessageModal";
 
 function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const sendForm = (event) => {
+    event.preventDefault();
+
+    axios({
+      method: "post",
+      data: {
+        email: sanitizeEmail(email),
+        password: password,
+      },
+      withCredentials: true,
+      url: BACKEND_ROUTE + "/login",
+    }).then((res) => {
+      alert(res.data);
+    });
+  };
+
+  const get_user = () => {
+    axios({
+      method: "get",
+      withCredentials: true,
+      url: BACKEND_ROUTE + "/get_user",
+    }).then((res) => {
+      alert(res.data);
+    });
+  };
+
   return (
     <div className="container py-5 h-100">
       <div className="row d-flex justify-content-center align-items-center h-100">
@@ -16,7 +49,7 @@ function Login() {
                     <h1 className="mt-1 mb-5 pb-1">Sistema Duende</h1>
                   </div>
 
-                  <form>
+                  <form onSubmit={sendForm}>
                     <h5 className="mt-1 mb-3 pb-1">Iniciar sesión</h5>
 
                     <div className="form-outline mb-4">
@@ -25,6 +58,7 @@ function Login() {
                         id="login_email"
                         className="form-control"
                         placeholder="email@gmail.com"
+                        onChange={(e) => setEmail(e.target.value)}
                         required
                       />
                       <label className="form-label">Correo electrónico</label>
@@ -35,6 +69,7 @@ function Login() {
                         type="password"
                         id="login_password"
                         className="form-control"
+                        onChange={(e) => setPassword(e.target.value)}
                         required
                       />
                       <label className="form-label">Contraseña</label>

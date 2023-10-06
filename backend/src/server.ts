@@ -1,14 +1,13 @@
 const cors = require("cors");
-const passport = require("passport");
-const passportLocal = require("passport-local").Strategy;
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const bodyParser = require("body-parser");
+const passport = require("passport");
 import Database from "./mongo-config";
 const databaseInstance = Database;
-import express, { Request, Response } from "express";
-import { register_user } from "./controllers/controller";
-import { UserT } from "./schemas/user";
+import express from "express";
+import { registerUser } from "./controllers/controller";
+const initializePassport = require("./passport-config");
 
 const app = express();
 
@@ -33,19 +32,23 @@ app.use(
 );
 
 app.use(cookieParser("secretcode"));
+app.use(passport.initialize());
+app.use(passport.session());
+initializePassport(passport);
 
 // Rutas ----------------------------------------------------------------------------------------
 
-app.get("/", async (req: Request, res: Response) => {
-  res.send("HOLA MUNDO");
+app.post("/login", passport.authenticate("local"), async (req, res) => {
+  res.send("Inicio de sesión exitoso");
 });
 
-app.post("/login", async (req: Request, res: Response) => {});
+app.get("/get_user", async (req, res) => {
+  res.send(req.user);
+});
 
-app.post("/signup", async (req: Request, res: Response) => {
+app.post("/signup", async (req, res) => {
   const { name, email, phone, password } = req.body;
-  const user: UserT = { name, email, phone, password, role: 1 };
-  const response = await register_user(user);
+  const response = await registerUser(name, email, phone, password);
   res.send(JSON.stringify(response));
 });
 

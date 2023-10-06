@@ -1,8 +1,8 @@
 import React from "react";
 import ClientWindow from "./ClientWindow";
 import { Link } from "react-router-dom";
-import photo_1 from "../photos/ClientMenu_img_1.png";
-import photo_2 from "../photos/ClientMenu_img_2.jpg";
+import photo1 from "../photos/ClientMenu_img_1.png";
+import photo2 from "../photos/ClientMenu_img_2.jpg";
 
 function ClientMenu() {
   return (
@@ -22,7 +22,7 @@ function ClientMenu() {
               <b>Ver publicaciones</b>
             </Link>
             <img
-              src={photo_1}
+              src={photo1}
               alt=""
               style={{ width: "400px", height: "400px" }}
             />
@@ -35,7 +35,7 @@ function ClientMenu() {
               <b>Ver productos</b>
             </Link>
             <img
-              src={photo_2}
+              src={photo2}
               alt=""
               style={{ width: "400px", height: "400px" }}
             />

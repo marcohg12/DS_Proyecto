@@ -39,61 +39,43 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var cors = require("cors");
-var cookieParser = require("cookie-parser");
-var session = require("express-session");
-var bodyParser = require("body-parser");
-var passport = require("passport");
-var mongo_config_1 = __importDefault(require("./mongo-config"));
-var databaseInstance = mongo_config_1.default;
-var express_1 = __importDefault(require("express"));
-var controller_1 = require("./controllers/controller");
-var initialize_passport = require("./passport-config");
-var app = (0, express_1.default)();
-// Configuraciones ------------------------------------------------------------------------------
-var port = 5000;
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cors({
-    origin: "http://localhost:3000",
-    credentials: true,
-}));
-app.use(session({
-    secret: "secretcode",
-    resave: true,
-    saveUninitialized: true,
-}));
-app.use(cookieParser("secretcode"));
-app.use(passport.initialize());
-app.use(passport.session());
-initialize_passport(passport);
-// Rutas ----------------------------------------------------------------------------------------
-app.post("/login", passport.authenticate("local"), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    return __generator(this, function (_a) {
-        res.send("Autenticado exitosamente");
-        return [2 /*return*/];
+var bcrypt = require("bcryptjs");
+var local_strategy = require("passport-local").Strategy;
+var user_1 = __importDefault(require("./schemas/user"));
+function initialize(passport) {
+    var _this = this;
+    passport.use(new local_strategy(function (email, password, done) {
+        user_1.default.findOne({ email: email }, function (err, user) {
+            if (err)
+                throw err;
+            if (!user)
+                return done(null, false);
+            bcrypt.compare(password, user.password, function (err, result) {
+                if (err)
+                    throw err;
+                if (result === true) {
+                    return done(null, user);
+                }
+                else {
+                    return done(null, false);
+                }
+            });
+        });
+    }));
+    passport.serializeUser(function (user, done) {
+        done(null, user.email);
     });
-}); });
-app.get("/get_user", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    return __generator(this, function (_a) {
-        res.send(req.user);
-        return [2 /*return*/];
-    });
-}); });
-app.post("/signup", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, name, email, phone, password, user, response;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
-            case 0:
-                _a = req.body, name = _a.name, email = _a.email, phone = _a.phone, password = _a.password;
-                user = { name: name, email: email, phone: phone, password: password, role: 1 };
-                return [4 /*yield*/, (0, controller_1.register_user)(user)];
-            case 1:
-                response = _b.sent();
-                res.send(JSON.stringify(response));
-                return [2 /*return*/];
-        }
-    });
-}); });
-// -----------------------------------------------------------------------------------------------
-app.listen(port);
+    passport.deserializeUser(function (email, done) { return __awaiter(_this, void 0, void 0, function () {
+        var _a, _b;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
+                case 0:
+                    _a = done;
+                    _b = [null];
+                    return [4 /*yield*/, user_1.default.findOne({ email: email })];
+                case 1: return [2 /*return*/, _a.apply(void 0, _b.concat([_c.sent()]))];
+            }
+        });
+    }); });
+}
+module.exports = initialize;

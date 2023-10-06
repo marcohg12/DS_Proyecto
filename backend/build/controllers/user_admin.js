@@ -39,61 +39,50 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var cors = require("cors");
-var cookieParser = require("cookie-parser");
-var session = require("express-session");
-var bodyParser = require("body-parser");
-var passport = require("passport");
-var mongo_config_1 = __importDefault(require("./mongo-config"));
-var databaseInstance = mongo_config_1.default;
-var express_1 = __importDefault(require("express"));
-var controller_1 = require("./controllers/controller");
-var initialize_passport = require("./passport-config");
-var app = (0, express_1.default)();
-// Configuraciones ------------------------------------------------------------------------------
-var port = 5000;
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cors({
-    origin: "http://localhost:3000",
-    credentials: true,
-}));
-app.use(session({
-    secret: "secretcode",
-    resave: true,
-    saveUninitialized: true,
-}));
-app.use(cookieParser("secretcode"));
-app.use(passport.initialize());
-app.use(passport.session());
-initialize_passport(passport);
-// Rutas ----------------------------------------------------------------------------------------
-app.post("/login", passport.authenticate("local"), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    return __generator(this, function (_a) {
-        res.send("Autenticado exitosamente");
-        return [2 /*return*/];
+exports.register_user = void 0;
+var user_1 = __importDefault(require("../schemas/user"));
+var bcrypt = require("bcryptjs");
+function register_user(data) {
+    return __awaiter(this, void 0, void 0, function () {
+        var user_email, result, _a, new_user, err_1;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
+                case 0:
+                    user_email = data.email;
+                    _b.label = 1;
+                case 1:
+                    _b.trys.push([1, 7, , 8]);
+                    return [4 /*yield*/, user_1.default.findOne({ email: user_email })];
+                case 2:
+                    result = _b.sent();
+                    if (!result) return [3 /*break*/, 3];
+                    return [2 /*return*/, {
+                            error: true,
+                            message: "El correo electrónico ya se encuentra en uso",
+                        }];
+                case 3:
+                    _a = data;
+                    return [4 /*yield*/, bcrypt.hash(data.password, 10)];
+                case 4:
+                    _a.password = _b.sent();
+                    new_user = new user_1.default(data);
+                    return [4 /*yield*/, new_user.save()];
+                case 5:
+                    _b.sent();
+                    return [2 /*return*/, {
+                            error: false,
+                            message: "Usuario registrado exitosamente",
+                        }];
+                case 6: return [3 /*break*/, 8];
+                case 7:
+                    err_1 = _b.sent();
+                    return [2 /*return*/, {
+                            error: true,
+                            message: "Ocurrió un error inesperado, intente de nuevo",
+                        }];
+                case 8: return [2 /*return*/];
+            }
+        });
     });
-}); });
-app.get("/get_user", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    return __generator(this, function (_a) {
-        res.send(req.user);
-        return [2 /*return*/];
-    });
-}); });
-app.post("/signup", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, name, email, phone, password, user, response;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
-            case 0:
-                _a = req.body, name = _a.name, email = _a.email, phone = _a.phone, password = _a.password;
-                user = { name: name, email: email, phone: phone, password: password, role: 1 };
-                return [4 /*yield*/, (0, controller_1.register_user)(user)];
-            case 1:
-                response = _b.sent();
-                res.send(JSON.stringify(response));
-                return [2 /*return*/];
-        }
-    });
-}); });
-// -----------------------------------------------------------------------------------------------
-app.listen(port);
+}
+exports.register_user = register_user;
