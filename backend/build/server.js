@@ -48,7 +48,7 @@ var mongo_config_1 = __importDefault(require("./mongo-config"));
 var databaseInstance = mongo_config_1.default;
 var express_1 = __importDefault(require("express"));
 var controller_1 = require("./controllers/controller");
-var initialize_passport = require("./passport-config");
+var initializePassport = require("./passport-config");
 var app = (0, express_1.default)();
 // Configuraciones ------------------------------------------------------------------------------
 var port = 5000;
@@ -66,11 +66,11 @@ app.use(session({
 app.use(cookieParser("secretcode"));
 app.use(passport.initialize());
 app.use(passport.session());
-initialize_passport(passport);
+initializePassport(passport);
 // Rutas ----------------------------------------------------------------------------------------
 app.post("/login", passport.authenticate("local"), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
-        res.send("Autenticado exitosamente");
+        res.send("Inicio de sesión exitoso");
         return [2 /*return*/];
     });
 }); });
@@ -81,13 +81,12 @@ app.get("/get_user", function (req, res) { return __awaiter(void 0, void 0, void
     });
 }); });
 app.post("/signup", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, name, email, phone, password, user, response;
+    var _a, name, email, phone, password, response;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
                 _a = req.body, name = _a.name, email = _a.email, phone = _a.phone, password = _a.password;
-                user = { name: name, email: email, phone: phone, password: password, role: 1 };
-                return [4 /*yield*/, (0, controller_1.register_user)(user)];
+                return [4 /*yield*/, (0, controller_1.registerUser)(name, email, phone, password)];
             case 1:
                 response = _b.sent();
                 res.send(JSON.stringify(response));

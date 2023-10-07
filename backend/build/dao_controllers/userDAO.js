@@ -35,42 +35,77 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.registerUser = void 0;
-var userDAO_1 = require("../dao_controllers/userDAO");
+exports.getUserNoPwd = exports.getUserByEmail = exports.getUserByID = exports.registerUser = void 0;
+var userS_1 = __importDefault(require("../schemas/userS"));
 var bcrypt = require("bcryptjs");
+// Registrar un usuario --------------------------------------------------------
+// Por defecto lo registra como cliente, NO COMO ADMINISTRADOR
 function registerUser(name, email, phone, password) {
     return __awaiter(this, void 0, void 0, function () {
-        var result, err_1;
+        var hashedPassword, user;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0:
-                    _a.trys.push([0, 5, , 6]);
-                    return [4 /*yield*/, (0, userDAO_1.getUserByEmail)(email)];
+                case 0: return [4 /*yield*/, bcrypt.hash(password, 10)];
                 case 1:
-                    result = _a.sent();
-                    if (!result) return [3 /*break*/, 2];
-                    return [2 /*return*/, {
-                            error: true,
-                            message: "El correo electrónico ya se encuentra en uso",
-                        }];
-                case 2: return [4 /*yield*/, (0, userDAO_1.registerUser)(name, email, phone, password)];
-                case 3:
-                    _a.sent();
-                    return [2 /*return*/, {
-                            error: false,
-                            message: "Usuario registrado exitosamente",
-                        }];
-                case 4: return [3 /*break*/, 6];
-                case 5:
-                    err_1 = _a.sent();
-                    return [2 /*return*/, {
-                            error: true,
-                            message: "Ocurrió un error inesperado, intente de nuevo",
-                        }];
-                case 6: return [2 /*return*/];
+                    hashedPassword = _a.sent();
+                    user = new userS_1.default({
+                        name: name,
+                        email: email,
+                        phone: phone,
+                        password: hashedPassword,
+                        role: 1,
+                    });
+                    return [4 /*yield*/, user.save()];
+                case 2: return [2 /*return*/, _a.sent()];
             }
         });
     });
 }
 exports.registerUser = registerUser;
+// Obtener un usuario por id ---------------------------------------------------
+function getUserByID(id) {
+    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
+        return [2 /*return*/];
+    }); });
+}
+exports.getUserByID = getUserByID;
+// Obtener un usuario por email ------------------------------------------------
+function getUserByEmail(email) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, userS_1.default.findOne({ email: email })];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+exports.getUserByEmail = getUserByEmail;
+// Obtiene un usuario por email pero no retorna la contraseña del usuario
+function getUserNoPwd(email) {
+    return __awaiter(this, void 0, void 0, function () {
+        var user;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, userS_1.default.findOne({ email: email })];
+                case 1:
+                    user = _a.sent();
+                    if (user == null) {
+                        return [2 /*return*/, null];
+                    }
+                    return [2 /*return*/, {
+                            id: user._id,
+                            name: user.name,
+                            email: user.email,
+                            phone: user.phone,
+                            role: user.role,
+                        }];
+            }
+        });
+    });
+}
+exports.getUserNoPwd = getUserNoPwd;

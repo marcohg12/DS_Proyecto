@@ -59,19 +59,19 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.register_user = void 0;
-var user_controller = __importStar(require("./user_admin"));
+exports.registerUser = void 0;
+var userController = __importStar(require("./user_admin"));
 // Funciones de usuario ----------------------------------------------------------------
-function register_user(user) {
+function registerUser(name, email, phone, password) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, user_controller.register_user(user)];
+                case 0: return [4 /*yield*/, userController.registerUser(name, email, phone, password)];
                 case 1: return [2 /*return*/, _a.sent()];
             }
         });
     });
 }
-exports.register_user = register_user;
+exports.registerUser = registerUser;
 // Funciones de cliente ----------------------------------------------------------------
 // Funciones de administrador ----------------------------------------------------------

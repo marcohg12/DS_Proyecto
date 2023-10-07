@@ -35,42 +35,67 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.registerUser = void 0;
-var userDAO_1 = require("../dao_controllers/userDAO");
-var bcrypt = require("bcryptjs");
-function registerUser(name, email, phone, password) {
+exports.deleteProduct = exports.registerProduct = exports.getProducts = exports.getProduct = void 0;
+var productS_1 = __importDefault(require("../schemas/productS"));
+//Obtener un producto por su id
+function getProduct(id_product) {
     return __awaiter(this, void 0, void 0, function () {
-        var result, err_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0:
-                    _a.trys.push([0, 5, , 6]);
-                    return [4 /*yield*/, (0, userDAO_1.getUserByEmail)(email)];
-                case 1:
-                    result = _a.sent();
-                    if (!result) return [3 /*break*/, 2];
-                    return [2 /*return*/, {
-                            error: true,
-                            message: "El correo electrónico ya se encuentra en uso",
-                        }];
-                case 2: return [4 /*yield*/, (0, userDAO_1.registerUser)(name, email, phone, password)];
-                case 3:
-                    _a.sent();
-                    return [2 /*return*/, {
-                            error: false,
-                            message: "Usuario registrado exitosamente",
-                        }];
-                case 4: return [3 /*break*/, 6];
-                case 5:
-                    err_1 = _a.sent();
-                    return [2 /*return*/, {
-                            error: true,
-                            message: "Ocurrió un error inesperado, intente de nuevo",
-                        }];
-                case 6: return [2 /*return*/];
+                case 0: return [4 /*yield*/, productS_1.default.findOne({ _id: id_product })];
+                case 1: return [2 /*return*/, _a.sent()];
             }
         });
     });
 }
-exports.registerUser = registerUser;
+exports.getProduct = getProduct;
+//Obtener todos los productos
+function getProducts() {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, productS_1.default.find()];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+exports.getProducts = getProducts;
+//Registrar un producto
+function registerProduct(name, description, units, photo) {
+    return __awaiter(this, void 0, void 0, function () {
+        var product;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    product = new productS_1.default({
+                        name: name,
+                        description: description,
+                        units: units,
+                        photo: photo
+                    });
+                    return [4 /*yield*/, product.save()];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+exports.registerProduct = registerProduct;
+/*Por aqui deben ir los de editar*/
+//Elimina un producto
+//Note: Delete one returns an object with deletedCount(number of docs deleted) field
+function deleteProduct(id_product) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, productS_1.default.deleteOne({ _id: id_product })];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+exports.deleteProduct = deleteProduct;
