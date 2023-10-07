@@ -16,8 +16,8 @@ export async function getPublicationsByCategory(id_category:String){
 }
 
 //Se trae las publicaciones por los tags
-export async function getPublicationsByTags(){
-    return;
+export async function getPublicationsByTags(tags: string[]){
+    return await Publication.find({tags : {$in: tags}});
 }
 
 export async function registerPublication(category:String, date:Date, description:String,
@@ -35,6 +35,16 @@ photo:String,tags: string[]){
 }
 
 //Faltan los de edit
+
+export async function editPublication(id_publication:String,category:String,date:Date,
+    description:String,photo:String,tags: string[]){
+
+    return await Publication.updateOne({_id:id_publication},{category: category,
+        date: date,
+        description: description,
+        photo: photo,
+        tags: tags})
+    }
 
 
 //Elimina una publicacion por su id

@@ -39,7 +39,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deletePublication = exports.registerPublication = exports.getPublicationsByTags = exports.getPublicationsByCategory = exports.getPublications = exports.getPublication = void 0;
+exports.deletePublication = exports.editPublication = exports.registerPublication = exports.getPublicationsByTags = exports.getPublicationsByCategory = exports.getPublications = exports.getPublication = void 0;
 var publicationS_1 = __importDefault(require("../schemas/publicationS"));
 //Se trae una publicacion por su id
 function getPublication(id_publication) {
@@ -78,10 +78,13 @@ function getPublicationsByCategory(id_category) {
 }
 exports.getPublicationsByCategory = getPublicationsByCategory;
 //Se trae las publicaciones por los tags
-function getPublicationsByTags() {
+function getPublicationsByTags(tags) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
-            return [2 /*return*/];
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, publicationS_1.default.find({ tags: { $in: tags } })];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
         });
     });
 }
@@ -107,6 +110,21 @@ function registerPublication(category, date, description, photo, tags) {
 }
 exports.registerPublication = registerPublication;
 //Faltan los de edit
+function editPublication(id_publication, category, date, description, photo, tags) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, publicationS_1.default.updateOne({ _id: id_publication }, { category: category,
+                        date: date,
+                        description: description,
+                        photo: photo,
+                        tags: tags })];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+exports.editPublication = editPublication;
 //Elimina una publicacion por su id
 function deletePublication(id_publication) {
     return __awaiter(this, void 0, void 0, function () {

@@ -27,6 +27,15 @@ export async function registerProduct (name:String, description:String, units:Nu
 
  /*Por aqui deben ir los de editar*/
 
+ export async function editProduct(id_product:String,name:String,description:String,
+    units:Number,photo:String){
+
+        return await Product.updateOne({_id:id_product},{name:name,
+        description: description,
+        units: units,
+        photo: photo});
+ }
+
  
 
  //Elimina un producto

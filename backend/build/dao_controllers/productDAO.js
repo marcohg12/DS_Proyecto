@@ -39,7 +39,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteProduct = exports.registerProduct = exports.getProducts = exports.getProduct = void 0;
+exports.deleteProduct = exports.editProduct = exports.registerProduct = exports.getProducts = exports.getProduct = void 0;
 var productS_1 = __importDefault(require("../schemas/productS"));
 //Obtener un producto por su id
 function getProduct(id_product) {
@@ -86,6 +86,20 @@ function registerProduct(name, description, units, photo) {
 }
 exports.registerProduct = registerProduct;
 /*Por aqui deben ir los de editar*/
+function editProduct(id_product, name, description, units, photo) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, productS_1.default.updateOne({ _id: id_product }, { name: name,
+                        description: description,
+                        units: units,
+                        photo: photo })];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+exports.editProduct = editProduct;
 //Elimina un producto
 //Note: Delete one returns an object with deletedCount(number of docs deleted) field
 function deleteProduct(id_product) {
