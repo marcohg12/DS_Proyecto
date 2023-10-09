@@ -2,8 +2,8 @@ import { Schema, InferSchemaType } from "mongoose";
 import mongoose from "mongoose";
 
 const categorySchema: Schema = new Schema({
-  idCategory: { type: String, required: true },
   name: { type: String, required: true },
+  fatherCategory: {type: String}
 });
 
 export type CategoryT = InferSchemaType<typeof categorySchema>;

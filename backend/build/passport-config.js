@@ -39,29 +39,45 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var passport_local_1 = __importDefault(require("passport-local"));
+var userDAO_1 = require("./dao_controllers/userDAO");
+var LocalStrategy = passport_local_1.default.Strategy;
 var bcrypt = require("bcryptjs");
-var local_strategy = require("passport-local").Strategy;
-var user_1 = __importDefault(require("./schemas/user"));
 function initialize(passport) {
     var _this = this;
-    passport.use(new local_strategy(function (email, password, done) {
-        user_1.default.findOne({ email: email }, function (err, user) {
-            if (err)
-                throw err;
-            if (!user)
-                return done(null, false);
-            bcrypt.compare(password, user.password, function (err, result) {
-                if (err)
-                    throw err;
-                if (result === true) {
-                    return done(null, user);
-                }
-                else {
-                    return done(null, false);
-                }
-            });
+    passport.use(new LocalStrategy({ usernameField: "email", passwordField: "password" }, function (email, password, done) { return __awaiter(_this, void 0, void 0, function () {
+        var user, error_1;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, (0, userDAO_1.getUserByEmail)(email)];
+                case 1:
+                    user = _a.sent();
+                    if (user == null) {
+                        return [2 /*return*/, done(null, false, {
+                                message: "Usuario y/o contraseña incorrectos",
+                            })];
+                    }
+                    _a.label = 2;
+                case 2:
+                    _a.trys.push([2, 4, , 5]);
+                    return [4 /*yield*/, bcrypt.compare(password, user.password)];
+                case 3:
+                    if (_a.sent()) {
+                        return [2 /*return*/, done(null, user)];
+                    }
+                    else {
+                        return [2 /*return*/, done(null, false, {
+                                message: "Usuario y/o contraseña incorrectos",
+                            })];
+                    }
+                    return [3 /*break*/, 5];
+                case 4:
+                    error_1 = _a.sent();
+                    return [2 /*return*/, done(error_1)];
+                case 5: return [2 /*return*/];
+            }
         });
-    }));
+    }); }));
     passport.serializeUser(function (user, done) {
         done(null, user.email);
     });
@@ -72,7 +88,7 @@ function initialize(passport) {
                 case 0:
                     _a = done;
                     _b = [null];
-                    return [4 /*yield*/, user_1.default.findOne({ email: email })];
+                    return [4 /*yield*/, (0, userDAO_1.getUserNoPwd)(email)];
                 case 1: return [2 /*return*/, _a.apply(void 0, _b.concat([_c.sent()]))];
             }
         });
