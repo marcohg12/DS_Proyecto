@@ -5,7 +5,7 @@ function ClientWindow({ children }) {
   return (
     <section>
       <ClientNavbar></ClientNavbar>
-      <section class="mb-4 mt-4">
+      <section className="mb-4 mt-4">
         <div className="container" id="client_window">
           {children}
         </div>

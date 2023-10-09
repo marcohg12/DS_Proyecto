@@ -39,7 +39,7 @@ initializePassport(passport);
 // Rutas ----------------------------------------------------------------------------------------
 
 app.post("/login", passport.authenticate("local"), async (req, res) => {
-  res.send("Inicio de sesión exitoso");
+  res.send(JSON.stringify({ error: false, message: "SUCCESS_LOGIN" }));
 });
 
 app.get("/get_user", async (req, res) => {
@@ -50,6 +50,12 @@ app.post("/signup", async (req, res) => {
   const { name, email, phone, password } = req.body;
   const response = await registerUser(name, email, phone, password);
   res.send(JSON.stringify(response));
+});
+
+app.get("/logout", (req, res) => {
+  req.logOut(function () {
+    res.send(JSON.stringify({ error: false, message: "SUCCESS_LOGOUT" }));
+  });
 });
 
 // -----------------------------------------------------------------------------------------------

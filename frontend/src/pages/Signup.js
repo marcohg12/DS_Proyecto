@@ -1,10 +1,10 @@
 import { React, useState } from "react";
 import { Link } from "react-router-dom";
-import Button from "./Button";
+import Button from "../components/Button";
 import axios from "axios";
 import { sanitizeName, sanitizeEmail } from "../scripts/data_sanitizer";
 import { BACKEND_ROUTE } from "../scripts/constants";
-import MessageModal from "./MessageModal";
+import MessageModal from "../components/MessageModal";
 
 function Signup() {
   const [name, setName] = useState("");
@@ -76,7 +76,7 @@ function Signup() {
     registerUser(sanitizedName, sanitizedEmail, phone, password1);
   };
 
-  const close_modal = () => {
+  const closeModal = () => {
     setShowModal(false);
   };
 
@@ -85,7 +85,7 @@ function Signup() {
       <MessageModal
         message={modalMessage}
         is_open={showModal}
-        close={close_modal}
+        close={closeModal}
         error={error}
       ></MessageModal>
       <div className="row d-flex justify-content-center align-items-center h-100">

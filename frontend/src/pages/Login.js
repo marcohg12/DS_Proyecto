@@ -1,15 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
-import Button from "./Button";
+import Button from "../components/Button";
 import photo from "../photos/Login_img_1.jpg";
 import axios from "axios";
 import { BACKEND_ROUTE } from "../scripts/constants";
 import { sanitizeEmail } from "../scripts/data_sanitizer";
-import MessageModal from "./MessageModal";
+import MessageModal from "../components/MessageModal";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const [error, setError] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
 
   const sendForm = (event) => {
     event.preventDefault();
@@ -22,23 +25,41 @@ function Login() {
       },
       withCredentials: true,
       url: BACKEND_ROUTE + "/login",
-    }).then((res) => {
-      alert(res.data);
-    });
+    }).then(
+      (res) => {
+        handleResponse(res.data);
+      },
+      () => {
+        handleResponse({
+          error: true,
+          message: "Usuario y/o contraseña incorrectos",
+        });
+      }
+    );
   };
 
-  const get_user = () => {
-    axios({
-      method: "get",
-      withCredentials: true,
-      url: BACKEND_ROUTE + "/get_user",
-    }).then((res) => {
-      alert(res.data);
-    });
+  const handleResponse = (response) => {
+    if (response.error) {
+      setModalMessage(response.message);
+      setShowModal(true);
+      setError(true);
+    } else {
+      window.location.href = "/login";
+    }
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
   };
 
   return (
     <div className="container py-5 h-100">
+      <MessageModal
+        message={modalMessage}
+        is_open={showModal}
+        close={closeModal}
+        error={error}
+      ></MessageModal>
       <div className="row d-flex justify-content-center align-items-center h-100">
         <div className="col-xl-10">
           <div className="card rounded-3 text-black">

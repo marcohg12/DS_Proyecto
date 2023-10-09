@@ -1,8 +1,20 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Button from "./Button";
+import { BACKEND_ROUTE } from "../scripts/constants";
+import Axios from "axios";
 
 function ClientNavbar() {
+  const logout = () => {
+    Axios.get(BACKEND_ROUTE + "/logout", {
+      withCredentials: true,
+    }).then((res) => {
+      if (res.data.error === false) {
+        window.location.href = "/";
+      }
+    });
+  };
+
   return (
     <nav
       className="navbar navbar-expand-lg"
@@ -35,14 +47,13 @@ function ClientNavbar() {
             color="#73E2A7"
             width="150px"
           ></Button>
-          <form method="POST" action="/logout" className="ms-4">
-            <Button
-              text="Cerrar sesión"
-              bootstrap="btn mx-2"
-              color="#73E2A7"
-              width="150px"
-            ></Button>
-          </form>
+          <Button
+            text="Cerrar sesión"
+            bootstrap="btn mx-2"
+            color="#73E2A7"
+            width="150px"
+            onclickHandler={logout}
+          ></Button>
         </div>
       </div>
     </nav>
