@@ -20,7 +20,7 @@ function ClientMenu() {
       <div className="row">
         <div className="col d-flex flex-column align-items-center">
           <div className="d-flex flex-column">
-            <Link className="link-dark fs-4 mb-4">
+            <Link to="/client_publications" className="link-dark fs-4 mb-4">
               <b>Ver publicaciones</b>
             </Link>
             <img
@@ -33,7 +33,7 @@ function ClientMenu() {
         </div>
         <div className="col d-flex flex-column align-items-center">
           <div className="d-flex flex-column">
-            <Link className="link-dark fs-4 mb-4">
+            <Link to="/client_products" className="link-dark fs-4 mb-4">
               <b>Ver productos</b>
             </Link>
             <img

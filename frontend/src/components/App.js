@@ -5,6 +5,11 @@ import Signup from "../pages/Signup";
 import ClientMenu from "../pages/ClientMenu";
 import { appContext } from "../context";
 import Protected from "./Protected";
+import AdminMenu from "../pages/AdminMenu";
+import ProductViewer from "../pages/ProductViewer";
+import ProductEdit from "../pages/ProductEdit";
+import ProductView from "../pages/ProductView";
+import PublicationViewer from "../pages/PublicationViewer";
 
 function App() {
   const ctx = useContext(appContext);
@@ -21,10 +26,66 @@ function App() {
           }
         />
         <Route
-          path="/"
+          path="/create_product"
           element={
-            <Protected ctx={ctx} loggedIn={false} forRole={null}>
-              <Login />
+            <Protected ctx={ctx} loggedIn={true} forRole={2}>
+              <ProductEdit toCreate={true} backRoute="/admin_menu" />
+            </Protected>
+          }
+        />
+        <Route
+          path="/edit_product"
+          element={
+            <Protected ctx={ctx} loggedIn={true} forRole={2}>
+              <ProductEdit toCreate={false} backRoute="/admin_products" />
+            </Protected>
+          }
+        />
+        <Route
+          path="/view_product"
+          element={
+            <Protected ctx={ctx} loggedIn={true} forRole={1}>
+              <ProductView />
+            </Protected>
+          }
+        />
+        <Route
+          path="/admin_products"
+          element={
+            <Protected ctx={ctx} loggedIn={true} forRole={2}>
+              <ProductViewer forUser={"admin"} />
+            </Protected>
+          }
+        />
+        <Route
+          path="/client_products"
+          element={
+            <Protected ctx={ctx} loggedIn={true} forRole={1}>
+              <ProductViewer forUser={"client"} />
+            </Protected>
+          }
+        />
+        <Route
+          path="/admin_publications"
+          element={
+            <Protected ctx={ctx} loggedIn={true} forRole={2}>
+              <PublicationViewer forUser={"admin"} />
+            </Protected>
+          }
+        />
+        <Route
+          path="/client_publications"
+          element={
+            <Protected ctx={ctx} loggedIn={true} forRole={1}>
+              <PublicationViewer forUser={"client"} />
+            </Protected>
+          }
+        />
+        <Route
+          path="/admin_menu"
+          element={
+            <Protected ctx={ctx} loggedIn={true} forRole={2}>
+              <AdminMenu />
             </Protected>
           }
         />
@@ -40,6 +101,15 @@ function App() {
           path="/login"
           element={
             <Protected ctx={ctx} loggedIn={false} forRole={null}></Protected>
+          }
+        />
+        <Route
+          exact
+          path="/"
+          element={
+            <Protected ctx={ctx} loggedIn={false} forRole={null}>
+              <Login />
+            </Protected>
           }
         />
       </Routes>

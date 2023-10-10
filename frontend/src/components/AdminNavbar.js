@@ -4,7 +4,7 @@ import Button from "./Button";
 import { BACKEND_ROUTE } from "../scripts/constants";
 import Axios from "axios";
 
-function ClientNavbar() {
+function AdminNavbar() {
   const logout = () => {
     Axios.get(BACKEND_ROUTE + "/logout", {
       withCredentials: true,
@@ -24,25 +24,9 @@ function ClientNavbar() {
         <div className="collapse navbar-collapse">
           <ul className="navbar-nav me-auto mb-3 mb-lg-3">
             <li className="nav-item me-4 mt-3">
-              <Link to="/client_menu" className="nav-link text-white">
+              <Link to="/admin_menu" className="nav-link text-white">
                 Menú principal
               </Link>
-            </li>
-            <li className="nav-item me-4 mt-3">
-              <Link to="/client_products" className="nav-link text-white">
-                Productos
-              </Link>
-            </li>
-            <li className="nav-item me-4 mt-3">
-              <Link to="/client_publications" className="nav-link text-white">
-                Publicaciones
-              </Link>
-            </li>
-            <li className="nav-item me-4 mt-3">
-              <Link className="nav-link text-white">Mi carrito</Link>
-            </li>
-            <li className="nav-item me-4 mt-3">
-              <Link className="nav-link text-white">Mis pedidos</Link>
             </li>
           </ul>
         </div>
@@ -66,4 +50,4 @@ function ClientNavbar() {
   );
 }
 
-export default ClientNavbar;
+export default AdminNavbar;
