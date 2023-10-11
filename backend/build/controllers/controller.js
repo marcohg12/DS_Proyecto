@@ -59,8 +59,10 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.registerUser = void 0;
+exports.registerSubCategory = exports.deleteCategory = exports.getSubCategories = exports.getCategories = exports.editCategory = exports.registerCategory = exports.getCart = exports.registerUser = void 0;
 var userController = __importStar(require("./user_admin"));
+var cartController = __importStar(require("./cart_admin"));
+var categoryController = __importStar(require("./category_admin"));
 // Funciones de usuario ----------------------------------------------------------------
 function registerUser(name, email, phone, password) {
     return __awaiter(this, void 0, void 0, function () {
@@ -74,4 +76,84 @@ function registerUser(name, email, phone, password) {
 }
 exports.registerUser = registerUser;
 // Funciones de cliente ----------------------------------------------------------------
+function getCart(idUser) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, cartController.getCart(idUser)];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+exports.getCart = getCart;
 // Funciones de administrador ----------------------------------------------------------
+/*------------------------------------------
+ Funciones de categorías
+ -------------------------------------------*/
+function registerCategory(name) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, categoryController.registerCategory(name)];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+exports.registerCategory = registerCategory;
+function editCategory(id_category, newName) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, categoryController.editCategory(id_category, newName)];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+exports.editCategory = editCategory;
+function getCategories() {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, categoryController.getCategories()];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+exports.getCategories = getCategories;
+function getSubCategories(fatherCategory) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, categoryController.getSubCategories(fatherCategory)];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+exports.getSubCategories = getSubCategories;
+function deleteCategory(id_category) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, categoryController.deleteCategory(id_category)];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+exports.deleteCategory = deleteCategory;
+function registerSubCategory(name, fatherCategory) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, categoryController.registerSubCategory(name, fatherCategory)];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+exports.registerSubCategory = registerSubCategory;

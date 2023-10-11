@@ -7,6 +7,8 @@ import Database from "./mongo-config";
 const databaseInstance = Database;
 import express from "express";
 import { registerUser } from "./controllers/controller";
+import { registerCategory,editCategory,getCategories,deleteCategory,
+registerSubCategory} from "./controllers/controller";
 const initializePassport = require("./passport-config");
 
 const app = express();
@@ -61,5 +63,34 @@ app.get("/logout", (req, res) => {
 });
 
 // -----------------------------------------------------------------------------------------------
+app.get("/registerCategory",async (req,res)=>{
+  const response = await registerCategory("Peliculas");
+  console.log(response);
+  res.send(JSON.stringify(response));
+})
+
+app.get("/editCategory",async (req,res)=>{
+  const response = await editCategory("6525eff3441aa2df65dc65f9","Series");
+  console.log(response);
+  res.send(JSON.stringify(response));
+})
+
+app.get("/getAllCategories", async (req,res)=>{
+  const response = await getCategories();
+  console.log(response);
+  res.send(JSON.stringify(response));
+})
+
+app.get("/registerSub",async (req,res)=>{
+  const response = await registerSubCategory("Marvel","6525eff3441aa2df65dc65f9");
+  console.log(response);
+  res.send(JSON.stringify(response));
+})
+
+app.get("/deleteSubcategory",async (req,res)=>{
+  const response = await deleteCategory("6525eff3441aa2df65dc65f9");
+  console.log(response);
+  res.send(JSON.stringify(response));
+})
 
 app.listen(port);
