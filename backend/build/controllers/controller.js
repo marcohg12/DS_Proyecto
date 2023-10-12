@@ -59,8 +59,10 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.registerUser = void 0;
+exports.getProducts = exports.registerProduct = exports.getCart = exports.registerUser = void 0;
 var userController = __importStar(require("./user_admin"));
+var cartController = __importStar(require("./cart_admin"));
+var productController = __importStar(require("./productAdmin"));
 // Funciones de usuario ----------------------------------------------------------------
 function registerUser(name, email, phone, password) {
     return __awaiter(this, void 0, void 0, function () {
@@ -73,5 +75,38 @@ function registerUser(name, email, phone, password) {
     });
 }
 exports.registerUser = registerUser;
-// Funciones de cliente ----------------------------------------------------------------
-// Funciones de administrador ----------------------------------------------------------
+// Funciones de carrito ----------------------------------------------------------------
+function getCart(idUser) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, cartController.getCart(idUser)];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+exports.getCart = getCart;
+// Funciones de productos --------------------------------------------------------------
+function registerProduct(name, description, units, price, photoPath) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, productController.registerProduct(name, description, units, price, photoPath)];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+exports.registerProduct = registerProduct;
+function getProducts() {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, productController.getProducts()];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+exports.getProducts = getProducts;

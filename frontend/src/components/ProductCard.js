@@ -1,7 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { BACKEND_ROUTE } from "../scripts/constants";
 
-function ProductCard({ id, name, price, toLink }) {
+function ProductCard({ id, photo, name, price, toLink }) {
   return (
     <Link
       to={toLink}
@@ -14,9 +15,13 @@ function ProductCard({ id, name, price, toLink }) {
           data-mdb-ripple-color="light"
         >
           <img
-            src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/E-commerce/Products/img%20(17).webp"
+            src={BACKEND_ROUTE + photo}
             className="w-100"
             alt=""
+            style={{
+              maxHeight: "400px",
+              maxWidth: "415px",
+            }}
           />
           <div className="mask">
             <div className="d-flex justify-content-start align-items-end h-100"></div>

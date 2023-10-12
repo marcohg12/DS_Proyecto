@@ -1,16 +1,86 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Button from "../components/Button";
 import AdminWindow from "../components/AdminWindow";
+import { BACKEND_ROUTE } from "../scripts/constants";
+import axios from "axios";
+import MessageModal from "../components/MessageModal";
 
 function ProductEdit({ toCreate, backRoute }) {
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [units, setUnits] = useState(0);
+  const [price, setPrice] = useState(0);
+  const [photo, setPhoto] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [error, setError] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+
+  //const getProduct = () => {};
+
+  const registerProduct = (event) => {
+    event.preventDefault();
+    console.log(photo);
+    axios({
+      method: "post",
+      data: {
+        name: name,
+        description: description,
+        units: units,
+        price: price,
+        photo: photo,
+      },
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      withCredentials: true,
+      url: BACKEND_ROUTE + "/admin/register_product",
+    }).then((res) => {
+      handleResponse(res.data);
+    });
+  };
+
+  //const deleteProduct = () => {};
+
+  const handleResponse = (response) => {
+    if (response.error) {
+      setError(true);
+    } else {
+      setError(false);
+    }
+    setModalMessage(response.message);
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+    window.location.reload();
+  };
+
   return (
     <AdminWindow>
+      <MessageModal
+        message={modalMessage}
+        is_open={showModal}
+        close={closeModal}
+        error={error}
+      ></MessageModal>
       <div className="row mt-4 mb-4">
-        <div className="mt-4 col-md-6 d-flex flex-column">
+        <div
+          className="mt-4 col-md-6 d-flex flex-column"
+          style={{ maxHeight: "487px" }}
+        >
           <img
-            src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/310px-Placeholder_view_vector.svg.png"
-            className="img-fluid rounded "
+            src={
+              photo
+                ? URL.createObjectURL(photo)
+                : "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/310px-Placeholder_view_vector.svg.png"
+            }
+            className="img-fluid rounded"
+            style={{
+              height: "100%",
+              objectFit: "contain",
+            }}
             alt=""
           />
         </div>
@@ -18,12 +88,17 @@ function ProductEdit({ toCreate, backRoute }) {
           <h3 className="mb-4">
             {toCreate ? "Crear Producto" : "Editar Producto"}
           </h3>
-          <form>
+          <form onSubmit={registerProduct}>
             <div className="row mb-4">
               <div className="col mb-4">
                 <div>
                   <label className="form-label">Nombre</label>
-                  <input type="text" className="form-control" required />
+                  <input
+                    type="text"
+                    className="form-control"
+                    onChange={(e) => setName(e.target.value)}
+                    required
+                  />
                 </div>
               </div>
               <div className="col mb-4">
@@ -34,6 +109,7 @@ function ProductEdit({ toCreate, backRoute }) {
                     className="form-control"
                     min="0"
                     defaultValue="0"
+                    onChange={(e) => setPrice(e.target.value)}
                     required
                   />
                 </div>
@@ -42,7 +118,11 @@ function ProductEdit({ toCreate, backRoute }) {
             <div className="row mb-4">
               <div className="mb-4">
                 <label className="form-label">Descripción</label>
-                <textarea className="form-control" required />
+                <textarea
+                  className="form-control"
+                  onChange={(e) => setDescription(e.target.value)}
+                  required
+                />
               </div>
             </div>
             <div className="row mb-4">
@@ -54,6 +134,7 @@ function ProductEdit({ toCreate, backRoute }) {
                     className="form-control"
                     min="0"
                     defaultValue="0"
+                    onChange={(e) => setUnits(e.target.value)}
                     required
                   />
                 </div>
@@ -62,12 +143,27 @@ function ProductEdit({ toCreate, backRoute }) {
                 {toCreate ? (
                   <div>
                     <label className="form-label">Foto</label>
-                    <input type="file" className="form-control" required />
+                    <input
+                      type="file"
+                      className="form-control"
+                      onChange={(e) =>
+                        setPhoto(e.target.files ? e.target.files[0] : null)
+                      }
+                      accept=".png,.jpg,.jpeg"
+                      required
+                    />
                   </div>
                 ) : (
                   <div>
                     <label className="form-label">Foto</label>
-                    <input type="file" className="form-control" />
+                    <input
+                      type="file"
+                      onChange={(e) =>
+                        setPhoto(e.target.files ? e.target.files[0] : null)
+                      }
+                      className="form-control"
+                      accept=".png,.jpg,.jpeg"
+                    />
                   </div>
                 )}
               </div>
