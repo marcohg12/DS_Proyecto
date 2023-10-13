@@ -75,15 +75,13 @@ initializePassport(passport);
 // Rutas ----------------------------------------------------------------------------------------
 app.post("/login", passport.authenticate("local"), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
-        console.log("AQUI");
         res.send(JSON.stringify({ error: false, message: "SUCCESS_LOGIN" }));
         return [2 /*return*/];
     });
 }); });
 app.get("/get_user", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
-        console.log(req.user);
-        res.send(req.user);
+        res.send(JSON.stringify(req.user));
         return [2 /*return*/];
     });
 }); });
@@ -172,4 +170,8 @@ app.get("/deleteSubcategory", function (req, res) { return __awaiter(void 0, voi
         }
     });
 }); });
+app.use("/admin", adminRouter);
+app.use("/general", generalRouter);
+//app.use("/client", clientRouter);
+app.use("/photos/products", expressStatic("./photos/products"));
 app.listen(port);

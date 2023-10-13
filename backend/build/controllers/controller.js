@@ -59,13 +59,11 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.registerSubCategory = exports.deleteCategory = exports.getSubCategories = exports.getCategories = exports.editCategory = exports.registerCategory = exports.getCart = exports.registerUser = void 0;
+exports.getProducts = exports.registerProduct = exports.deletePublication = exports.editPublication = exports.registerPublication = exports.getPublicationsByTags = exports.getPublicationsByCategory = exports.getPublications = exports.getPublication = exports.registerSubCategory = exports.deleteCategory = exports.getSubCategories = exports.getCategories = exports.editCategory = exports.registerCategory = exports.getCart = exports.registerUser = void 0;
 var userController = __importStar(require("./user_admin"));
 var cartController = __importStar(require("./cart_admin"));
 var categoryController = __importStar(require("./category_admin"));
-exports.getProducts = exports.registerProduct = exports.getCart = exports.registerUser = void 0;
-var userController = __importStar(require("./user_admin"));
-var cartController = __importStar(require("./cart_admin"));
+var publicationController = __importStar(require("./publication_admin"));
 var productController = __importStar(require("./productAdmin"));
 // Funciones de usuario ----------------------------------------------------------------
 function registerUser(name, email, phone, password) {
@@ -79,7 +77,6 @@ function registerUser(name, email, phone, password) {
     });
 }
 exports.registerUser = registerUser;
-// Funciones de cliente ----------------------------------------------------------------
 // Funciones de carrito ----------------------------------------------------------------
 function getCart(idUser) {
     return __awaiter(this, void 0, void 0, function () {
@@ -101,12 +98,6 @@ function registerCategory(name) {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, categoryController.registerCategory(name)];
-// Funciones de productos --------------------------------------------------------------
-function registerProduct(name, description, units, price, photoPath) {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, productController.registerProduct(name, description, units, price, photoPath)];
                 case 1: return [2 /*return*/, _a.sent()];
             }
         });
@@ -118,12 +109,6 @@ function editCategory(id_category, newName) {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, categoryController.editCategory(id_category, newName)];
-exports.registerProduct = registerProduct;
-function getProducts() {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, productController.getProducts()];
                 case 1: return [2 /*return*/, _a.sent()];
             }
         });
@@ -174,3 +159,106 @@ function registerSubCategory(name, fatherCategory) {
     });
 }
 exports.registerSubCategory = registerSubCategory;
+/*------------------------------------------
+ Funciones de publicaciones
+ -------------------------------------------*/
+function getPublication(id_publication) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, publicationController.getPublication(id_publication)];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+exports.getPublication = getPublication;
+function getPublications() {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, publicationController.getPublications()];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+exports.getPublications = getPublications;
+function getPublicationsByCategory(id_category) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, publicationController.getPublicationsByCategory(id_category)];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+exports.getPublicationsByCategory = getPublicationsByCategory;
+function getPublicationsByTags(tags) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, publicationController.getPublicationsByTags(tags)];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+exports.getPublicationsByTags = getPublicationsByTags;
+function registerPublication(category, date, description, tags, photoPath) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, publicationController.registerPublication(category, date, description, tags, photoPath)];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+exports.registerPublication = registerPublication;
+function editPublication(id_publication, category, date, description, photo, tags) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, publicationController.editPublication(id_publication, category, date, description, photo, tags)];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+exports.editPublication = editPublication;
+function deletePublication(id_publication) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, publicationController.deletePublication(id_publication)];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+exports.deletePublication = deletePublication;
+// Funciones de productos --------------------------------------------------------------
+function registerProduct(name, description, units, price, photoPath) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, productController.registerProduct(name, description, units, price, photoPath)];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+exports.registerProduct = registerProduct;
+function getProducts() {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, productController.getProducts()];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+exports.getProducts = getProducts;

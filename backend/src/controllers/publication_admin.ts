@@ -1,3 +1,4 @@
+const fs = require("fs");
 import {
     getPublication as getOne,
     getPublications as getMany,
@@ -100,9 +101,10 @@ export async function getPublicationsByTags(tags: string[]){
 }
 
 export async function registerPublication(category:String,date:Date,description:String,
-    photo:String,tags: string[]){
+    tags: string[],path:String){
     try{
-        await register(category,date,description,photo,tags);
+        const publicationId = await register(category,date,description,tags);
+        await fs.renameSync(path,"photos/publications/"+publicationId+".png");
         return{
             error: false,
             message: "Publicación registrada con éxito",

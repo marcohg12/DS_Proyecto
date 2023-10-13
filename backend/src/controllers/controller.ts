@@ -74,10 +74,10 @@ export async function registerSubCategory(name:String,fatherCategory:String){
   category:String,
   date:Date,
   description:String,
-  photo:String,
-  tags: string[]){
+  tags: string[],
+  photoPath:String){
 
-    return await publicationController.registerPublication(category,date,description,photo,tags);
+    return await publicationController.registerPublication(category,date,description,tags,photoPath);
   }
 
   export async function editPublication(
@@ -99,6 +99,8 @@ export async function registerSubCategory(name:String,fatherCategory:String){
   export async function deletePublication(id_publication:String){
     return await publicationController.deletePublication(id_publication);
   }
+
+  
 // Funciones de productos --------------------------------------------------------------
 export async function registerProduct(
   name: String,

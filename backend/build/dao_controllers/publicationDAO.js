@@ -89,9 +89,9 @@ function getPublicationsByTags(tags) {
     });
 }
 exports.getPublicationsByTags = getPublicationsByTags;
-function registerPublication(category, date, description, photo, tags) {
+function registerPublication(category, date, description, tags) {
     return __awaiter(this, void 0, void 0, function () {
-        var publication;
+        var publication, result;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -99,11 +99,16 @@ function registerPublication(category, date, description, photo, tags) {
                         category: category,
                         date: date,
                         description: description,
-                        photo: photo,
+                        photo: "TEMPORAL",
                         tags: tags
                     });
                     return [4 /*yield*/, publication.save()];
-                case 1: return [2 /*return*/, _a.sent()];
+                case 1:
+                    result = _a.sent();
+                    return [4 /*yield*/, publicationS_1.default.updateOne({ _id: result._id }, { photo: "/photos/publications/" + result._id + ".png" })];
+                case 2:
+                    _a.sent();
+                    return [2 /*return*/, result._id];
             }
         });
     });
