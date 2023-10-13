@@ -2,6 +2,7 @@ import * as userController from "./user_admin";
 import * as cartController from "./cart_admin";
 import * as categoryController from "./category_admin";
 import * as publicationController from "./publication_admin"
+import * as productController from "./productAdmin";
 
 // Funciones de usuario ----------------------------------------------------------------
 
@@ -14,9 +15,9 @@ export async function registerUser(
   return await userController.registerUser(name, email, phone, password);
 }
 
-// Funciones de cliente ----------------------------------------------------------------
+// Funciones de carrito ----------------------------------------------------------------
 
-export async function getCart(idUser: String){
+export async function getCart(idUser: String) {
   return await cartController.getCart(idUser);
 }
 
@@ -98,3 +99,23 @@ export async function registerSubCategory(name:String,fatherCategory:String){
   export async function deletePublication(id_publication:String){
     return await publicationController.deletePublication(id_publication);
   }
+// Funciones de productos --------------------------------------------------------------
+export async function registerProduct(
+  name: String,
+  description: String,
+  units: Number,
+  price: Number,
+  photoPath: String
+) {
+  return await productController.registerProduct(
+    name,
+    description,
+    units,
+    price,
+    photoPath
+  );
+}
+
+export async function getProducts() {
+  return await productController.getProducts();
+}

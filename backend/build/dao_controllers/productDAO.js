@@ -66,9 +66,9 @@ function getProducts() {
 }
 exports.getProducts = getProducts;
 //Registrar un producto
-function registerProduct(name, description, units, photo) {
+function registerProduct(name, description, units, price) {
     return __awaiter(this, void 0, void 0, function () {
-        var product;
+        var product, result;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -76,24 +76,33 @@ function registerProduct(name, description, units, photo) {
                         name: name,
                         description: description,
                         units: units,
-                        photo: photo
+                        photo: "TEMPORAL",
+                        price: price,
                     });
                     return [4 /*yield*/, product.save()];
-                case 1: return [2 /*return*/, _a.sent()];
+                case 1:
+                    result = _a.sent();
+                    return [4 /*yield*/, productS_1.default.updateOne({ _id: result._id }, { photo: "/photos/products/" + result._id + ".png" })];
+                case 2:
+                    _a.sent();
+                    return [2 /*return*/, result._id];
             }
         });
     });
 }
 exports.registerProduct = registerProduct;
 /*Por aqui deben ir los de editar*/
-function editProduct(id_product, name, description, units, photo) {
+function editProduct(id_product, name, description, units, photo, price) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, productS_1.default.updateOne({ _id: id_product }, { name: name,
+                case 0: return [4 /*yield*/, productS_1.default.updateOne({ _id: id_product }, {
+                        name: name,
                         description: description,
                         units: units,
-                        photo: photo })];
+                        photo: photo,
+                        price: price,
+                    })];
                 case 1: return [2 /*return*/, _a.sent()];
             }
         });

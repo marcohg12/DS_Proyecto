@@ -15,7 +15,7 @@ function PublicationCard({ id, description, date, category, toLink }) {
         >
           <img
             src="https://pielboutiquecr.com/wp-content/uploads/2021/10/3337875722827_1.jpg"
-            className="w-100"
+            className="img-fluid w-100"
             alt=""
           />
           <div className="mask">

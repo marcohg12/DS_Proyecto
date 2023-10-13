@@ -9,6 +9,7 @@ var productSchema = new mongoose_1.Schema({
     name: { type: String, required: true },
     description: { type: String, required: true },
     units: { type: Number, required: true },
+    price: { type: Number, required: true },
     photo: { type: String, required: true },
 });
 exports.default = mongoose_2.default.model("Product", productSchema);

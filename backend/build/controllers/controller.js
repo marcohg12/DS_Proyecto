@@ -63,6 +63,10 @@ exports.registerSubCategory = exports.deleteCategory = exports.getSubCategories 
 var userController = __importStar(require("./user_admin"));
 var cartController = __importStar(require("./cart_admin"));
 var categoryController = __importStar(require("./category_admin"));
+exports.getProducts = exports.registerProduct = exports.getCart = exports.registerUser = void 0;
+var userController = __importStar(require("./user_admin"));
+var cartController = __importStar(require("./cart_admin"));
+var productController = __importStar(require("./productAdmin"));
 // Funciones de usuario ----------------------------------------------------------------
 function registerUser(name, email, phone, password) {
     return __awaiter(this, void 0, void 0, function () {
@@ -76,6 +80,7 @@ function registerUser(name, email, phone, password) {
 }
 exports.registerUser = registerUser;
 // Funciones de cliente ----------------------------------------------------------------
+// Funciones de carrito ----------------------------------------------------------------
 function getCart(idUser) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
@@ -96,6 +101,12 @@ function registerCategory(name) {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, categoryController.registerCategory(name)];
+// Funciones de productos --------------------------------------------------------------
+function registerProduct(name, description, units, price, photoPath) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, productController.registerProduct(name, description, units, price, photoPath)];
                 case 1: return [2 /*return*/, _a.sent()];
             }
         });
@@ -107,6 +118,12 @@ function editCategory(id_category, newName) {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, categoryController.editCategory(id_category, newName)];
+exports.registerProduct = registerProduct;
+function getProducts() {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, productController.getProducts()];
                 case 1: return [2 /*return*/, _a.sent()];
             }
         });
