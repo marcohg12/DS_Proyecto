@@ -6,9 +6,24 @@ export async function getCategoryByID(id_category:String){
     return await Category.findOne({_id: id_category});
 }
 
+//Regresa la categoria por el nombre
+export async function getCategoryByName(name:String){
+    return await Category.findOne({name:name});
+}
+
 //Regresa todas las categorias
 export async function getCategories(){
-    return await Category.find();
+    let categories = await Category.find({fatherCategory:null}).select({_id:1,name:1});
+    let categoriesArray = categories.map(category => category.toObject());
+    for(let i = 0;i<categoriesArray.length;i++){
+        categoriesArray[i].subs = await getSubCategories(String(categoriesArray[i]._id));
+    }
+    return categoriesArray;
+}
+
+//Regresa todas las subcategorias de una categoria
+export async function getSubCategories(fatherCategory:String){
+    return await Category.find({fatherCategory: fatherCategory}).select({_id:1,name:1});
 }
 
 //Registra una categoria.

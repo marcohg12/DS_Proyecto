@@ -39,7 +39,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.registerSubCategory = exports.deleteCategory = exports.editCategory = exports.registerCategory = exports.getCategories = exports.getCategoryByID = void 0;
+exports.registerSubCategory = exports.deleteCategory = exports.editCategory = exports.registerCategory = exports.getSubCategories = exports.getCategories = exports.getCategoryByName = exports.getCategoryByID = void 0;
 var categoryS_1 = __importDefault(require("../schemas/categoryS"));
 //Regresa la categoria correspondiente al id 
 function getCategoryByID(id_category) {
@@ -53,18 +53,58 @@ function getCategoryByID(id_category) {
     });
 }
 exports.getCategoryByID = getCategoryByID;
-//Regresa todas las categorias
-function getCategories() {
+//Regresa la categoria por el nombre
+function getCategoryByName(name) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, categoryS_1.default.find()];
+                case 0: return [4 /*yield*/, categoryS_1.default.findOne({ name: name })];
                 case 1: return [2 /*return*/, _a.sent()];
             }
         });
     });
 }
+exports.getCategoryByName = getCategoryByName;
+//Regresa todas las categorias
+function getCategories() {
+    return __awaiter(this, void 0, void 0, function () {
+        var categories, categoriesArray, i, _a;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
+                case 0: return [4 /*yield*/, categoryS_1.default.find({ fatherCategory: null }).select({ _id: 1, name: 1 })];
+                case 1:
+                    categories = _b.sent();
+                    categoriesArray = categories.map(function (category) { return category.toObject(); });
+                    i = 0;
+                    _b.label = 2;
+                case 2:
+                    if (!(i < categoriesArray.length)) return [3 /*break*/, 5];
+                    _a = categoriesArray[i];
+                    return [4 /*yield*/, getSubCategories(String(categoriesArray[i]._id))];
+                case 3:
+                    _a.subs = _b.sent();
+                    _b.label = 4;
+                case 4:
+                    i++;
+                    return [3 /*break*/, 2];
+                case 5: return [2 /*return*/, categoriesArray];
+            }
+        });
+    });
+}
 exports.getCategories = getCategories;
+//Regresa todas las subcategorias de una categoria
+function getSubCategories(fatherCategory) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, categoryS_1.default.find({ fatherCategory: fatherCategory }).select({ _id: 1, name: 1 })];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+exports.getSubCategories = getSubCategories;
 //Registra una categoria.
 //Solo recibe el nombre, no necesita la categoria padre.
 function registerCategory(name) {

@@ -20,18 +20,21 @@ export async function getPublicationsByTags(tags: string[]){
     return await Publication.find({tags : {$in: tags}});
 }
 
-export async function registerPublication(category:String, date:Date, description:String,
-photo:String,tags: string[]){
-
+export async function registerPublication(category:String, date:Date, description:String,tags: string[]){
     const publication = new Publication({
         category: category,
         date: date,
         description: description,
-        photo: photo,
+        photo: "TEMPORAL",
         tags: tags
     });
 
-    return await publication.save();
+    const result = await publication.save();
+    await Publication.updateOne(
+        { _id: result._id },
+        { photo: "/photos/publications/" + result._id + ".png" }
+      );
+    return result._id;
 }
 
 //Faltan los de edit

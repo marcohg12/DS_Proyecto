@@ -52,6 +52,7 @@ var generalRouter = require("./routers/generalRouter");
 var express_1 = __importDefault(require("express"));
 var expressStatic = express_1.default.static;
 var controller_1 = require("./controllers/controller");
+var controller_2 = require("./controllers/controller");
 var initializePassport = require("./passport-config");
 var app = (0, express_1.default)();
 // Configuraciones ------------------------------------------------------------------------------
@@ -104,6 +105,71 @@ app.get("/logout", function (req, res) {
     });
 });
 // -----------------------------------------------------------------------------------------------
+app.get("/registerCategory", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var response;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, (0, controller_2.registerCategory)("Peliculas")];
+            case 1:
+                response = _a.sent();
+                console.log(response);
+                res.send(JSON.stringify(response));
+                return [2 /*return*/];
+        }
+    });
+}); });
+app.get("/editCategory", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var response;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, (0, controller_2.editCategory)("6525eff3441aa2df65dc65f9", "Series")];
+            case 1:
+                response = _a.sent();
+                console.log(response);
+                res.send(JSON.stringify(response));
+                return [2 /*return*/];
+        }
+    });
+}); });
+app.get("/getAllCategories", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var response;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, (0, controller_2.getCategories)()];
+            case 1:
+                response = _a.sent();
+                console.log(response);
+                res.send(JSON.stringify(response));
+                return [2 /*return*/];
+        }
+    });
+}); });
+app.get("/registerSub", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var response;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, (0, controller_2.registerSubCategory)("Marvel", "6525eff3441aa2df65dc65f9")];
+            case 1:
+                response = _a.sent();
+                console.log(response);
+                res.send(JSON.stringify(response));
+                return [2 /*return*/];
+        }
+    });
+}); });
+app.get("/deleteSubcategory", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var response;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, (0, controller_2.deleteCategory)("6525eff3441aa2df65dc65f9")];
+            case 1:
+                response = _a.sent();
+                console.log(response);
+                res.send(JSON.stringify(response));
+                return [2 /*return*/];
+        }
+    });
+}); });
 app.use("/admin", adminRouter);
 app.use("/general", generalRouter);
 //app.use("/client", clientRouter);
