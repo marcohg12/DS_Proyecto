@@ -6,6 +6,7 @@ import Axios from "axios";
 import AdminWindow from "../components/AdminWindow";
 import MessageModal from "../components/MessageModal";
 import Button from "../components/Button";
+import { Link } from "react-router-dom";
 
 function CategoryEdit() {
   const [categoryName, setCategoryName] = useState("");
@@ -256,6 +257,15 @@ function CategoryEdit() {
                 })}
               </tbody>
             </table>
+          </div>
+          <div className="mt-4 d-flex justify-content-end">
+            <Link
+              to={"/admin_categories"}
+              className="btn btn-block fa-lg mb-3"
+              style={{ backgroundColor: "#73E2A7", width: "150px" }}
+            >
+              Regresar
+            </Link>
           </div>
         </div>
       </div>
