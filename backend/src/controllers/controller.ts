@@ -14,12 +14,13 @@ export async function registerUser(
 }
 
 // Funciones de carrito ----------------------------------------------------------------
-
 export async function getCart(idUser: String) {
   return await cartController.getCart(idUser);
 }
 
 // Funciones de productos --------------------------------------------------------------
+
+// Registra un producto -------------
 export async function registerProduct(
   name: String,
   description: String,
@@ -36,6 +37,36 @@ export async function registerProduct(
   );
 }
 
+// Obtiene todos los productos registrados -----------
 export async function getProducts() {
   return await productController.getProducts();
+}
+
+// Obtiene un producto por su id ---------------------
+export async function getProduct(productId: String) {
+  return await productController.getProduct(productId);
+}
+
+// Elimina un producto por su id ---------------------
+export async function deleteProduct(productId: String) {
+  return await productController.deleteProduct(productId);
+}
+
+// Actualiza los datos de un producto ----------------
+export async function updateProduct(
+  productId: String,
+  name: String,
+  description: String,
+  units: Number,
+  price: Number,
+  photoPath: String
+) {
+  return await productController.updateProduct(
+    productId,
+    name,
+    description,
+    units,
+    price,
+    photoPath
+  );
 }

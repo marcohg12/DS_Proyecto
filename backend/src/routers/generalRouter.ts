@@ -23,4 +23,24 @@ router.get("/get_products", async (req: Request, res: Response) => {
   }
 });
 
+router.get("/get_product/:id", async (req: Request, res: Response) => {
+  try {
+    const product = await controller.getProduct(req.params.id);
+    res.send(
+      JSON.stringify({
+        error: false,
+        message: "Producto consultado exitosamente",
+        result: product,
+      })
+    );
+  } catch (e) {
+    res.send(
+      JSON.stringify({
+        error: true,
+        message: "Ocurrió un error inesperado, intente de nuevo",
+      })
+    );
+  }
+});
+
 module.exports = router;

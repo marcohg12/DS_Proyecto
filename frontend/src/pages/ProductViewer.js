@@ -26,7 +26,7 @@ function ProductViewer({ forUser }) {
           {products.map((product) => {
             return (
               <ProductCard
-                toLink={forUser === "admin" ? "/edit_product" : "/view_product"}
+                toLink={"/edit_product/" + product._id}
                 name={product.name}
                 price={product.price}
                 photo={product.photo}
@@ -46,7 +46,7 @@ function ProductViewer({ forUser }) {
           {products.map((product) => {
             return (
               <ProductCard
-                toLink={forUser === "admin" ? "/edit_product" : "/view_product"}
+                toLink={"/view_product/" + product._id}
                 name={product.name}
                 price={product.price}
                 photo={product.photo}

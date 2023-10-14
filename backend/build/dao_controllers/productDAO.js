@@ -42,11 +42,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteProduct = exports.editProduct = exports.registerProduct = exports.getProducts = exports.getProduct = void 0;
 var productS_1 = __importDefault(require("../schemas/productS"));
 //Obtener un producto por su id
-function getProduct(id_product) {
+function getProduct(productId) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, productS_1.default.findOne({ _id: id_product })];
+                case 0: return [4 /*yield*/, productS_1.default.findOne({ _id: productId })];
                 case 1: return [2 /*return*/, _a.sent()];
             }
         });
@@ -92,11 +92,11 @@ function registerProduct(name, description, units, price) {
 }
 exports.registerProduct = registerProduct;
 /*Por aqui deben ir los de editar*/
-function editProduct(id_product, name, description, units, photo, price) {
+function editProduct(productId, name, description, units, photo, price) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, productS_1.default.updateOne({ _id: id_product }, {
+                case 0: return [4 /*yield*/, productS_1.default.updateOne({ _id: productId }, {
                         name: name,
                         description: description,
                         units: units,
@@ -111,11 +111,11 @@ function editProduct(id_product, name, description, units, photo, price) {
 exports.editProduct = editProduct;
 //Elimina un producto
 //Note: Delete one returns an object with deletedCount(number of docs deleted) field
-function deleteProduct(id_product) {
+function deleteProduct(productId) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, productS_1.default.deleteOne({ _id: id_product })];
+                case 0: return [4 /*yield*/, productS_1.default.deleteOne({ _id: productId })];
                 case 1: return [2 /*return*/, _a.sent()];
             }
         });

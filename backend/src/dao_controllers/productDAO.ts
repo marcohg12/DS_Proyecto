@@ -1,8 +1,8 @@
 import Product from "../schemas/productS";
 
 //Obtener un producto por su id
-export async function getProduct(id_product: String) {
-  return await Product.findOne({ _id: id_product });
+export async function getProduct(productId: String) {
+  return await Product.findOne({ _id: productId });
 }
 
 //Obtener todos los productos
@@ -33,23 +33,20 @@ export async function registerProduct(
   return result._id;
 }
 
-/*Por aqui deben ir los de editar*/
-
-export async function editProduct(
-  id_product: String,
+//Actualizar un producto
+export async function updateProduct(
+  productId: String,
   name: String,
   description: String,
   units: Number,
-  photo: String,
   price: Number
 ) {
   return await Product.updateOne(
-    { _id: id_product },
+    { _id: productId },
     {
       name: name,
       description: description,
       units: units,
-      photo: photo,
       price: price,
     }
   );
@@ -57,6 +54,6 @@ export async function editProduct(
 
 //Elimina un producto
 //Note: Delete one returns an object with deletedCount(number of docs deleted) field
-export async function deleteProduct(id_product: String) {
-  return await Product.deleteOne({ _id: id_product });
+export async function deleteProduct(productId: String) {
+  return await Product.deleteOne({ _id: productId });
 }

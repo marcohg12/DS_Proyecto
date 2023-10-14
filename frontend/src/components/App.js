@@ -34,7 +34,7 @@ function App() {
           }
         />
         <Route
-          path="/edit_product"
+          path="/edit_product/:id"
           element={
             <Protected ctx={ctx} loggedIn={true} forRole={2}>
               <ProductEdit toCreate={false} backRoute="/admin_products" />
@@ -42,7 +42,7 @@ function App() {
           }
         />
         <Route
-          path="/view_product"
+          path="/view_product/:id"
           element={
             <Protected ctx={ctx} loggedIn={true} forRole={1}>
               <ProductView />

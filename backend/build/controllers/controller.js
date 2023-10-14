@@ -59,7 +59,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getProducts = exports.registerProduct = exports.getCart = exports.registerUser = void 0;
+exports.deleteProduct = exports.getProduct = exports.getProducts = exports.registerProduct = exports.getCart = exports.registerUser = void 0;
 var userController = __importStar(require("./user_admin"));
 var cartController = __importStar(require("./cart_admin"));
 var productController = __importStar(require("./productAdmin"));
@@ -110,3 +110,25 @@ function getProducts() {
     });
 }
 exports.getProducts = getProducts;
+function getProduct(productId) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, productController.getProduct(productId)];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+exports.getProduct = getProduct;
+function deleteProduct(productId) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, productController.deleteProduct(productId)];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+exports.deleteProduct = deleteProduct;
