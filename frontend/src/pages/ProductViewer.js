@@ -29,7 +29,7 @@ function ProductViewer({ forUser }) {
                 toLink={"/edit_product/" + product._id}
                 name={product.name}
                 price={product.price}
-                photo={product.photo}
+                photoPath={product.photo}
                 key={product._id}
               ></ProductCard>
             );
@@ -42,14 +42,13 @@ function ProductViewer({ forUser }) {
       <ClientWindow>
         <div className="row mt-4 mb-4"></div>
         <div className="row mt-4">
-          {" "}
           {products.map((product) => {
             return (
               <ProductCard
                 toLink={"/view_product/" + product._id}
                 name={product.name}
                 price={product.price}
-                photo={product.photo}
+                photoPath={product.photo}
                 key={product._id}
               ></ProductCard>
             );

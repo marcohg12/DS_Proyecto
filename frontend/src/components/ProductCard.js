@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { BACKEND_ROUTE } from "../scripts/constants";
 
-function ProductCard({ photo, name, price, toLink }) {
+function ProductCard({ photoPath, name, price, toLink }) {
   return (
     <Link
       to={toLink}
@@ -18,7 +18,7 @@ function ProductCard({ photo, name, price, toLink }) {
           }}
         >
           <img
-            src={BACKEND_ROUTE + photo}
+            src={BACKEND_ROUTE + photoPath}
             className="card-img-top"
             style={{ objectFit: "scale-down", width: "100%", height: "100%" }}
             alt=""

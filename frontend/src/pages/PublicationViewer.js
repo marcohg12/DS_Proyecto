@@ -1,9 +1,10 @@
-import React, { useEffect } from "react";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AdminWindow from "../components/AdminWindow";
 import ClientWindow from "../components/ClientWindow";
 import PublicationCard from "../components/PublicationCard";
 import CategoryDropdown from "../components/CategoryDropdown";
+import Axios from "axios";
+import { BACKEND_ROUTE } from "../scripts/constants";
 
 function PublicationViewer({ forUser }) {
   const [categoryId, setCategoryId] = useState(null);
@@ -12,18 +13,16 @@ function PublicationViewer({ forUser }) {
   const [publications, setPublications] = useState([]);
 
   useEffect(() => {
-    setCategories([
-      { id: 1, name: "Personajes", subs: [] },
-      { id: 2, name: "Bodas", subs: [] },
-      {
-        id: 3,
-        name: "Criaturas",
-        subs: [
-          { id: 4, name: "Zombis" },
-          { id: 5, name: "Vampiros" },
-        ],
-      },
-    ]);
+    // Obtiene las categorías
+    Axios.get(BACKEND_ROUTE + "/general/get_categories", {
+      withCredentials: true,
+    }).then((res) => {
+      if (!res.data.error) {
+        setCategories(res.data.result);
+      }
+    });
+
+    // Obtiene las publicaciones
     setPublications([
       {
         id: 1,

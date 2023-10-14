@@ -24,7 +24,7 @@ function AdminMenu() {
             <Link to="/admin_products" className="link-dark fs-4 mb-4">
               <b>Administrar productos</b>
             </Link>
-            <Link className="link-dark fs-4 mb-4">
+            <Link to="/admin_categories" className="link-dark fs-4 mb-4">
               <b>Administrar categorías</b>
             </Link>
             <Link className="link-dark fs-4 mb-4">
@@ -43,7 +43,7 @@ function AdminMenu() {
             <Link to="/create_product" className="link-dark fs-4 mb-4">
               <b>Crear producto</b>
             </Link>
-            <Link className="link-dark fs-4 mb-4">
+            <Link to="/admin_categories" className="link-dark fs-4 mb-4">
               <b>Crear categoría</b>
             </Link>
             <Link className="link-dark fs-4 mb-4">

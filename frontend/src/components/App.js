@@ -10,6 +10,8 @@ import ProductViewer from "../pages/ProductViewer";
 import ProductEdit from "../pages/ProductEdit";
 import ProductView from "../pages/ProductView";
 import PublicationViewer from "../pages/PublicationViewer";
+import CategoryViewer from "../pages/CategoryViewer";
+import CategoryEdit from "../pages/CategoryEdit";
 
 function App() {
   const ctx = useContext(appContext);
@@ -78,6 +80,22 @@ function App() {
           element={
             <Protected ctx={ctx} loggedIn={true} forRole={1}>
               <PublicationViewer forUser={"client"} />
+            </Protected>
+          }
+        />
+        <Route
+          path="/admin_categories"
+          element={
+            <Protected ctx={ctx} loggedIn={true} forRole={2}>
+              <CategoryViewer />
+            </Protected>
+          }
+        />
+        <Route
+          path="/edit_category/:id"
+          element={
+            <Protected ctx={ctx} loggedIn={true} forRole={2}>
+              <CategoryEdit />
             </Protected>
           }
         />
