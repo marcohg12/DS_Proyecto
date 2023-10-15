@@ -3,6 +3,7 @@ const multer = require("multer");
 import { Request, Response } from "express";
 import * as controller from "../controllers/controller";
 const productUpload = multer({ dest: "photos/products" });
+const publicationUpload = multer({ dest: "photos/publications" });
 
 // Rutas de productos --------------------------------------------------------------------
 router.post(
@@ -59,9 +60,9 @@ router.post(
   "/update_product",
   productUpload.single("photo"),
   async (req: Request, res: Response) => {
+    const { productId, name, description, units, price } = req.body;
+    const photoPath = req.file ? req.file.path : "";
     try {
-      const { productId, name, description, units, price } = req.body;
-      const photoPath = req.file ? req.file.path : "";
       await controller.updateProduct(
         productId,
         name,
@@ -107,7 +108,7 @@ router.post("/register_category", async (req: Request, res: Response) => {
 router.post("/register_subcategory", async (req: Request, res: Response) => {
   const { name, fatherCategory } = req.body;
   try {
-    await controller.registerSubCategory(name, fatherCategory);
+    await controller.registerSubcategory(name, fatherCategory);
     res.send({ error: false, message: "Subcategoría registrada exitosamente" });
   } catch (e) {
     res.send(
@@ -122,7 +123,7 @@ router.post("/register_subcategory", async (req: Request, res: Response) => {
 router.post("/edit_category", async (req: Request, res: Response) => {
   try {
     const { name, categoryId } = req.body;
-    await controller.editCategory(categoryId, name);
+    await controller.updateCategory(categoryId, name);
     res.send({ error: false, message: "Categoría actualizada exitosamente" });
   } catch (e) {
     res.send(
@@ -155,32 +156,77 @@ router.post("/delete_category", async (req: Request, res: Response) => {
 
 // Rutas de publicaciones ----------------------------------------------------------------
 
-router.post("/register_publication", async (req: Request, res: Response) => {
+router.post(
+  "/register_publication",
+  publicationUpload.single("photo"),
+  async (req: Request, res: Response) => {
+    try {
+      const { description, keywords, categoryId } = req.body;
+      const photoPath = req.file ? req.file.path : "";
+      await controller.registerPublication(
+        description,
+        keywords,
+        categoryId,
+        photoPath
+      );
+      res.send(
+        JSON.stringify({
+          error: false,
+          message: "Publicación registrada exitosamente",
+        })
+      );
+    } catch (e) {
+      res.send(
+        JSON.stringify({
+          error: true,
+          message: "Ocurrió un error inesperado, intente de nuevo",
+        })
+      );
+    }
+  }
+);
+
+router.post(
+  "/update_publication",
+  publicationUpload.single("photo"),
+  async (req: Request, res: Response) => {
+    const { publicationId, description, tags, categoryId } = req.body;
+    const photoPath = req.file ? req.file.path : "";
+    try {
+      await controller.updatePublication(
+        publicationId,
+        description,
+        tags,
+        categoryId,
+        photoPath
+      );
+      res.send(
+        JSON.stringify({
+          error: false,
+          message: "Publicación actualizada exitosamente",
+        })
+      );
+    } catch (e) {
+      res.send(
+        JSON.stringify({
+          error: true,
+          message: "Ocurrió un error inesperado, intente de nuevo",
+        })
+      );
+    }
+  }
+);
+
+router.post("/delete_publication/:id", async (req: Request, res: Response) => {
+  const publicationId = req.params.id;
   try {
-  } catch (e) {
+    await controller.deletePublication(publicationId);
     res.send(
       JSON.stringify({
-        error: true,
-        message: "Ocurrió un error inesperado, intente de nuevo",
+        error: false,
+        message: "Publicación eliminada exitosamente",
       })
     );
-  }
-});
-
-router.post("/edit_publication", async (req: Request, res: Response) => {
-  try {
-  } catch (e) {
-    res.send(
-      JSON.stringify({
-        error: true,
-        message: "Ocurrió un error inesperado, intente de nuevo",
-      })
-    );
-  }
-});
-
-router.post("/delete_publication", async (req: Request, res: Response) => {
-  try {
   } catch (e) {
     res.send(
       JSON.stringify({

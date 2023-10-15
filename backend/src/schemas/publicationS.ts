@@ -2,7 +2,7 @@ import { Schema, InferSchemaType } from "mongoose";
 import mongoose from "mongoose";
 
 const publicationSchema: Schema = new Schema({
-  category: { type: String, required: true },
+  categoryId: { type: Schema.Types.ObjectId, required: true },
   date: { type: Date, required: true },
   description: { type: String, required: true },
   photo: { type: String, required: true },

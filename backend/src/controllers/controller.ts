@@ -1,7 +1,7 @@
-import * as userController from "./user_admin";
-import * as cartController from "./cart_admin";
+import * as userController from "./userAdmin";
+import * as cartController from "./cartAdmin";
 import * as categoryController from "./categoryAdmin";
-import * as publicationController from "./publication_admin";
+import * as publicationController from "./publicationAdmin";
 import * as productController from "./productAdmin";
 
 // Funciones de usuario ----------------------------------------------------------------
@@ -15,21 +15,26 @@ export async function registerUser(
   return await userController.registerUser(name, email, phone, password);
 }
 
+export async function updateUser(
+  name: String,
+  email: String,
+  photo: String,
+  password: String
+) {}
+
 // Funciones de carrito ----------------------------------------------------------------
+
 export async function getCart(idUser: String) {
   return await cartController.getCart(idUser);
 }
 
-// Funciones de administrador ----------------------------------------------------------
+// Funciones de categorías -------------------------------------------------------------
 
-/*------------------------------------------
- Funciones de categorías
- -------------------------------------------*/
 export async function registerCategory(name: String) {
   return await categoryController.registerCategory(name);
 }
 
-export async function editCategory(categoryId: String, newName: String) {
+export async function updateCategory(categoryId: String, newName: String) {
   return await categoryController.editCategory(categoryId, newName);
 }
 
@@ -49,16 +54,14 @@ export async function deleteCategory(categoryId: String) {
   return await categoryController.deleteCategory(categoryId);
 }
 
-export async function registerSubCategory(
+export async function registerSubcategory(
   name: String,
   fatherCategory: String
 ) {
   return await categoryController.registerSubCategory(name, fatherCategory);
 }
 
-/*------------------------------------------
- Funciones de publicaciones
- -------------------------------------------*/
+// Funciones de publicaciones -----------------------------------------------------------
 
 export async function getPublication(publicationId: String) {
   return await publicationController.getPublication(publicationId);
@@ -72,41 +75,37 @@ export async function getPublicationsByCategory(categoryId: String) {
   return await publicationController.getPublicationsByCategory(categoryId);
 }
 
-export async function getPublicationsByTags(tags: string[]) {
+export async function getPublicationsByTags(tags: String[]) {
   return await publicationController.getPublicationsByTags(tags);
 }
 
 export async function registerPublication(
-  category: String,
-  date: Date,
   description: String,
-  tags: string[],
+  tags: String,
+  categoryId: String,
   photoPath: String
 ) {
   return await publicationController.registerPublication(
-    category,
-    date,
     description,
     tags,
+    categoryId,
     photoPath
   );
 }
 
-export async function editPublication(
+export async function updatePublication(
   publicationId: String,
-  category: String,
-  date: Date,
   description: String,
-  photo: String,
-  tags: string[]
+  tags: String,
+  categoryId: String,
+  photoPath: String
 ) {
-  return await publicationController.editPublication(
+  return await publicationController.updatePublication(
     publicationId,
-    category,
-    date,
     description,
-    photo,
-    tags
+    tags,
+    categoryId,
+    photoPath
   );
 }
 
@@ -116,7 +115,6 @@ export async function deletePublication(publicationId: String) {
 
 // Funciones de productos --------------------------------------------------------------
 
-// Registra un producto -------------
 export async function registerProduct(
   name: String,
   description: String,
@@ -133,22 +131,18 @@ export async function registerProduct(
   );
 }
 
-// Obtiene todos los productos registrados -----------
 export async function getProducts() {
   return await productController.getProducts();
 }
 
-// Obtiene un producto por su id ---------------------
 export async function getProduct(productId: String) {
   return await productController.getProduct(productId);
 }
 
-// Elimina un producto por su id ---------------------
 export async function deleteProduct(productId: String) {
   return await productController.deleteProduct(productId);
 }
 
-// Actualiza los datos de un producto ----------------
 export async function updateProduct(
   productId: String,
   name: String,
@@ -166,3 +160,5 @@ export async function updateProduct(
     photoPath
   );
 }
+
+// Funciones de pedidos ----------------------------------------------------------------

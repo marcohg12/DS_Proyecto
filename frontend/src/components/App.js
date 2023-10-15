@@ -12,6 +12,8 @@ import ProductView from "../pages/ProductView";
 import PublicationViewer from "../pages/PublicationViewer";
 import CategoryViewer from "../pages/CategoryViewer";
 import CategoryEdit from "../pages/CategoryEdit";
+import PublicationEdit from "../pages/PublicationEdit";
+import PublicationView from "../pages/PublicationView";
 
 function App() {
   const ctx = useContext(appContext);
@@ -72,6 +74,33 @@ function App() {
           element={
             <Protected ctx={ctx} loggedIn={true} forRole={2}>
               <PublicationViewer forUser={"admin"} />
+            </Protected>
+          }
+        />
+        <Route
+          path="/create_publication"
+          element={
+            <Protected ctx={ctx} loggedIn={true} forRole={2}>
+              <PublicationEdit toCreate={true} backRoute="/admin_menu" />
+            </Protected>
+          }
+        />
+        <Route
+          path="/edit_publication/:id"
+          element={
+            <Protected ctx={ctx} loggedIn={true} forRole={2}>
+              <PublicationEdit
+                toCreate={false}
+                backRoute="/admin_publications"
+              />
+            </Protected>
+          }
+        />
+        <Route
+          path="/view_publication/:id"
+          element={
+            <Protected ctx={ctx} loggedIn={true} forRole={1}>
+              <PublicationView />
             </Protected>
           }
         />

@@ -1,16 +1,16 @@
 import Category from "../schemas/categoryS";
 
-//Regresa la categoria correspondiente al id
+// Retorna la categoria correspondiente al Id
 export async function getCategoryByID(categoryId: String) {
   return await Category.findOne({ _id: categoryId });
 }
 
-//Regresa la categoria por el nombre
+// Retorna la categoria por el nombre
 export async function getCategoryByName(name: String) {
   return await Category.findOne({ name: name });
 }
 
-//Regresa todas las categorias
+// Retorna todas las categorias
 export async function getCategories() {
   let categories = await Category.find({ fatherCategory: null }).select({
     _id: 1,
@@ -25,7 +25,7 @@ export async function getCategories() {
   return categoriesArray;
 }
 
-//Regresa todas las subcategorias de una categoria
+// Retorna todas las subcategorias de una categoria
 export async function getSubCategories(fatherCategory: String) {
   return await Category.find({ fatherCategory: fatherCategory }).select({
     _id: 1,
@@ -33,8 +33,7 @@ export async function getSubCategories(fatherCategory: String) {
   });
 }
 
-//Registra una categoria.
-//Solo recibe el nombre, no necesita la categoria padre.
+// Registra una categoria padre
 export async function registerCategory(name: String) {
   const category = new Category({
     name: name,
@@ -42,22 +41,23 @@ export async function registerCategory(name: String) {
   return await category.save();
 }
 
-//Editar el nombre de la categoria.
-export async function editCategory(categoryId: String, newName: String) {
+// Actualiza una categoría
+export async function updateCategory(categoryId: String, name: String) {
   return await Category.updateOne(
     { _id: categoryId },
-    { $set: { name: newName } }
+    { $set: { name: name } }
   );
 }
 
-//Eliminar la categoria correspondiente al id
+// Elimina la categoria correspondiente al id
 export async function deleteCategory(categoryId: String) {
+  // Eliminamos las subcategorías de la categoría
   await Category.deleteMany({ fatherCategory: categoryId });
+  // Eliminamos la categoría padre
   return await Category.deleteOne({ _id: categoryId });
 }
 
-//Registra una subcategoria
-//En esta si recibe la referencia a la categoria padre
+// Registra una subcategoria de una categoría
 export async function registerSubCategory(
   name: String,
   fatherCategory: String

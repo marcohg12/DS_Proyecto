@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { BACKEND_ROUTE } from "../scripts/constants";
 
 function PublicationCard({ photoPath, description, date, category, toLink }) {
   return (
@@ -17,9 +18,9 @@ function PublicationCard({ photoPath, description, date, category, toLink }) {
           }}
         >
           <img
-            src="https://pielboutiquecr.com/wp-content/uploads/2021/10/3337875722827_1.jpg"
+            src={BACKEND_ROUTE + photoPath}
             className="card-img-top"
-            style={{ objectFit: "scale-down", width: "100%", height: "100%" }}
+            style={{ objectFit: "cover", width: "100%", height: "100%" }}
             alt=""
           />
         </div>

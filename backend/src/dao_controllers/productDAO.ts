@@ -1,16 +1,17 @@
 import Product from "../schemas/productS";
+import Cart from "../schemas/cartS";
 
-//Obtener un producto por su id
+// Obtiene un producto por su id
 export async function getProduct(productId: String) {
   return await Product.findOne({ _id: productId });
 }
 
-//Obtener todos los productos
+// Obtiene todos los productos registrados
 export async function getProducts() {
   return await Product.find();
 }
 
-//Registrar un producto
+// Registra un producto
 export async function registerProduct(
   name: String,
   description: String,
@@ -26,6 +27,8 @@ export async function registerProduct(
   });
 
   const result = await product.save();
+
+  // Actualizamos el producto con la ruta de la foto en el sistema de archivos
   await Product.updateOne(
     { _id: result._id },
     { photo: "/photos/products/" + result._id + ".png" }
@@ -33,7 +36,7 @@ export async function registerProduct(
   return result._id;
 }
 
-//Actualizar un producto
+// Actualiza un producto
 export async function updateProduct(
   productId: String,
   name: String,
@@ -52,8 +55,19 @@ export async function updateProduct(
   );
 }
 
-//Elimina un producto
-//Note: Delete one returns an object with deletedCount(number of docs deleted) field
+// Elimina un producto
+// Nota: también elimina los productos de los carritos en los que se encontrara el producto
 export async function deleteProduct(productId: String) {
+  // Eliminamos los productos de los carritos
+  await Cart.updateMany(
+    {},
+    {
+      $pull: {
+        products: {
+          productRef: productId,
+        },
+      },
+    }
+  );
   return await Product.deleteOne({ _id: productId });
 }

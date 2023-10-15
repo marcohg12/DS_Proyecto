@@ -1,10 +1,10 @@
-import User, { UserT } from "../schemas/userS";
 import {
   registerUser as register,
   getUserByEmail,
 } from "../dao_controllers/userDAO";
 const bcrypt = require("bcryptjs");
 
+// Registra un usuario
 export async function registerUser(
   name: String,
   email: String,

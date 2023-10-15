@@ -37,7 +37,7 @@ function AdminMenu() {
         </div>
         <div className="col d-flex flex-column">
           <div className="d-flex flex-column">
-            <Link className="link-dark fs-4 mb-4">
+            <Link to="/create_publication" className="link-dark fs-4 mb-4">
               <b>Crear publicación</b>
             </Link>
             <Link to="/create_product" className="link-dark fs-4 mb-4">

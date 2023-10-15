@@ -8,9 +8,25 @@ import { BACKEND_ROUTE } from "../scripts/constants";
 
 function PublicationViewer({ forUser }) {
   const [categoryId, setCategoryId] = useState(null);
-  const [keyWords, setKeyWords] = useState("");
+  const [keywords, setKeywords] = useState("");
   const [categories, setCategories] = useState([]);
   const [publications, setPublications] = useState([]);
+
+  const getAllPublications = () => {
+    Axios.get(BACKEND_ROUTE + "/general/get_publications", {
+      withCredentials: true,
+    }).then((res) => {
+      if (!res.data.error) {
+        setPublications(res.data.result);
+      }
+    });
+  };
+
+  const resetFilters = () => {
+    getAllPublications();
+    setKeywords("");
+    setCategoryId("");
+  };
 
   useEffect(() => {
     // Obtiene las categorías
@@ -23,39 +39,56 @@ function PublicationViewer({ forUser }) {
     });
 
     // Obtiene las publicaciones
-    setPublications([
-      {
-        id: 1,
-        description: "Maquillaje para bodas",
-        date: "2 de septiembre",
-        category: "Bodas",
-      },
-      {
-        id: 2,
-        description: "Caracterización de la bruja escarlata",
-        date: "25 de agosto",
-        category: "Personajes",
-      },
-      {
-        id: 3,
-        description: "Maquillaje para cena de noche",
-        date: "01 de febrero",
-        category: "Formal",
-      },
-    ]);
+    getAllPublications();
   }, []);
 
-  useEffect(() => {}, [categoryId]);
+  useEffect(() => {
+    if (categoryId === "") {
+      return;
+    }
+    // Obtiene las publicaciones por categoría
+    Axios.get(BACKEND_ROUTE + "/general/get_publications", {
+      withCredentials: true,
+      params: { categoryId: categoryId },
+    }).then((res) => {
+      if (!res.data.error) {
+        setPublications(res.data.result);
+      }
+    });
+  }, [categoryId]);
+
+  const filterByKeywords = (event) => {
+    event.preventDefault();
+    // Obtiene las publicaciones por palabras clave
+    Axios.get(BACKEND_ROUTE + "/general/get_publications", {
+      withCredentials: true,
+      params: { keywords: keywords },
+    }).then((res) => {
+      if (!res.data.error) {
+        setPublications(res.data.result);
+      }
+    });
+  };
 
   if (forUser === "admin") {
     return (
       <AdminWindow>
         <div className="d-flex mt-4 mb-4">
           <div className="col d-flex md-6">
+            <button
+              type="submit"
+              className="btn btn-outline-secondary me-4"
+              onClick={resetFilters}
+            >
+              Reiniciar filtros
+            </button>
             <p className="me-4">Filtrar por categoría</p>
             <CategoryDropdown
               categories={categories}
               setCategoryId={setCategoryId}
+              bootstrap={"rounded flex-fill form-control-sm"}
+              required={true}
+              selectedId={categoryId}
             ></CategoryDropdown>
           </div>
           <div className="col d-flex md-6 justify-content-center">
@@ -64,9 +97,14 @@ function PublicationViewer({ forUser }) {
               type="search"
               className="flex-fill rounded form-control-sm"
               placeholder="Palabras clave"
-              onChange={(e) => setKeyWords(e.target.value)}
+              onChange={(e) => setKeywords(e.target.value)}
+              value={keywords}
             />
-            <button type="button" className="btn btn-outline-secondary">
+            <button
+              type="submit"
+              className="btn btn-outline-secondary"
+              onClick={filterByKeywords}
+            >
               Filtrar
             </button>
           </div>
@@ -76,16 +114,13 @@ function PublicationViewer({ forUser }) {
           {publications.map((publication) => {
             return (
               <PublicationCard
-                toLink={
-                  forUser === "admin"
-                    ? "/edit_publication"
-                    : "/view_publication"
-                }
-                id={publication.id}
+                toLink={"/edit_publication/" + publication._id}
+                id={publication._id}
                 description={publication.description}
-                date={publication.date}
-                category={publication.category}
-                key={publication.id}
+                date={new Date(publication.date).toLocaleDateString()}
+                category={publication.category.name}
+                photoPath={publication.photo}
+                key={publication._id}
               ></PublicationCard>
             );
           })}
@@ -97,10 +132,20 @@ function PublicationViewer({ forUser }) {
       <ClientWindow>
         <div className="d-flex mt-4 mb-4">
           <div className="col d-flex md-6">
+            <button
+              type="submit"
+              className="btn btn-outline-secondary me-4"
+              onClick={resetFilters}
+            >
+              Reiniciar filtros
+            </button>
             <p className="me-4">Filtrar por categoría</p>
             <CategoryDropdown
               categories={categories}
               setCategoryId={setCategoryId}
+              bootstrap={"rounded flex-fill form-control-sm"}
+              required={true}
+              selectedId={categoryId}
             ></CategoryDropdown>
           </div>
           <div className="col d-flex md-6 justify-content-center">
@@ -109,9 +154,13 @@ function PublicationViewer({ forUser }) {
               type="search"
               className="flex-fill rounded form-control-sm"
               placeholder="Palabras clave"
-              onChange={(e) => setKeyWords(e.target.value)}
+              onChange={(e) => setKeywords(e.target.value)}
             />
-            <button type="button" className="btn btn-outline-secondary">
+            <button
+              type="submit"
+              className="btn btn-outline-secondary"
+              onClick={filterByKeywords}
+            >
               Filtrar
             </button>
           </div>
@@ -121,16 +170,13 @@ function PublicationViewer({ forUser }) {
           {publications.map((publication) => {
             return (
               <PublicationCard
-                toLink={
-                  forUser === "admin"
-                    ? "/edit_publication"
-                    : "/view_publication"
-                }
-                id={publication.id}
+                toLink={"/view_publication/" + publication._id}
+                id={publication._id}
                 description={publication.description}
-                date={publication.date}
-                category={publication.category}
-                key={publication.id}
+                date={new Date(publication.date).toLocaleDateString()}
+                category={publication.category.name}
+                photoPath={publication.photo}
+                key={publication._id}
               ></PublicationCard>
             );
           })}

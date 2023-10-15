@@ -1,7 +1,7 @@
 import User, { UserT } from "../schemas/userS";
 const bcrypt = require("bcryptjs");
 
-// Registrar un usuario --------------------------------------------------------
+// Registra un usuario
 // Por defecto lo registra como cliente, NO COMO ADMINISTRADOR
 export async function registerUser(
   name: String,
@@ -20,15 +20,15 @@ export async function registerUser(
   return await user.save();
 }
 
-// Obtener un usuario por id ---------------------------------------------------
+// Retorna un usuario por id
 export async function getUserByID(id: String) {}
 
-// Obtener un usuario por email ------------------------------------------------
+// Retorna un usuario por email
 export async function getUserByEmail(email: String) {
   return await User.findOne({ email: email });
 }
 
-// Obtiene un usuario por email pero no retorna la contraseña del usuario
+// Retorna un usuario por email pero no retorna la contraseña del usuario
 export async function getUserNoPwd(email: String) {
   const user: UserT | null = await User.findOne({ email: email });
   if (user == null) {

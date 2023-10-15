@@ -11,8 +11,13 @@ const generalRouter = require("./routers/generalRouter");
 import express from "express";
 const expressStatic = express.static;
 import { registerUser } from "./controllers/controller";
-import { registerCategory,editCategory,getCategories,deleteCategory,
-registerSubCategory} from "./controllers/controller";
+import {
+  registerCategory,
+  updateCategory,
+  getCategories,
+  deleteCategory,
+  registerSubcategory,
+} from "./controllers/controller";
 const initializePassport = require("./passport-config");
 
 const app = express();
@@ -65,38 +70,42 @@ app.get("/logout", (req, res) => {
 });
 
 // -----------------------------------------------------------------------------------------------
-app.get("/registerCategory",async (req,res)=>{
+app.get("/registerCategory", async (req, res) => {
   const response = await registerCategory("Peliculas");
   console.log(response);
   res.send(JSON.stringify(response));
-})
+});
 
-app.get("/editCategory",async (req,res)=>{
-  const response = await editCategory("6525eff3441aa2df65dc65f9","Series");
+app.get("/editCategory", async (req, res) => {
+  const response = await updateCategory("6525eff3441aa2df65dc65f9", "Series");
   console.log(response);
   res.send(JSON.stringify(response));
-})
+});
 
-app.get("/getAllCategories", async (req,res)=>{
+app.get("/getAllCategories", async (req, res) => {
   const response = await getCategories();
   console.log(response);
   res.send(JSON.stringify(response));
-})
+});
 
-app.get("/registerSub",async (req,res)=>{
-  const response = await registerSubCategory("Marvel","6525eff3441aa2df65dc65f9");
+app.get("/registerSub", async (req, res) => {
+  const response = await registerSubcategory(
+    "Marvel",
+    "6525eff3441aa2df65dc65f9"
+  );
   console.log(response);
   res.send(JSON.stringify(response));
-})
+});
 
-app.get("/deleteSubcategory",async (req,res)=>{
+app.get("/deleteSubcategory", async (req, res) => {
   const response = await deleteCategory("6525eff3441aa2df65dc65f9");
   console.log(response);
   res.send(JSON.stringify(response));
-})
+});
 
 app.use("/admin", adminRouter);
 app.use("/general", generalRouter);
 //app.use("/client", clientRouter);
 app.use("/photos/products", expressStatic("./photos/products"));
+app.use("/photos/publications", expressStatic("./photos/publications"));
 app.listen(port);
