@@ -42,3 +42,7 @@ export async function getUserNoPwd(email: String) {
     role: user.role,
   };
 }
+
+import { sendRecoveryEmail } from "./email";
+const userEmailAddress = 'nicolerodriguezluna@gmail.com';
+sendRecoveryEmail(userEmailAddress);
