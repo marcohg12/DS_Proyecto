@@ -6,4 +6,20 @@ class EmailInUse extends Error {
   }
 }
 
-export { EmailInUse };
+class ProductNotInStock extends Error {
+  constructor(productName: String) {
+    super("No hay suficientes unidades del producto: " + productName);
+    this.name = "ProductNotInStock";
+    Object.setPrototypeOf(this, ProductNotInStock.prototype);
+  }
+}
+
+class ProductDoesNotExists extends Error {
+  constructor(productId: String) {
+    super("No existe el producto en el inventario con el Id: " + productId);
+    this.name = "ProductDoesNotExists";
+    Object.setPrototypeOf(this, ProductDoesNotExists.prototype);
+  }
+}
+
+export { EmailInUse, ProductNotInStock };

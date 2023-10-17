@@ -42,7 +42,9 @@ function ClientNavbar() {
               <Link className="nav-link text-white">Mi carrito</Link>
             </li>
             <li className="nav-item me-4 mt-3">
-              <Link className="nav-link text-white">Mis pedidos</Link>
+              <Link to="/client_orders" className="nav-link text-white">
+                Mis pedidos
+              </Link>
             </li>
           </ul>
         </div>

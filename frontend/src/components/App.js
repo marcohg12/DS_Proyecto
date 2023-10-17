@@ -16,6 +16,7 @@ import PublicationEdit from "../pages/PublicationEdit";
 import PublicationView from "../pages/PublicationView";
 import Profile from "../pages/Profile";
 import PasswordRecover from "../pages/PasswordRecover";
+import ClientOrderViewer from "../pages/ClientOrderViewer";
 
 function App() {
   const ctx = useContext(appContext).user;
@@ -119,6 +120,14 @@ function App() {
           element={
             <Protected ctx={ctx} loggedIn={true} forRole={2}>
               <CategoryViewer />
+            </Protected>
+          }
+        />
+        <Route
+          path="/client_orders"
+          element={
+            <Protected ctx={ctx} loggedIn={true} forRole={1}>
+              <ClientOrderViewer />
             </Protected>
           }
         />
