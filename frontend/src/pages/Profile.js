@@ -125,6 +125,7 @@ function Profile({ user }) {
                         id="email"
                         className="form-control"
                         onChange={(e) => setEmail(e.target.value)}
+                        placeholder="email@gmail.com"
                         value={email}
                         required
                       />
@@ -133,10 +134,17 @@ function Profile({ user }) {
 
                     <div className="form-outline mb-4">
                       <input
-                        type="number"
+                        type="text"
                         id="phone"
                         className="form-control"
-                        max="99999999"
+                        onInput={(e) =>
+                          (e.target.value = e.target.value
+                            .replace(/[^0-9.]/g, "")
+                            .replace(/(\..*)\./g, "$1"))
+                        }
+                        pattern=".{8,8}"
+                        maxlength="8"
+                        placeholder="00000000"
                         onChange={(e) => setPhone(e.target.value)}
                         value={phone}
                         required

@@ -1,4 +1,5 @@
 import * as userDAO from "../dao_controllers/userDAO";
+import { sendEmail } from "./emailService";
 const bcrypt = require("bcryptjs");
 
 // Funciones auxiliares -------------------------------------------------------------------
@@ -66,6 +67,12 @@ export async function updatePassword(email: String, password: String) {
 // Actualiza el código de recuperación de contraseña de un usuario
 export async function updateRecoverCode(email: String) {
   const code = generateNumericPasswordRecoveryCode(8);
+  const content = "El código de recuperación es: " + code.toString();
+  sendEmail(
+    email.toString(),
+    "Sistema Duende - Código de recuperación de contraseña",
+    content
+  );
   await userDAO.updateRecoverCode(email, code);
 }
 
@@ -77,5 +84,9 @@ export async function compareRecoverCode(email: String, code: String) {
 // Verifica si existe el usuario con el email del parámetro
 export async function userExists(email: String) {
   const user = await userDAO.getUserByEmail(email);
-  return user ? true : false;
+  const result = user ? true : false;
+  if (result) {
+    updateRecoverCode(email);
+  }
+  return result;
 }

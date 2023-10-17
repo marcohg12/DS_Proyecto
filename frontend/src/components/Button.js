@@ -7,6 +7,7 @@ function Button({
   link,
   width,
   height,
+  form,
 }) {
   return (
     <button
@@ -14,6 +15,7 @@ function Button({
       style={{ backgroundColor: color, width: width }}
       type={type}
       onClick={onclickHandler}
+      form={form}
     >
       {text}
     </button>

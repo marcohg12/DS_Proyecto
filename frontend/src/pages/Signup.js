@@ -15,6 +15,7 @@ function Signup() {
   const [showModal, setShowModal] = useState(false);
   const [error, setError] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
+  const [successSignup, setSuccessSignup] = useState(false);
 
   const registerUser = (name, email, phone, password) => {
     axios({
@@ -58,6 +59,7 @@ function Signup() {
     setModalMessage(message);
     setShowModal(true);
     setError(false);
+    setSuccessSignup(true);
   };
 
   const sendForm = (event) => {
@@ -78,6 +80,9 @@ function Signup() {
 
   const closeModal = () => {
     setShowModal(false);
+    if (successSignup) {
+      window.location.href = "/";
+    }
   };
 
   return (
@@ -117,6 +122,7 @@ function Signup() {
                         type="email"
                         id="email"
                         className="form-control"
+                        placeholder="email@gmail.com"
                         onChange={(e) => setEmail(e.target.value)}
                         required
                       />
@@ -125,10 +131,17 @@ function Signup() {
 
                     <div className="form-outline mb-4">
                       <input
-                        type="number"
+                        type="text"
                         id="phone"
                         className="form-control"
-                        max="99999999"
+                        onInput={(e) =>
+                          (e.target.value = e.target.value
+                            .replace(/[^0-9.]/g, "")
+                            .replace(/(\..*)\./g, "$1"))
+                        }
+                        pattern=".{8,8}"
+                        maxlength="8"
+                        placeholder="00000000"
                         onChange={(e) => setPhone(e.target.value)}
                         required
                       />

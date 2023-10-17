@@ -15,6 +15,7 @@ import CategoryEdit from "../pages/CategoryEdit";
 import PublicationEdit from "../pages/PublicationEdit";
 import PublicationView from "../pages/PublicationView";
 import Profile from "../pages/Profile";
+import PasswordRecover from "../pages/PasswordRecover";
 
 function App() {
   const ctx = useContext(appContext).user;
@@ -157,6 +158,14 @@ function App() {
           path="/login"
           element={
             <Protected ctx={ctx} loggedIn={false} forRole={null}></Protected>
+          }
+        />
+        <Route
+          path="/recover_password"
+          element={
+            <Protected ctx={ctx} loggedIn={false} forRole={null}>
+              <PasswordRecover />
+            </Protected>
           }
         />
         <Route

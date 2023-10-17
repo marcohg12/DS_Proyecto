@@ -103,7 +103,7 @@ function Login() {
                         color="#73E2A7"
                         type="submit"
                       />
-                      <Link to="/recoverpwd">Olvidé mi contraseña</Link>
+                      <Link to="/recover_password">Olvidé mi contraseña</Link>
                     </div>
                   </form>
                 </div>
