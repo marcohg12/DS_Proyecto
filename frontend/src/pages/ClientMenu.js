@@ -6,7 +6,7 @@ import photo2 from "../photos/ClientMenu_img_2.jpg";
 import { appContext } from "../context";
 
 function ClientMenu() {
-  const ctx = useContext(appContext);
+  const ctx = useContext(appContext).user;
 
   return (
     <ClientWindow>

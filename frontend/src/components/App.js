@@ -14,9 +14,10 @@ import CategoryViewer from "../pages/CategoryViewer";
 import CategoryEdit from "../pages/CategoryEdit";
 import PublicationEdit from "../pages/PublicationEdit";
 import PublicationView from "../pages/PublicationView";
+import Profile from "../pages/Profile";
 
 function App() {
-  const ctx = useContext(appContext);
+  const ctx = useContext(appContext).user;
 
   return (
     <BrowserRouter>
@@ -133,6 +134,14 @@ function App() {
           element={
             <Protected ctx={ctx} loggedIn={true} forRole={2}>
               <AdminMenu />
+            </Protected>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <Protected ctx={ctx} loggedIn={true} forRole={null}>
+              <Profile user={ctx} />
             </Protected>
           }
         />

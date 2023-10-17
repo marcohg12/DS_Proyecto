@@ -21,5 +21,19 @@ export default function Context({ children }) {
     );
   }, []);
 
-  return <appContext.Provider value={user}>{children}</appContext.Provider>;
+  const updateUserSessionData = () => {
+    Axios.get(BACKEND_ROUTE + "/get_user", { withCredentials: true }).then(
+      (res) => {
+        setUser(res.data);
+        localStorage.removeItem("session");
+        localStorage.setItem("session", JSON.stringify(res.data));
+      }
+    );
+  };
+
+  return (
+    <appContext.Provider value={{ user, updateUserSessionData }}>
+      {children}
+    </appContext.Provider>
+  );
 }

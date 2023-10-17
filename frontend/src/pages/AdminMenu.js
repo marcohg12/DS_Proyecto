@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { appContext } from "../context";
 
 function AdminMenu() {
-  const ctx = useContext(appContext);
+  const ctx = useContext(appContext).user;
 
   return (
     <AdminWindow>

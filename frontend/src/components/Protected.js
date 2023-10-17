@@ -1,5 +1,8 @@
 import { Navigate } from "react-router-dom";
-const Protected = ({ ctx, loggedIn, forRole, children, a }) => {
+const Protected = ({ ctx, loggedIn, forRole, children }) => {
+  if (loggedIn && !forRole) {
+    return children;
+  }
   if (loggedIn && !ctx) {
     return <Navigate to="/" replace />;
   } else if (loggedIn && ctx && ctx.role !== forRole) {

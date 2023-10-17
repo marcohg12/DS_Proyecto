@@ -15,12 +15,36 @@ export async function registerUser(
   return await userController.registerUser(name, email, phone, password);
 }
 
+// Actualiza los datos de un usuario
 export async function updateUser(
+  userId: String,
   name: String,
   email: String,
-  photo: String,
+  phone: String,
   password: String
-) {}
+) {
+  await userController.updateUser(userId, name, email, phone, password);
+}
+
+// Actualiza la contraseña de un usuario
+export async function updatePassword(email: String, password: String) {
+  await userController.updatePassword(email, password);
+}
+
+// Actualiza el código de recuperación de contraseña de un usuario
+export async function updateRecoverCode(email: String) {
+  await userController.updateRecoverCode(email);
+}
+
+// Verifica si existe el usuario con el email del parámetro
+export async function userExists(email: String) {
+  return await userController.userExists(email);
+}
+
+// Verifica si el código de recuperación ingresado por un usuario es igual al de la BD
+export async function compareRecoverCode(email: String, code: String) {
+  return await userController.compareRecoverCode(email, code);
+}
 
 // Funciones de carrito ----------------------------------------------------------------
 

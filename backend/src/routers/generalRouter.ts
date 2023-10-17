@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const multer = require("multer");
+const { EmailInUse } = require("../exceptions/exceptions");
 import { Request, Response } from "express";
 import * as controller from "../controllers/controller";
 
@@ -150,6 +151,119 @@ router.get("/get_category/:id", async (req: Request, res: Response) => {
       message: "Categorías consultadas exitosamente",
       result: category,
     });
+  } catch (e) {
+    res.send(
+      JSON.stringify({
+        error: true,
+        message: "Ocurrió un error inesperado, intente de nuevo",
+      })
+    );
+  }
+});
+
+// Rutas de usuario -----------------------------------------------------------------------
+
+router.post("/update_user", async (req: Request, res: Response) => {
+  const { userId, name, email, phone, password } = req.body;
+  try {
+    await controller.updateUser(userId, name, email, phone, password);
+    res.send(
+      JSON.stringify({
+        error: false,
+        message: "Datos actualizados exitosamente",
+      })
+    );
+  } catch (e) {
+    if (e instanceof Error) {
+      let message = "Ocurrió un error inesperado, intente de nuevo";
+      if (e instanceof EmailInUse) {
+        message = e.message;
+      }
+      res.send(
+        JSON.stringify({
+          error: true,
+          message: message,
+        })
+      );
+    }
+  }
+});
+
+router.post("/update_user_code", async (req: Request, res: Response) => {
+  const { email } = req.body;
+  try {
+    await controller.updateRecoverCode(email);
+    res.send(
+      JSON.stringify({
+        error: false,
+        message: "Código actualizado exitosamente",
+      })
+    );
+  } catch (e) {
+    res.send(
+      JSON.stringify({
+        error: true,
+        message: "Ocurrió un error inesperado, intente de nuevo",
+      })
+    );
+  }
+});
+
+router.get("/check_recover_code", async (req: Request, res: Response) => {
+  const { email, code } = req.query;
+  try {
+    const result = await controller.compareRecoverCode(
+      new String(email),
+      new String(code)
+    );
+    res.send(
+      JSON.stringify({
+        error: false,
+        message: "Código comparado exitosamente",
+        result: result,
+      })
+    );
+  } catch (e) {
+    res.send(
+      JSON.stringify({
+        error: true,
+        message: "Ocurrió un error inesperado, intente de nuevo",
+      })
+    );
+  }
+});
+
+router.get("/check_email_exists", async (req: Request, res: Response) => {
+  const { email } = req.query;
+  try {
+    const result = await controller.userExists(new String(email));
+    res.send(
+      JSON.stringify({
+        error: false,
+        message: "Correo electrónico verificado exitosamente",
+        result: result,
+      })
+    );
+  } catch (e) {
+    res.send(
+      JSON.stringify({
+        error: true,
+        message: "Ocurrió un error inesperado, intente de nuevo",
+      })
+    );
+  }
+});
+
+router.post("/update_user_password", async (req: Request, res: Response) => {
+  const { email, password } = req.body;
+  try {
+    await controller.updatePassword(email, password);
+    res.send(
+      JSON.stringify({
+        error: false,
+        message: "Contraseña actualizada exitosamente",
+      })
+    );
   } catch (e) {
     res.send(
       JSON.stringify({

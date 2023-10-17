@@ -47,12 +47,13 @@ function ClientNavbar() {
           </ul>
         </div>
         <div className="d-flex">
-          <Button
-            text="Mi perfil"
-            bootstrap="btn mx-2"
-            color="#73E2A7"
-            width="150px"
-          ></Button>
+          <Link
+            to="/profile"
+            className="btn mx-2"
+            style={{ backgroundColor: "#73E2A7", width: "150px" }}
+          >
+            Mi perfil
+          </Link>
           <Button
             text="Cerrar sesión"
             bootstrap="btn mx-2"
