@@ -8,7 +8,7 @@ export async function getOrders() {
 
 // Obtiene todas las ordenes de un Usuario 
 export async function getOrdersUser(idUser: String) {
-    return await Order.find({client: idUser});
+    return await Order.find({clientRef: idUser});
 }
 
 // Obtiene el detalle de una orden
@@ -16,19 +16,36 @@ export async function getDetail(idOrder: String) {
     return await Order.findOne({_id: idOrder});
 }
 
+export async function changeOrderState(idOrder:String,newState: Number){
+    return await Order.updateOne({_id: idOrder},{$set: { state: newState }});
+}
+
 // Registrar un pedido 
-export async function registerOrder(client: String, orderDate: Date, 
-    deliveryDate: Date, address: String, priceWithDelivery: Double, 
-    photoOfPayment: String, lineProduct: [String], state: Number) {
+export async function registerOrder(client: String, 
+    orderDate: Date, 
+    deliveryDate: Date, 
+    address: String, 
+    priceWithDelivery: Double, 
+    lineProducts: [{_id:String,name:String,units:Number, price:Number}], 
+    state: Number) {
+
     const order = new Order({
-        client: client, 
+        clientRef: client, 
         orderDate: orderDate,
         deliveryDate: deliveryDate,
         address: address, 
-        priceWithDelivery: priceWithDelivery,
-        photoOfPayment: photoOfPayment, 
-        lineProduct: lineProduct, 
+        price: priceWithDelivery,
+        photoOfPayment: "TEMPORAL", 
+        lineProducts: lineProducts, 
         state: state 
     });
-    return await order.save();
+
+    const result = await order.save();
+    //Actualizar foto del pago de la orden
+    await Order.updateOne(
+        {_id: result._id},
+        {photo: "/photos/orders/" + result._id +".png"}
+    );
+
+    return result._id;
 }

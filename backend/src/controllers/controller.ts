@@ -212,7 +212,9 @@ export async function getOrders() {
   return await orderController.getOrders();
 }
 
-export async function getOrder(orderId: String) {}
+export async function getOrder(orderId: String) {
+    return await orderController.getOrder(orderId);
+}
 
 export async function getUserOrders(userId: String) {
   return await orderController.getUserOrders(userId);
