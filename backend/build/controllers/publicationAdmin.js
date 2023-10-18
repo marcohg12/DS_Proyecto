@@ -59,20 +59,71 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getProduct = exports.getProducts = exports.deleteProduct = exports.updateProduct = exports.registerProduct = void 0;
-var productDAO = __importStar(require("../dao_controllers/productDAO"));
+exports.deletePublication = exports.updatePublication = exports.registerPublication = exports.getPublicationsByTags = exports.getPublicationsByCategory = exports.getPublications = exports.getPublication = void 0;
+var publicationDAO = __importStar(require("../dao_controllers/publicationDAO"));
 var fs = require("fs");
-// Registra un producto
-function registerProduct(name, description, units, price, photoPath) {
+// Obtiene una publicación por su Id
+function getPublication(publicationId) {
     return __awaiter(this, void 0, void 0, function () {
-        var productId;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, productDAO.registerProduct(name, description, units, price)];
+                case 0: return [4 /*yield*/, publicationDAO.getPublication(publicationId)];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+exports.getPublication = getPublication;
+// Obtiene todas las publicaciones registradas
+function getPublications() {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, publicationDAO.getPublications()];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+exports.getPublications = getPublications;
+// Obtiene todas las publicaciones de una categoría
+function getPublicationsByCategory(categoryId) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, publicationDAO.getPublicationsByCategory(categoryId)];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+exports.getPublicationsByCategory = getPublicationsByCategory;
+// Obtiene todas las publicaciones de un conjunto de palabras clave
+function getPublicationsByTags(tags) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, publicationDAO.getPublicationsByTags(tags)];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+exports.getPublicationsByTags = getPublicationsByTags;
+// Registra una publicación
+function registerPublication(description, tags, categoryId, photoPath) {
+    return __awaiter(this, void 0, void 0, function () {
+        var keywords, trimmedKeywords, publicationId;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    keywords = tags.split(",");
+                    trimmedKeywords = keywords.map(function (keyword) { return keyword.trim(); });
+                    return [4 /*yield*/, publicationDAO.registerPublication(description, trimmedKeywords, categoryId)];
                 case 1:
-                    productId = _a.sent();
+                    publicationId = _a.sent();
                     // Guardamos la foto en el sistema de archivos
-                    return [4 /*yield*/, fs.renameSync(photoPath, "photos/products/" + productId + ".png")];
+                    return [4 /*yield*/, fs.renameSync(photoPath, "photos/publications/" + publicationId + ".png")];
                 case 2:
                     // Guardamos la foto en el sistema de archivos
                     _a.sent();
@@ -81,75 +132,50 @@ function registerProduct(name, description, units, price, photoPath) {
         });
     });
 }
-exports.registerProduct = registerProduct;
-// Actualiza los datos de un producto
-function updateProduct(productId, name, description, units, price, photoPath) {
+exports.registerPublication = registerPublication;
+// Actualiza una publicación
+function updatePublication(publicationId, description, tags, categoryId, photoPath) {
     return __awaiter(this, void 0, void 0, function () {
+        var keywords, trimmedKeywords;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     if (!(photoPath !== "")) return [3 /*break*/, 3];
                     // Eliminamos la foto anterior
-                    return [4 /*yield*/, fs.unlink("photos/products/" + productId + ".png", function () { })];
+                    return [4 /*yield*/, fs.unlink("photos/publications/" + publicationId + ".png", function () { })];
                 case 1:
                     // Eliminamos la foto anterior
                     _a.sent();
                     // Guardamos la nueva foto
-                    return [4 /*yield*/, fs.renameSync(photoPath, "photos/products/" + productId + ".png")];
+                    return [4 /*yield*/, fs.renameSync(photoPath, "photos/publications/" + publicationId + ".png")];
                 case 2:
                     // Guardamos la nueva foto
                     _a.sent();
                     _a.label = 3;
-                case 3: return [4 /*yield*/, productDAO.updateProduct(productId, name, description, units, price)];
-                case 4: return [2 /*return*/, _a.sent()];
-            }
-        });
-    });
-}
-exports.updateProduct = updateProduct;
-// Elimina un producto por su Id
-function deleteProduct(productId) {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: 
-                // Eliminamos la foto del sistema de archivos
-                return [4 /*yield*/, fs.unlink("photos/products/" + productId + ".png", function () { })];
-                case 1:
-                    // Eliminamos la foto del sistema de archivos
-                    _a.sent();
-                    // Eliminamos el producto de la BD
-                    return [4 /*yield*/, productDAO.deleteProduct(productId)];
-                case 2:
-                    // Eliminamos el producto de la BD
+                case 3:
+                    keywords = tags.split(",");
+                    trimmedKeywords = keywords.map(function (keyword) { return keyword.trim(); });
+                    return [4 /*yield*/, publicationDAO.updatePublication(publicationId, categoryId, description, trimmedKeywords)];
+                case 4:
                     _a.sent();
                     return [2 /*return*/];
             }
         });
     });
 }
-exports.deleteProduct = deleteProduct;
-// Retorna todos los productos registrados
-function getProducts() {
+exports.updatePublication = updatePublication;
+// Elimina una publicación por su Id
+function deletePublication(publicationId) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, productDAO.getProducts()];
-                case 1: return [2 /*return*/, _a.sent()];
+                case 0: return [4 /*yield*/, fs.unlink("photos/publications/" + publicationId + ".png", function () { })];
+                case 1:
+                    _a.sent();
+                    return [4 /*yield*/, publicationDAO.deletePublication(publicationId)];
+                case 2: return [2 /*return*/, _a.sent()];
             }
         });
     });
 }
-exports.getProducts = getProducts;
-// Retorna el producto con el Id enviado por parámetro
-function getProduct(productId) {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, productDAO.getProduct(productId)];
-                case 1: return [2 /*return*/, _a.sent()];
-            }
-        });
-    });
-}
-exports.getProduct = getProduct;
+exports.deletePublication = deletePublication;

@@ -59,97 +59,89 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getProduct = exports.getProducts = exports.deleteProduct = exports.updateProduct = exports.registerProduct = void 0;
-var productDAO = __importStar(require("../dao_controllers/productDAO"));
-var fs = require("fs");
-// Registra un producto
-function registerProduct(name, description, units, price, photoPath) {
-    return __awaiter(this, void 0, void 0, function () {
-        var productId;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, productDAO.registerProduct(name, description, units, price)];
-                case 1:
-                    productId = _a.sent();
-                    // Guardamos la foto en el sistema de archivos
-                    return [4 /*yield*/, fs.renameSync(photoPath, "photos/products/" + productId + ".png")];
-                case 2:
-                    // Guardamos la foto en el sistema de archivos
-                    _a.sent();
-                    return [2 /*return*/];
-            }
-        });
-    });
-}
-exports.registerProduct = registerProduct;
-// Actualiza los datos de un producto
-function updateProduct(productId, name, description, units, price, photoPath) {
+exports.getSubCategories = exports.registerSubCategory = exports.deleteCategory = exports.getCategory = exports.getCategories = exports.editCategory = exports.registerCategory = void 0;
+var categoryDAO = __importStar(require("../dao_controllers/categoryDAO"));
+// Registra una categoría
+function registerCategory(name) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0:
-                    if (!(photoPath !== "")) return [3 /*break*/, 3];
-                    // Eliminamos la foto anterior
-                    return [4 /*yield*/, fs.unlink("photos/products/" + productId + ".png", function () { })];
-                case 1:
-                    // Eliminamos la foto anterior
-                    _a.sent();
-                    // Guardamos la nueva foto
-                    return [4 /*yield*/, fs.renameSync(photoPath, "photos/products/" + productId + ".png")];
-                case 2:
-                    // Guardamos la nueva foto
-                    _a.sent();
-                    _a.label = 3;
-                case 3: return [4 /*yield*/, productDAO.updateProduct(productId, name, description, units, price)];
-                case 4: return [2 /*return*/, _a.sent()];
-            }
-        });
-    });
-}
-exports.updateProduct = updateProduct;
-// Elimina un producto por su Id
-function deleteProduct(productId) {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: 
-                // Eliminamos la foto del sistema de archivos
-                return [4 /*yield*/, fs.unlink("photos/products/" + productId + ".png", function () { })];
-                case 1:
-                    // Eliminamos la foto del sistema de archivos
-                    _a.sent();
-                    // Eliminamos el producto de la BD
-                    return [4 /*yield*/, productDAO.deleteProduct(productId)];
-                case 2:
-                    // Eliminamos el producto de la BD
-                    _a.sent();
-                    return [2 /*return*/];
-            }
-        });
-    });
-}
-exports.deleteProduct = deleteProduct;
-// Retorna todos los productos registrados
-function getProducts() {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, productDAO.getProducts()];
+                case 0: return [4 /*yield*/, categoryDAO.registerCategory(name)];
                 case 1: return [2 /*return*/, _a.sent()];
             }
         });
     });
 }
-exports.getProducts = getProducts;
-// Retorna el producto con el Id enviado por parámetro
-function getProduct(productId) {
+exports.registerCategory = registerCategory;
+// Actualiza una categoría
+function editCategory(categoryId, newName) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, productDAO.getProduct(productId)];
+                case 0: return [4 /*yield*/, categoryDAO.updateCategory(categoryId, newName)];
                 case 1: return [2 /*return*/, _a.sent()];
             }
         });
     });
 }
-exports.getProduct = getProduct;
+exports.editCategory = editCategory;
+// Obtiene todas las categorías
+function getCategories() {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, categoryDAO.getCategories()];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+exports.getCategories = getCategories;
+// Obtiene una categoría por Id
+function getCategory(categoryId) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, categoryDAO.getCategoryByID(categoryId)];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+exports.getCategory = getCategory;
+// Elimina una categoría por Id
+function deleteCategory(categoryId) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, categoryDAO.deleteCategory(categoryId)];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+exports.deleteCategory = deleteCategory;
+// Registra una subcategoría en una categoría
+function registerSubCategory(name, fatherCategory) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, categoryDAO.registerSubCategory(name, fatherCategory)];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+exports.registerSubCategory = registerSubCategory;
+// Retorna todas las subcategorías de una categoría padre
+function getSubCategories(fatherCategory) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, categoryDAO.getSubCategories(fatherCategory)];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+exports.getSubCategories = getSubCategories;

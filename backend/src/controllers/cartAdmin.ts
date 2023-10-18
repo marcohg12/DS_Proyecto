@@ -1,28 +1,28 @@
-import cart, { CartT } from "../schemas/cartS";
-import {
-  getCart as getCartDAO,
-  addProduct as addProductDAO,
-  deleteProduct as deleteProductDAO,
-  getProductsCart as getProductsCartDAO,
-  getProductsToString as getProductsToString,
-  getPriceCart as getPriceCartDAO,
-  buyCart as buyCartDAO,
-} from "../dao_controllers/cartDAO";
+import * as cartDAO from "../dao_controllers/cartDAO";
+const fs = require("fs");
 
-export async function getCart(idUser: String) {
-  const result = await getCartDAO(idUser);
-}
+// Agrega un producto al carrito
+// Valida que no hayan más de 5 unidades del producto en el carrito
+export async function addProductToCart(
+  userId: String,
+  productId: String,
+  units: Number
+) {}
 
-// Agregar un producto al carrito
-// Solo pueden haber 5 unidades máximo del producto en el carrito
-// Id del producto, las unidades
-// Id del usuario: req.user.id
+// Elimina una unidad de un producto del carrito
+// Si las unidades llegan a 0, se elimina el producto totalmente del carrito
+export async function deleteProductFromCart(
+  userId: String,
+  productId: String
+) {}
 
-// Eliminar un producto del carrito
-// Id del producto
+// Obtiene los productos del carrito de un usuario
+export async function getCart(userId: String) {}
 
-// Productos del carrito
-// Lista de productos [{idProducto, nombre, unidades en el carrito, precio por unidad, photoURL}]
-
-// Confirmación del carrito
-// String con la dirección, precio ya con el envío, foto
+// Genera un pedido a partir del carrito de un usuario
+// Limpia los productos del carrito
+export async function sendOrder(
+  userId: String,
+  address: String,
+  totalPrice: Number
+) {}

@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var mongoose_1 = require("mongoose");
 var mongoose_2 = __importDefault(require("mongoose"));
 var publicationSchema = new mongoose_1.Schema({
-    category: { type: String, required: true },
+    categoryId: { type: mongoose_1.Schema.Types.ObjectId, required: true },
     date: { type: Date, required: true },
     description: { type: String, required: true },
     photo: { type: String, required: true },

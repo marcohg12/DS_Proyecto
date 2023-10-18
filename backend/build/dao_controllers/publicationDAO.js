@@ -39,74 +39,150 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deletePublication = exports.editPublication = exports.registerPublication = exports.getPublicationsByTags = exports.getPublicationsByCategory = exports.getPublications = exports.getPublication = void 0;
+exports.deletePublication = exports.updatePublication = exports.registerPublication = exports.getPublicationsByTags = exports.getPublicationsByCategory = exports.getPublications = exports.getPublication = void 0;
+var mongodb_1 = require("mongodb");
+var mongoose_1 = __importDefault(require("mongoose"));
 var publicationS_1 = __importDefault(require("../schemas/publicationS"));
-//Se trae una publicacion por su id
-function getPublication(id_publication) {
+// Retorna una publicacion por su Id
+function getPublication(publicationId) {
     return __awaiter(this, void 0, void 0, function () {
+        var publication;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, publicationS_1.default.findOne({ _id: id_publication })];
-                case 1: return [2 /*return*/, _a.sent()];
+                case 0: return [4 /*yield*/, publicationS_1.default.aggregate([
+                        {
+                            $match: {
+                                _id: new mongoose_1.default.Types.ObjectId(publicationId.toString()),
+                            },
+                        },
+                        {
+                            $lookup: {
+                                from: "categories",
+                                localField: "categoryId",
+                                foreignField: "_id",
+                                as: "category",
+                            },
+                        },
+                        {
+                            $unwind: "$category",
+                        },
+                    ])];
+                case 1:
+                    publication = _a.sent();
+                    return [2 /*return*/, publication[0]];
             }
         });
     });
 }
 exports.getPublication = getPublication;
-//Se trae todas las publicaciones
+// Retorna todas las publicaciones registradas
 function getPublications() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, publicationS_1.default.find()];
+                case 0: return [4 /*yield*/, publicationS_1.default.aggregate([
+                        {
+                            $lookup: {
+                                from: "categories",
+                                localField: "categoryId",
+                                foreignField: "_id",
+                                as: "category",
+                            },
+                        },
+                        {
+                            $unwind: "$category",
+                        },
+                    ])];
                 case 1: return [2 /*return*/, _a.sent()];
             }
         });
     });
 }
 exports.getPublications = getPublications;
-//Se trae las publicaciones de la categoria por el id
-function getPublicationsByCategory(id_category) {
+// Retorna todas las publicaciones que pertenecen a una categoría
+function getPublicationsByCategory(categoryId) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, publicationS_1.default.find({ category: id_category })];
+                case 0: return [4 /*yield*/, publicationS_1.default.aggregate([
+                        {
+                            $lookup: {
+                                from: "categories",
+                                localField: "categoryId",
+                                foreignField: "_id",
+                                as: "category",
+                            },
+                        },
+                        {
+                            $unwind: "$category",
+                        },
+                        {
+                            $match: {
+                                $or: [
+                                    { categoryId: new mongodb_1.ObjectId(categoryId.toString()) },
+                                    { "category.fatherCategory": categoryId.toString() },
+                                ],
+                            },
+                        },
+                    ])];
                 case 1: return [2 /*return*/, _a.sent()];
             }
         });
     });
 }
 exports.getPublicationsByCategory = getPublicationsByCategory;
-//Se trae las publicaciones por los tags
+// Retorna todas las publicaciones que tengan al menos una palabra clave en los tags enviados
 function getPublicationsByTags(tags) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, publicationS_1.default.find({ tags: { $in: tags } })];
+                case 0: return [4 /*yield*/, publicationS_1.default.aggregate([
+                        {
+                            $lookup: {
+                                from: "categories",
+                                localField: "categoryId",
+                                foreignField: "_id",
+                                as: "category",
+                            },
+                        },
+                        {
+                            $unwind: "$category",
+                        },
+                        {
+                            $match: {
+                                tags: {
+                                    $in: tags,
+                                },
+                            },
+                        },
+                    ]).collation({ locale: "en", strength: 1 })];
                 case 1: return [2 /*return*/, _a.sent()];
             }
         });
     });
 }
 exports.getPublicationsByTags = getPublicationsByTags;
-function registerPublication(category, date, description, tags) {
+// Registra una publicación
+function registerPublication(description, tags, categoryId) {
     return __awaiter(this, void 0, void 0, function () {
         var publication, result;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     publication = new publicationS_1.default({
-                        category: category,
-                        date: date,
+                        categoryId: categoryId,
+                        date: new Date(),
                         description: description,
                         photo: "TEMPORAL",
-                        tags: tags
+                        tags: tags,
                     });
                     return [4 /*yield*/, publication.save()];
                 case 1:
                     result = _a.sent();
+                    // Actualizamos la ruta de la foto a la del sistema de archivos
                     return [4 /*yield*/, publicationS_1.default.updateOne({ _id: result._id }, { photo: "/photos/publications/" + result._id + ".png" })];
                 case 2:
+                    // Actualizamos la ruta de la foto a la del sistema de archivos
                     _a.sent();
                     return [2 /*return*/, result._id];
             }
@@ -114,28 +190,28 @@ function registerPublication(category, date, description, tags) {
     });
 }
 exports.registerPublication = registerPublication;
-//Faltan los de edit
-function editPublication(id_publication, category, date, description, photo, tags) {
+// Actualiza una publicación
+function updatePublication(publicationId, categoryId, description, tags) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, publicationS_1.default.updateOne({ _id: id_publication }, { category: category,
-                        date: date,
+                case 0: return [4 /*yield*/, publicationS_1.default.updateOne({ _id: publicationId }, {
+                        categoryId: categoryId,
                         description: description,
-                        photo: photo,
-                        tags: tags })];
+                        tags: tags,
+                    })];
                 case 1: return [2 /*return*/, _a.sent()];
             }
         });
     });
 }
-exports.editPublication = editPublication;
-//Elimina una publicacion por su id
-function deletePublication(id_publication) {
+exports.updatePublication = updatePublication;
+// Elimina una publicacion por su id
+function deletePublication(publicationId) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, publicationS_1.default.deleteOne({ _id: id_publication })];
+                case 0: return [4 /*yield*/, publicationS_1.default.deleteOne({ _id: publicationId })];
                 case 1: return [2 /*return*/, _a.sent()];
             }
         });

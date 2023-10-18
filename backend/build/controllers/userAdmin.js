@@ -59,97 +59,132 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getProduct = exports.getProducts = exports.deleteProduct = exports.updateProduct = exports.registerProduct = void 0;
-var productDAO = __importStar(require("../dao_controllers/productDAO"));
-var fs = require("fs");
-// Registra un producto
-function registerProduct(name, description, units, price, photoPath) {
-    return __awaiter(this, void 0, void 0, function () {
-        var productId;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, productDAO.registerProduct(name, description, units, price)];
-                case 1:
-                    productId = _a.sent();
-                    // Guardamos la foto en el sistema de archivos
-                    return [4 /*yield*/, fs.renameSync(photoPath, "photos/products/" + productId + ".png")];
-                case 2:
-                    // Guardamos la foto en el sistema de archivos
-                    _a.sent();
-                    return [2 /*return*/];
-            }
-        });
-    });
+exports.userExists = exports.compareRecoverCode = exports.updateRecoverCode = exports.updatePassword = exports.updateUser = exports.registerUser = void 0;
+var userDAO = __importStar(require("../dao_controllers/userDAO"));
+var emailService_1 = require("./emailService");
+var bcrypt = require("bcryptjs");
+// Funciones auxiliares -------------------------------------------------------------------
+function generateNumericPasswordRecoveryCode(length) {
+    var charset = "0123456789";
+    var code = "";
+    for (var i = 0; i < length; i++) {
+        var randomIndex = Math.floor(Math.random() * charset.length);
+        code += charset[randomIndex];
+    }
+    return code;
 }
-exports.registerProduct = registerProduct;
-// Actualiza los datos de un producto
-function updateProduct(productId, name, description, units, price, photoPath) {
+// ----------------------------------------------------------------------------------------
+// Registra un usuario
+function registerUser(name, email, phone, password) {
     return __awaiter(this, void 0, void 0, function () {
+        var result, err_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    if (!(photoPath !== "")) return [3 /*break*/, 3];
-                    // Eliminamos la foto anterior
-                    return [4 /*yield*/, fs.unlink("photos/products/" + productId + ".png", function () { })];
+                    _a.trys.push([0, 5, , 6]);
+                    return [4 /*yield*/, userDAO.getUserByEmail(email)];
                 case 1:
-                    // Eliminamos la foto anterior
+                    result = _a.sent();
+                    if (!result) return [3 /*break*/, 2];
+                    return [2 /*return*/, {
+                            error: true,
+                            message: "El correo electrónico ya se encuentra en uso",
+                        }];
+                case 2: return [4 /*yield*/, userDAO.registerUser(name, email, phone, password)];
+                case 3:
                     _a.sent();
-                    // Guardamos la nueva foto
-                    return [4 /*yield*/, fs.renameSync(photoPath, "photos/products/" + productId + ".png")];
-                case 2:
-                    // Guardamos la nueva foto
-                    _a.sent();
-                    _a.label = 3;
-                case 3: return [4 /*yield*/, productDAO.updateProduct(productId, name, description, units, price)];
-                case 4: return [2 /*return*/, _a.sent()];
+                    return [2 /*return*/, {
+                            error: false,
+                            message: "Usuario registrado exitosamente",
+                        }];
+                case 4: return [3 /*break*/, 6];
+                case 5:
+                    err_1 = _a.sent();
+                    return [2 /*return*/, {
+                            error: true,
+                            message: "Ocurrió un error inesperado, intente de nuevo",
+                        }];
+                case 6: return [2 /*return*/];
             }
         });
     });
 }
-exports.updateProduct = updateProduct;
-// Elimina un producto por su Id
-function deleteProduct(productId) {
+exports.registerUser = registerUser;
+// Actualiza los datos de un usuario
+function updateUser(userId, name, email, phone, password) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: 
-                // Eliminamos la foto del sistema de archivos
-                return [4 /*yield*/, fs.unlink("photos/products/" + productId + ".png", function () { })];
+                case 0: return [4 /*yield*/, userDAO.updateUser(userId, name, email, phone, password)];
                 case 1:
-                    // Eliminamos la foto del sistema de archivos
-                    _a.sent();
-                    // Eliminamos el producto de la BD
-                    return [4 /*yield*/, productDAO.deleteProduct(productId)];
-                case 2:
-                    // Eliminamos el producto de la BD
                     _a.sent();
                     return [2 /*return*/];
             }
         });
     });
 }
-exports.deleteProduct = deleteProduct;
-// Retorna todos los productos registrados
-function getProducts() {
+exports.updateUser = updateUser;
+// Actualiza la contraseña de un usuario
+function updatePassword(email, password) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, productDAO.getProducts()];
+                case 0: return [4 /*yield*/, userDAO.updatePassword(email, password)];
+                case 1:
+                    _a.sent();
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.updatePassword = updatePassword;
+// Actualiza el código de recuperación de contraseña de un usuario
+function updateRecoverCode(email) {
+    return __awaiter(this, void 0, void 0, function () {
+        var code, content;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    code = generateNumericPasswordRecoveryCode(8);
+                    content = "El código de recuperación es: " + code.toString();
+                    (0, emailService_1.sendEmail)(email.toString(), "Sistema Duende - Código de recuperación de contraseña", content);
+                    return [4 /*yield*/, userDAO.updateRecoverCode(email, code)];
+                case 1:
+                    _a.sent();
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.updateRecoverCode = updateRecoverCode;
+// Verifica si el código de recuperación ingresado por un usuario es igual al de la BD
+function compareRecoverCode(email, code) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, userDAO.compareRecoverCode(email, code)];
                 case 1: return [2 /*return*/, _a.sent()];
             }
         });
     });
 }
-exports.getProducts = getProducts;
-// Retorna el producto con el Id enviado por parámetro
-function getProduct(productId) {
+exports.compareRecoverCode = compareRecoverCode;
+// Verifica si existe el usuario con el email del parámetro
+function userExists(email) {
     return __awaiter(this, void 0, void 0, function () {
+        var user, result;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, productDAO.getProduct(productId)];
-                case 1: return [2 /*return*/, _a.sent()];
+                case 0: return [4 /*yield*/, userDAO.getUserByEmail(email)];
+                case 1:
+                    user = _a.sent();
+                    result = user ? true : false;
+                    if (result) {
+                        updateRecoverCode(email);
+                    }
+                    return [2 /*return*/, result];
             }
         });
     });
 }
-exports.getProduct = getProduct;
+exports.userExists = userExists;

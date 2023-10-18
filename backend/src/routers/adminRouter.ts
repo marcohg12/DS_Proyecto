@@ -251,4 +251,46 @@ router.post("/set_order_state", async (req: Request, res: Response) => {
   }
 });
 
+// Rutas de pedidos ----------------------------------------------------------------------
+
+router.post("/set_order_state", async (req: Request, res: Response) => {
+  const { orderId, state } = req.body;
+  try {
+    await controller.setOrderState(orderId, state);
+    res.send(
+      JSON.stringify({
+        error: false,
+        message: "Estado de pedido actualizado exitosamente",
+      })
+    );
+  } catch (e) {
+    res.send(
+      JSON.stringify({
+        error: true,
+        message: "Ocurrió un error inesperado, intente de nuevo",
+      })
+    );
+  }
+});
+
+router.post("/confirm_order", async (req: Request, res: Response) => {
+  const { orderId } = req.body;
+  try {
+    await controller.confirmOrder(orderId);
+    res.send(
+      JSON.stringify({
+        error: false,
+        message: "Pedido confirmado exitosamente",
+      })
+    );
+  } catch (e) {
+    res.send(
+      JSON.stringify({
+        error: true,
+        message: "Ocurrió un error inesperado, intente de nuevo",
+      })
+    );
+  }
+});
+
 module.exports = router;

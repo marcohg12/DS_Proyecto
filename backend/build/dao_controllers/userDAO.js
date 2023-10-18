@@ -39,11 +39,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getUserNoPwd = exports.getUserByEmail = exports.getUserByID = exports.registerUser = void 0;
+exports.getUserNoPwd = exports.getUserByEmail = exports.getUserByID = exports.compareRecoverCode = exports.updateRecoverCode = exports.updatePassword = exports.updateUser = exports.registerUser = void 0;
 var userS_1 = __importDefault(require("../schemas/userS"));
+var EmailInUse = require("../exceptions/exceptions").EmailInUse;
 var bcrypt = require("bcryptjs");
-// Registrar un usuario --------------------------------------------------------
+// Registra un usuario
 // Por defecto lo registra como cliente, NO COMO ADMINISTRADOR
+// Se encarga de encriptar la contraseña
 function registerUser(name, email, phone, password) {
     return __awaiter(this, void 0, void 0, function () {
         var hashedPassword, user;
@@ -66,14 +68,86 @@ function registerUser(name, email, phone, password) {
     });
 }
 exports.registerUser = registerUser;
-// Obtener un usuario por id ---------------------------------------------------
+// Actualiza un usuario
+// Se encarga de encriptar la contraseña del usuario
+function updateUser(userId, name, email, phone, password) {
+    return __awaiter(this, void 0, void 0, function () {
+        var checkUser;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, getUserByEmail(email)];
+                case 1:
+                    checkUser = _a.sent();
+                    // Verificamos que otro usuario no tenga el mismo correo
+                    if (checkUser && checkUser._id != userId) {
+                        throw new EmailInUse();
+                    }
+                    // Si hay una contraseña nueva, la actualizamos
+                    if (password != "") {
+                        updatePassword(email, password);
+                    }
+                    return [4 /*yield*/, userS_1.default.updateOne({ _id: userId }, { name: name, email: email, phone: phone })];
+                case 2: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+exports.updateUser = updateUser;
+// Actualiza la contraseña de un usuario
+// Se encarga de encriptar la contraseña
+function updatePassword(email, password) {
+    return __awaiter(this, void 0, void 0, function () {
+        var hashedPassword;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, bcrypt.hash(password, 10)];
+                case 1:
+                    hashedPassword = _a.sent();
+                    return [4 /*yield*/, userS_1.default.updateOne({ email: email }, { password: hashedPassword })];
+                case 2: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+exports.updatePassword = updatePassword;
+// Actualiza el código de recuperación de contraseña de un usuario
+function updateRecoverCode(email, code) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, userS_1.default.updateOne({ email: email }, { recoverCode: code })];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+exports.updateRecoverCode = updateRecoverCode;
+// Verifica si el código de recuperación ingresado por un usuario es igual al de la BD
+function compareRecoverCode(email, code) {
+    return __awaiter(this, void 0, void 0, function () {
+        var user;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, getUserByEmail(email)];
+                case 1:
+                    user = _a.sent();
+                    if (!user) {
+                        return [2 /*return*/, false];
+                    }
+                    return [2 /*return*/, user.recoverCode == code];
+            }
+        });
+    });
+}
+exports.compareRecoverCode = compareRecoverCode;
+// Retorna un usuario por id
 function getUserByID(id) {
     return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
         return [2 /*return*/];
     }); });
 }
 exports.getUserByID = getUserByID;
-// Obtener un usuario por email ------------------------------------------------
+// Retorna un usuario por email
 function getUserByEmail(email) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
@@ -85,7 +159,7 @@ function getUserByEmail(email) {
     });
 }
 exports.getUserByEmail = getUserByEmail;
-// Obtiene un usuario por email pero no retorna la contraseña del usuario
+// Retorna un usuario por email pero no retorna la contraseña del usuario
 function getUserNoPwd(email) {
     return __awaiter(this, void 0, void 0, function () {
         var user;

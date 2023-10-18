@@ -39,9 +39,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteProduct = exports.editProduct = exports.registerProduct = exports.getProducts = exports.getProduct = void 0;
+exports.deleteProduct = exports.updateProduct = exports.registerProduct = exports.getProducts = exports.getProduct = void 0;
 var productS_1 = __importDefault(require("../schemas/productS"));
-//Obtener un producto por su id
+var cartS_1 = __importDefault(require("../schemas/cartS"));
+// Obtiene un producto por su id
 function getProduct(productId) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
@@ -53,7 +54,7 @@ function getProduct(productId) {
     });
 }
 exports.getProduct = getProduct;
-//Obtener todos los productos
+// Obtiene todos los productos registrados
 function getProducts() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
@@ -65,7 +66,7 @@ function getProducts() {
     });
 }
 exports.getProducts = getProducts;
-//Registrar un producto
+// Registra un producto
 function registerProduct(name, description, units, price) {
     return __awaiter(this, void 0, void 0, function () {
         var product, result;
@@ -82,8 +83,10 @@ function registerProduct(name, description, units, price) {
                     return [4 /*yield*/, product.save()];
                 case 1:
                     result = _a.sent();
+                    // Actualizamos el producto con la ruta de la foto en el sistema de archivos
                     return [4 /*yield*/, productS_1.default.updateOne({ _id: result._id }, { photo: "/photos/products/" + result._id + ".png" })];
                 case 2:
+                    // Actualizamos el producto con la ruta de la foto en el sistema de archivos
                     _a.sent();
                     return [2 /*return*/, result._id];
             }
@@ -91,8 +94,8 @@ function registerProduct(name, description, units, price) {
     });
 }
 exports.registerProduct = registerProduct;
-/*Por aqui deben ir los de editar*/
-function editProduct(productId, name, description, units, photo, price) {
+// Actualiza un producto
+function updateProduct(productId, name, description, units, price) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
@@ -100,7 +103,6 @@ function editProduct(productId, name, description, units, photo, price) {
                         name: name,
                         description: description,
                         units: units,
-                        photo: photo,
                         price: price,
                     })];
                 case 1: return [2 /*return*/, _a.sent()];
@@ -108,15 +110,27 @@ function editProduct(productId, name, description, units, photo, price) {
         });
     });
 }
-exports.editProduct = editProduct;
-//Elimina un producto
-//Note: Delete one returns an object with deletedCount(number of docs deleted) field
+exports.updateProduct = updateProduct;
+// Elimina un producto
+// Nota: también elimina los productos de los carritos en los que se encontrara el producto
 function deleteProduct(productId) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, productS_1.default.deleteOne({ _id: productId })];
-                case 1: return [2 /*return*/, _a.sent()];
+                case 0: 
+                // Eliminamos los productos de los carritos
+                return [4 /*yield*/, cartS_1.default.updateMany({}, {
+                        $pull: {
+                            products: {
+                                productRef: productId,
+                            },
+                        },
+                    })];
+                case 1:
+                    // Eliminamos los productos de los carritos
+                    _a.sent();
+                    return [4 /*yield*/, productS_1.default.deleteOne({ _id: productId })];
+                case 2: return [2 /*return*/, _a.sent()];
             }
         });
     });

@@ -7,6 +7,6 @@ var mongoose_1 = require("mongoose");
 var mongoose_2 = __importDefault(require("mongoose"));
 var categorySchema = new mongoose_1.Schema({
     name: { type: String, required: true },
-    fatherCategory: { type: String }
+    fatherCategory: { type: String },
 });
 exports.default = mongoose_2.default.model("Category", categorySchema);

@@ -3,6 +3,7 @@ import * as cartController from "./cartAdmin";
 import * as categoryController from "./categoryAdmin";
 import * as publicationController from "./publicationAdmin";
 import * as productController from "./productAdmin";
+import * as orderController from "./orderAdmin";
 
 // Funciones de usuario ----------------------------------------------------------------
 
@@ -48,8 +49,28 @@ export async function compareRecoverCode(email: String, code: String) {
 
 // Funciones de carrito ----------------------------------------------------------------
 
-export async function getCart(idUser: String) {
-  return await cartController.getCart(idUser);
+export async function addProductToCart(
+  userId: String,
+  productId: String,
+  units: Number
+) {
+  return await cartController.addProductToCart(userId, productId, units);
+}
+
+export async function deleteProductFromCart(userId: String, productId: String) {
+  return await cartController.deleteProductFromCart(userId, productId);
+}
+
+export async function getCart(userId: String) {
+  return await cartController.getCart(userId);
+}
+
+export async function sendOrder(
+  userId: String,
+  address: String,
+  totalPrice: Number
+) {
+  return await cartController.sendOrder(userId, address, totalPrice);
 }
 
 // Funciones de categorías -------------------------------------------------------------
@@ -186,3 +207,21 @@ export async function updateProduct(
 }
 
 // Funciones de pedidos ----------------------------------------------------------------
+
+export async function getOrders() {
+  return await orderController.getOrders();
+}
+
+export async function getOrder(orderId: String) {}
+
+export async function getUserOrders(userId: String) {
+  return await orderController.getUserOrders(userId);
+}
+
+export async function setOrderState(orderId: String, state: Number) {
+  return await orderController.setOrderState(orderId, state);
+}
+
+export async function confirmOrder(orderId: String) {
+  return await orderController.confirmOrder(orderId);
+}

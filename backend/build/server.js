@@ -122,7 +122,7 @@ app.get("/editCategory", function (req, res) { return __awaiter(void 0, void 0, 
     var response;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, (0, controller_2.editCategory)("6525eff3441aa2df65dc65f9", "Series")];
+            case 0: return [4 /*yield*/, (0, controller_2.updateCategory)("6525eff3441aa2df65dc65f9", "Series")];
             case 1:
                 response = _a.sent();
                 console.log(response);
@@ -148,7 +148,7 @@ app.get("/registerSub", function (req, res) { return __awaiter(void 0, void 0, v
     var response;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, (0, controller_2.registerSubCategory)("Marvel", "6525eff3441aa2df65dc65f9")];
+            case 0: return [4 /*yield*/, (0, controller_2.registerSubcategory)("Marvel", "6525eff3441aa2df65dc65f9")];
             case 1:
                 response = _a.sent();
                 console.log(response);
@@ -174,4 +174,5 @@ app.use("/admin", adminRouter);
 app.use("/general", generalRouter);
 //app.use("/client", clientRouter);
 app.use("/photos/products", expressStatic("./photos/products"));
+app.use("/photos/publications", expressStatic("./photos/publications"));
 app.listen(port);

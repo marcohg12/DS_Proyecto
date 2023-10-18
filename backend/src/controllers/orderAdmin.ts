@@ -1,9 +1,18 @@
-// Get pedidos todos
+import * as orderDAO from "../dao_controllers/orderDAO";
 
-// Get pedidos de un usuario
-// IdUsuario: req.user.id
+// Obtiene todos los pedidos registrados
+export async function getOrders() {}
 
-// Cambiar estado del pedido
-// IdPedido, numero de estado
+// Obtiene el detalle de un pedido
+export async function getOrder(orderId: String) {}
 
-// Comprar pedido
+// Obtiene todos los pedidos de un usuario
+export async function getUserOrders(userId: String) {}
+
+// Cambia el estado de un pedido
+export async function setOrderState(orderId: String, state: Number) {}
+
+// Confirma un pedido
+// Valida que por cada producto del pedido hayan unidades suficientes o
+// que el producto exista en el inventario
+export async function confirmOrder(orderId: String) {}

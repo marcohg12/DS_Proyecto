@@ -39,21 +39,21 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.registerSubCategory = exports.deleteCategory = exports.editCategory = exports.registerCategory = exports.getSubCategories = exports.getCategories = exports.getCategoryByName = exports.getCategoryByID = void 0;
+exports.registerSubCategory = exports.deleteCategory = exports.updateCategory = exports.registerCategory = exports.getSubCategories = exports.getCategories = exports.getCategoryByName = exports.getCategoryByID = void 0;
 var categoryS_1 = __importDefault(require("../schemas/categoryS"));
-//Regresa la categoria correspondiente al id 
-function getCategoryByID(id_category) {
+// Retorna la categoria correspondiente al Id
+function getCategoryByID(categoryId) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, categoryS_1.default.findOne({ _id: id_category })];
+                case 0: return [4 /*yield*/, categoryS_1.default.findOne({ _id: categoryId })];
                 case 1: return [2 /*return*/, _a.sent()];
             }
         });
     });
 }
 exports.getCategoryByID = getCategoryByID;
-//Regresa la categoria por el nombre
+// Retorna la categoria por el nombre
 function getCategoryByName(name) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
@@ -65,13 +65,16 @@ function getCategoryByName(name) {
     });
 }
 exports.getCategoryByName = getCategoryByName;
-//Regresa todas las categorias
+// Retorna todas las categorias
 function getCategories() {
     return __awaiter(this, void 0, void 0, function () {
         var categories, categoriesArray, i, _a;
         return __generator(this, function (_b) {
             switch (_b.label) {
-                case 0: return [4 /*yield*/, categoryS_1.default.find({ fatherCategory: null }).select({ _id: 1, name: 1 })];
+                case 0: return [4 /*yield*/, categoryS_1.default.find({ fatherCategory: null }).select({
+                        _id: 1,
+                        name: 1,
+                    })];
                 case 1:
                     categories = _b.sent();
                     categoriesArray = categories.map(function (category) { return category.toObject(); });
@@ -93,20 +96,22 @@ function getCategories() {
     });
 }
 exports.getCategories = getCategories;
-//Regresa todas las subcategorias de una categoria
+// Retorna todas las subcategorias de una categoria
 function getSubCategories(fatherCategory) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, categoryS_1.default.find({ fatherCategory: fatherCategory }).select({ _id: 1, name: 1 })];
+                case 0: return [4 /*yield*/, categoryS_1.default.find({ fatherCategory: fatherCategory }).select({
+                        _id: 1,
+                        name: 1,
+                    })];
                 case 1: return [2 /*return*/, _a.sent()];
             }
         });
     });
 }
 exports.getSubCategories = getSubCategories;
-//Registra una categoria.
-//Solo recibe el nombre, no necesita la categoria padre.
+// Registra una categoria padre
 function registerCategory(name) {
     return __awaiter(this, void 0, void 0, function () {
         var category;
@@ -123,40 +128,49 @@ function registerCategory(name) {
     });
 }
 exports.registerCategory = registerCategory;
-//Editar el nombre de la categoria.
-function editCategory(id_category, newName) {
+// Actualiza una categoría
+function updateCategory(categoryId, name) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, categoryS_1.default.updateOne({ _id: id_category }, { $set: { name: newName } })];
+                case 0: return [4 /*yield*/, categoryS_1.default.updateOne({ _id: categoryId }, { $set: { name: name } })];
                 case 1: return [2 /*return*/, _a.sent()];
             }
         });
     });
 }
-exports.editCategory = editCategory;
-//Eliminar la categoria correspondiente al id
-function deleteCategory(id_category) {
+exports.updateCategory = updateCategory;
+// Elimina la categoria correspondiente al id
+function deleteCategory(categoryId) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, categoryS_1.default.deleteOne({ _id: id_category })];
-                case 1: return [2 /*return*/, _a.sent()];
+                case 0: 
+                // Eliminamos las subcategorías de la categoría
+                return [4 /*yield*/, categoryS_1.default.deleteMany({ fatherCategory: categoryId })];
+                case 1:
+                    // Eliminamos las subcategorías de la categoría
+                    _a.sent();
+                    return [4 /*yield*/, categoryS_1.default.deleteOne({ _id: categoryId })];
+                case 2: 
+                // Eliminamos la categoría padre
+                return [2 /*return*/, _a.sent()];
             }
         });
     });
 }
 exports.deleteCategory = deleteCategory;
-//Registra una subcategoria
-//En esta si recibe la referencia a la categoria padre
+// Registra una subcategoria de una categoría
 function registerSubCategory(name, fatherCategory) {
     return __awaiter(this, void 0, void 0, function () {
         var subcategory;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    subcategory = new categoryS_1.default({ name: name,
-                        fatherCategory: fatherCategory });
+                    subcategory = new categoryS_1.default({
+                        name: name,
+                        fatherCategory: fatherCategory,
+                    });
                     return [4 /*yield*/, subcategory.save()];
                 case 1: return [2 /*return*/, _a.sent()];
             }
