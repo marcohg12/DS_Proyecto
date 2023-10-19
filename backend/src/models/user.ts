@@ -1,74 +1,85 @@
-class User{
-    id_user: String;
-    name: String;
-    email: String;
-    phone: String;
-    password: String;
-    recoverCode: String;
-    role: Number
+class User {
+  private userId: string | null;
+  private name: string;
+  private email: string;
+  private phone: string;
+  private password: string;
+  private recoverCode: string | null;
+  private role: number | null;
 
-    constructor(name:String,email:String,phone:String,password:String,recoverCode:String,role:Number){
-        this.name = name;
-        this.email = email;
-        this.phone = phone;
-        this.password = password;
-        this.recoverCode = recoverCode;
-        this.role = role;
-    }
+  constructor(
+    name: string,
+    email: string,
+    phone: string,
+    password: string,
+    recoverCode?: string,
+    role?: number,
+    userId?: string
+  ) {
+    this.name = name;
+    this.email = email;
+    this.phone = phone;
+    this.password = password;
+    this.recoverCode = recoverCode;
+    this.role = role;
+    this.userId = userId;
+  }
 
-    getID() :String{
-        return this.id_user;
-    }
+  getID(): string {
+    return this.userId;
+  }
 
-    getName() : String{
-        return this.name;
-    }
+  getName(): string {
+    return this.name;
+  }
 
-    getEmail() : String{
-        return this.email;
-    }
+  getEmail(): string {
+    return this.email;
+  }
 
-    getPhone() :String {
-        return this.phone;
-    }
+  getPhone(): string {
+    return this.phone;
+  }
 
-    getPassword() :String{
-        return this.password;
-    }
+  getPassword(): string {
+    return this.password;
+  }
 
-    getRecoverCode() :String{
-        return this.recoverCode;
-    }
+  getRecoverCode(): string {
+    return this.recoverCode;
+  }
 
-    getRole() :Number{
-        return this.role;
-    }
+  getRole(): number {
+    return this.role;
+  }
 
-    setID(new_id:String){
-        this.id_user = new_id;
-    }
+  setID(newId: string) {
+    this.userId = newId;
+  }
 
-    setName(new_name:String){
-        this.name = new_name;
-    }
+  setName(newName: string) {
+    this.name = newName;
+  }
 
-    setEmail(new_mail:String){
-        this.email = new_mail;
-    }
+  setEmail(newEmail: string) {
+    this.email = newEmail;
+  }
 
-    setPhone(new_phone:String){
-        this.phone = new_phone;
-    }
+  setPhone(newPhone: string) {
+    this.phone = newPhone;
+  }
 
-    setPassword(new_pass:String){
-        this.password = new_pass;
-    }
+  setPassword(newPassword: string) {
+    this.password = newPassword;
+  }
 
-    setRecoverCode(new_code:String){
-        this.recoverCode = new_code;
-    }
+  setRecoverCode(newRecoverCode: string) {
+    this.recoverCode = newRecoverCode;
+  }
 
-    setRole(new_role:Number){
-        this.role = new_role;
-    }
+  setRole(new_role: number) {
+    this.role = new_role;
+  }
 }
+
+export { User };

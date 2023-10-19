@@ -1,99 +1,105 @@
-class Order{
-    id_order: String;
-    clientRef: String;
-    orderDate: Date;
-    deliveryDate: any;
-    address: String;
-    price: Number;
-    photoOfPayment: String
-    lineProducts: [ProductLine];
-    state: Number;
+class Order {
+  private orderId: string;
+  private clientRef: string;
+  private orderDate: Date;
+  private deliveryDate: any;
+  private address: string;
+  private price: number;
+  private photoOfPayment: string;
+  private lineProducts: ProductLine[];
+  private state: number;
 
+  constructor(
+    clientRef: string,
+    orderDate: Date,
+    address: string,
+    price: number,
+    photoOfPayment: string,
+    lineProducts: ProductLine[],
+    state: number,
+    orderId?: string,
+    deliveryDate?: Date
+  ) {
+    this.orderId = orderId;
+    this.clientRef = clientRef;
+    this.orderDate = orderDate;
+    this.deliveryDate = deliveryDate;
+    this.address = address;
+    this.price = price;
+    this.photoOfPayment = photoOfPayment;
+    this.lineProducts = lineProducts;
+    this.state = state;
+  }
 
-    constructor(id_order:String,clientRef:String,orderDate:Date,deliveryDate:any,address:String,
-        price:Number,photoOfPayment:String,lineProducts: [ProductLine],state:Number){
+  getID(): string {
+    return this.orderId;
+  }
 
-            this.id_order = id_order;
-            this.clientRef = clientRef;
-            this.orderDate = orderDate;
-            this.deliveryDate = deliveryDate;
-            this.address = address;
-            this.price = price;
-            this.photoOfPayment = photoOfPayment;
-            this.lineProducts = lineProducts;
-            this.state = state;
-    }
+  getClientRef(): string {
+    return this.clientRef;
+  }
 
-    getID() :String{
-        return this.id_order;
-    }
+  getOrderDate(): Date {
+    return this.orderDate;
+  }
 
-    getClientRef() : String{
-        return this.clientRef;
-    }
+  getDeliveryDate(): any {
+    return this.deliveryDate;
+  }
 
-    getOrderDate() : Date{
-        return this.orderDate;
-    }
+  getAddress(): string {
+    return this.address;
+  }
 
-    getDeliveryDate() : any{
-        return this.deliveryDate;
-    }
+  getPrice(): number {
+    return this.price;
+  }
 
-    getAddress() : String{
-        return this.address;
-    }
+  getPhoto(): string {
+    return this.photoOfPayment;
+  }
 
-    getPrice() : Number{
-        return this.price;
-    }
+  getLineProducts(): ProductLine[] {
+    return this.lineProducts;
+  }
 
-    getPhoto() : String{
-        return this.photoOfPayment;
-    }
+  getState(): number {
+    return this.state;
+  }
 
-    getLineProducts() : [ProductLine]{
-        return this.lineProducts;
-    }
+  setID(newId: string) {
+    this.orderId = newId;
+  }
 
-    getState() : Number{
-        return this.state;
-    }
+  setClient(newClient: string) {
+    this.clientRef = newClient;
+  }
 
-    setID(new_id:String){
-        this.id_order = new_id;
-    }
+  setOrderDate(newOrderDate: Date) {
+    this.orderDate = newOrderDate;
+  }
 
-    setClient(new_client:String){
-        this.clientRef = new_client;
-    }
+  setDeliveryDate(newDeliveryDate: any) {
+    this.deliveryDate = newDeliveryDate;
+  }
 
-    setOrderDate(new_order_date: Date){
-        this.orderDate = new_order_date;
-    }
+  setAddress(newAddress: string) {
+    this.address = newAddress;
+  }
 
-    setDeliveryDate(new_delivery_date:any){
-        this.deliveryDate = new_delivery_date;
-    }
+  setPrice(newPrice: number) {
+    this.price = newPrice;
+  }
 
-    setAddress(new_address:String){
-        this.address = new_address;
-    }
+  setPhoto(newPhoto: string) {
+    this.photoOfPayment = newPhoto;
+  }
 
-    setPrice(new_price:Number){
-        this.price = new_price;
-    }
+  setLineProducts(newLines: ProductLine[]) {
+    this.lineProducts = newLines;
+  }
 
-    setPhoto(new_photo:String){
-        this.photoOfPayment = new_photo;
-    }
-
-    setLineProducts(new_lines: [ProductLine]){
-        this.lineProducts = new_lines;
-    }
-
-    setState(new_state: Number){
-        this.state = new_state;
-    }
-      
+  setState(newState: number) {
+    this.state = newState;
+  }
 }

@@ -1,14 +1,18 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.User = void 0;
 var User = /** @class */ (function () {
-    function User(name, email, phone, password, recoverCode, role) {
+    function User(name, email, phone, password, recoverCode, role, userId) {
         this.name = name;
         this.email = email;
         this.phone = phone;
         this.password = password;
         this.recoverCode = recoverCode;
         this.role = role;
+        this.userId = userId;
     }
     User.prototype.getID = function () {
-        return this.id_user;
+        return this.userId;
     };
     User.prototype.getName = function () {
         return this.name;
@@ -28,26 +32,27 @@ var User = /** @class */ (function () {
     User.prototype.getRole = function () {
         return this.role;
     };
-    User.prototype.setID = function (new_id) {
-        this.id_user = new_id;
+    User.prototype.setID = function (newId) {
+        this.userId = newId;
     };
-    User.prototype.setName = function (new_name) {
-        this.name = new_name;
+    User.prototype.setName = function (newName) {
+        this.name = newName;
     };
-    User.prototype.setEmail = function (new_mail) {
-        this.email = new_mail;
+    User.prototype.setEmail = function (newEmail) {
+        this.email = newEmail;
     };
-    User.prototype.setPhone = function (new_phone) {
-        this.phone = new_phone;
+    User.prototype.setPhone = function (newPhone) {
+        this.phone = newPhone;
     };
-    User.prototype.setPassword = function (new_pass) {
-        this.password = new_pass;
+    User.prototype.setPassword = function (newPassword) {
+        this.password = newPassword;
     };
-    User.prototype.setRecoverCode = function (new_code) {
-        this.recoverCode = new_code;
+    User.prototype.setRecoverCode = function (newRecoverCode) {
+        this.recoverCode = newRecoverCode;
     };
     User.prototype.setRole = function (new_role) {
         this.role = new_role;
     };
     return User;
 }());
+exports.User = User;

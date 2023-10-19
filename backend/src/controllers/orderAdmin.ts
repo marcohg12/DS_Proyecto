@@ -1,49 +1,70 @@
-import * as orderDAO from "../dao_controllers/orderDAO";
-import * as productDAO from "../dao_controllers/productDAO";
-import { ProductDoesNotExists, ProductNotInStock } from "../exceptions/exceptions";
+import { OrderDAO } from "../daos/OrderDAO";
+import { ProductDAO } from "../daos/ProductDAO";
+import { ViewableFactory } from "../models/ViewableFactory";
+import {
+  ProductDoesNotExists,
+  ProductNotInStock,
+} from "../exceptions/exceptions";
 
-// Obtiene todos los pedidos registrados
-export async function getOrders() {
-    return await orderDAO.getOrders();
-}
+class OrderAdmin {
+  private productDAO: ProductDAO = new ProductDAO();
+  private orderDAO: OrderDAO = new OrderDAO();
+  private viewableFactory: ViewableFactory = new ViewableFactory();
+  constructor() {}
 
-// Obtiene el detalle de un pedido
-export async function getOrder(orderId: String) {
-    return await orderDAO.getDetail(orderId);
-}
+  // Obtiene todos los pedidos registrados
+  public async getOrders() {
+    return await this.orderDAO.getOrders();
+  }
 
-// Obtiene todos los pedidos de un usuario
-export async function getUserOrders(userId: String) {
-    return await orderDAO.getOrdersUser(userId);
-}
+  // Obtiene el detalle de un pedido
+  public async getOrder(orderId: string) {
+    return await this.orderDAO.getDetail(orderId);
+  }
 
-// Cambia el estado de un pedido
-export async function setOrderState(orderId: String, state: Number) {
-    return await orderDAO.changeOrderState(orderId,state);
-}
+  // Obtiene todos los pedidos de un usuario
+  public async getUserOrders(userId: string) {
+    return await this.orderDAO.getOrdersUser(userId);
+  }
 
-// Confirma un pedido
-// Valida que por cada producto del pedido hayan unidades suficientes o
-// que el producto exista en el inventario
-export async function confirmOrder(orderId: String) {
+  // Cambia el estado de un pedido
+  public async setOrderState(orderId: string, state: number) {
+    return await this.orderDAO.changeOrderState(orderId, state);
+  }
+
+  // Confirma un pedido
+  // Valida que por cada producto del pedido hayan unidades suficientes o
+  // que el producto exista en el inventario
+  public async confirmOrder(orderId: string) {
     //Traer la orden que se va a confirmar
-     const order =  await orderDAO.getDetail(orderId);
+    const order = await this.orderDAO.getDetail(orderId);
 
-     //Sacar la lista con las lineas de productos
-     let productLines = order.lineProducts;
+    //Sacar la lista con las lineas de productos
+    let productLines = order.lineProducts;
 
-     for(let i = 0;i<productLines.length;i++){
-        const product = await productDAO.getProduct(productLines[i]._id);
-        if(product == undefined)  {
-            throw new ProductDoesNotExists(productLines[i].name);
-        }
-        if(product.units-productLines[i].units < 0){
-            throw new ProductNotInStock(productLines[i].name);
-        }
-        //Update the product stock
-        productDAO.updateProduct(productLines[i]._id,product.name,product.description,
-            product.units-productLines[i].units,product.price);
-     }
-     
-     orderDAO.changeOrderState(orderId,2);
+    for (let i = 0; i < productLines.length; i++) {
+      const product = await this.productDAO.getProduct(productLines[i]._id);
+      if (product == undefined) {
+        throw new ProductDoesNotExists(productLines[i].name);
+      }
+      if (product.units - productLines[i].units < 0) {
+        throw new ProductNotInStock(productLines[i].name);
+      }
+
+      const productToUpdate = this.viewableFactory.createProduct(
+        product.name,
+        product.description,
+        product.units - productLines[i].units,
+        product.price,
+        product.photo,
+        productLines[i]._id
+      );
+      //Update the product stock
+      await this.productDAO.updateProduct(productToUpdate);
+    }
+
+    await this.orderDAO.changeOrderState(orderId, 2);
+  }
 }
+
+export { OrderAdmin };

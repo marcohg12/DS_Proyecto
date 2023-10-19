@@ -35,90 +35,116 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CategoryAdmin = void 0;
-var CategoryDAO_1 = require("../daos/CategoryDAO");
-var CategoryAdmin = /** @class */ (function () {
-    function CategoryAdmin() {
-        this.categoryDAO = new CategoryDAO_1.CategoryDAO();
+exports.CartDAO = void 0;
+var cartS_1 = __importDefault(require("../schemas/cartS"));
+var CartDAO = /** @class */ (function () {
+    function CartDAO() {
     }
-    // Registra una categoría
-    CategoryAdmin.prototype.registerCategory = function (name) {
+    //Obtiene Carrito
+    CartDAO.prototype.getCart = function (idUser) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.categoryDAO.registerCategory(name)];
+                    case 0:
+                        console.log(idUser);
+                        return [4 /*yield*/, cartS_1.default.findOne({ client: idUser })];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
         });
     };
-    // Actualiza una categoría
-    CategoryAdmin.prototype.editCategory = function (categoryId, newName) {
+    // Agrega un producto al carrito
+    CartDAO.prototype.addProduct = function (idProduct, units, idUser) {
         return __awaiter(this, void 0, void 0, function () {
+            var cart;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.categoryDAO.updateCategory(categoryId, newName)];
+                    case 0:
+                        cart = new cartS_1.default({
+                            client: idUser,
+                            productRef: { idProduct: idProduct, units: units },
+                        });
+                        return [4 /*yield*/, cart.save()];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
         });
     };
-    // Obtiene todas las categorías
-    CategoryAdmin.prototype.getCategories = function () {
+    // Elimina un producto del carrito
+    CartDAO.prototype.deleteProduct = function (idProduct, units, idUser) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.categoryDAO.getCategories()];
+                    case 0: return [4 /*yield*/, cartS_1.default.deleteOne({
+                            client: idProduct,
+                            productRef: { units: units, idUser: idUser },
+                        })];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
         });
     };
-    // Obtiene una categoría por Id
-    CategoryAdmin.prototype.getCategory = function (categoryId) {
+    // Obtiene los productos del carrito
+    CartDAO.prototype.getProductsCart = function (idUser) {
+        return __awaiter(this, void 0, void 0, function () {
+            var cart;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, cartS_1.default.findOne({ client: idUser })];
+                    case 1:
+                        cart = _a.sent();
+                        if (cart == null) {
+                            return [2 /*return*/, null];
+                        }
+                        return [2 /*return*/, { products: cart.products }];
+                }
+            });
+        });
+    };
+    // Obtiene el tostring de los productos del carrito
+    CartDAO.prototype.getProductsTostring = function (idUser) {
+        return __awaiter(this, void 0, void 0, function () {
+            var cart, productsstring;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, cartS_1.default.findOne({ client: idUser })];
+                    case 1:
+                        cart = _a.sent();
+                        if (cart == null) {
+                            return [2 /*return*/, null];
+                        }
+                        productsstring = cart.products.tostring();
+                        return [2 /*return*/, { productsstring: productsstring }];
+                }
+            });
+        });
+    };
+    // Obtiene el precio del carrito FALTA
+    CartDAO.prototype.getPriceCart = function (idUser) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.categoryDAO.getCategoryByID(categoryId)];
+                    case 0: return [4 /*yield*/, cartS_1.default.find({ client: idUser })];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
         });
     };
-    // Elimina una categoría por Id
-    CategoryAdmin.prototype.deleteCategory = function (categoryId) {
+    // Compra el carrito FALTA
+    CartDAO.prototype.buyCart = function (idUser) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.categoryDAO.deleteCategory(categoryId)];
+                    case 0: return [4 /*yield*/, cartS_1.default.find({ client: idUser })];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
         });
     };
-    // Registra una subcategoría en una categoría
-    CategoryAdmin.prototype.registerSubCategory = function (name, fatherCategory) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.categoryDAO.registerSubCategory(name, fatherCategory)];
-                    case 1: return [2 /*return*/, _a.sent()];
-                }
-            });
-        });
-    };
-    // Retorna todas las subcategorías de una categoría padre
-    CategoryAdmin.prototype.getSubCategories = function (fatherCategory) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.categoryDAO.getSubCategories(fatherCategory)];
-                    case 1: return [2 /*return*/, _a.sent()];
-                }
-            });
-        });
-    };
-    return CategoryAdmin;
+    return CartDAO;
 }());
-exports.CategoryAdmin = CategoryAdmin;
+exports.CartDAO = CartDAO;

@@ -2,7 +2,8 @@ const router = require("express").Router();
 const multer = require("multer");
 const { EmailInUse } = require("../exceptions/exceptions");
 import { Request, Response } from "express";
-import * as controller from "../controllers/controller";
+import { Controller } from "../controllers/Controller";
+const controller = Controller.getInstance();
 
 // Rutas de publicaciones -------------------------------------------------------------
 
@@ -11,8 +12,10 @@ router.get("/get_publications", async (req: Request, res: Response) => {
     let publications = [];
     if (Object.keys(req.query).length > 0) {
       if (req.query.categoryId) {
-        const categoryId = new String(req.query.categoryId);
-        publications = await controller.getPublicationsByCategory(categoryId);
+        const categoryId = req.query.categoryId;
+        publications = await controller.getPublicationsByCategory(
+          categoryId as string
+        );
       } else {
         const tags = req.query.keywords ? new String(req.query.keywords) : "";
         // Tomamos el string de palabras clave y generamos una lista con las palabras
@@ -213,8 +216,8 @@ router.get("/check_recover_code", async (req: Request, res: Response) => {
   const { email, code } = req.query;
   try {
     const result = await controller.compareRecoverCode(
-      new String(email),
-      new String(code)
+      email as string,
+      code as string
     );
     res.send(
       JSON.stringify({
@@ -236,7 +239,7 @@ router.get("/check_recover_code", async (req: Request, res: Response) => {
 router.get("/check_email_exists", async (req: Request, res: Response) => {
   const { email } = req.query;
   try {
-    const result = await controller.userExists(new String(email));
+    const result = await controller.userExists(email as string);
     res.send(
       JSON.stringify({
         error: false,

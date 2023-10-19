@@ -1,39 +1,44 @@
-import * as categoryDAO from "../dao_controllers/categoryDAO";
+import { CategoryDAO } from "../daos/CategoryDAO";
 
-// Registra una categoría
-export async function registerCategory(name: String) {
-  return await categoryDAO.registerCategory(name);
+class CategoryAdmin {
+  private categoryDAO: CategoryDAO = new CategoryDAO();
+
+  constructor() {}
+
+  // Registra una categoría
+  public async registerCategory(name: string) {
+    return await this.categoryDAO.registerCategory(name);
+  }
+
+  // Actualiza una categoría
+  public async editCategory(categoryId: string, newName: string) {
+    return await this.categoryDAO.updateCategory(categoryId, newName);
+  }
+
+  // Obtiene todas las categorías
+  public async getCategories() {
+    return await this.categoryDAO.getCategories();
+  }
+
+  // Obtiene una categoría por Id
+  public async getCategory(categoryId: string) {
+    return await this.categoryDAO.getCategoryByID(categoryId);
+  }
+
+  // Elimina una categoría por Id
+  public async deleteCategory(categoryId: string) {
+    return await this.categoryDAO.deleteCategory(categoryId);
+  }
+
+  // Registra una subcategoría en una categoría
+  public async registerSubCategory(name: string, fatherCategory: string) {
+    return await this.categoryDAO.registerSubCategory(name, fatherCategory);
+  }
+
+  // Retorna todas las subcategorías de una categoría padre
+  public async getSubCategories(fatherCategory: string) {
+    return await this.categoryDAO.getSubCategories(fatherCategory);
+  }
 }
 
-// Actualiza una categoría
-export async function editCategory(categoryId: String, newName: String) {
-  return await categoryDAO.updateCategory(categoryId, newName);
-}
-
-// Obtiene todas las categorías
-export async function getCategories() {
-  return await categoryDAO.getCategories();
-}
-
-// Obtiene una categoría por Id
-export async function getCategory(categoryId: String) {
-  return await categoryDAO.getCategoryByID(categoryId);
-}
-
-// Elimina una categoría por Id
-export async function deleteCategory(categoryId: String) {
-  return await categoryDAO.deleteCategory(categoryId);
-}
-
-// Registra una subcategoría en una categoría
-export async function registerSubCategory(
-  name: String,
-  fatherCategory: String
-) {
-  return await categoryDAO.registerSubCategory(name, fatherCategory);
-}
-
-// Retorna todas las subcategorías de una categoría padre
-export async function getSubCategories(fatherCategory: String) {
-  return await categoryDAO.getSubCategories(fatherCategory);
-}
+export { CategoryAdmin };

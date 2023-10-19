@@ -44,14 +44,15 @@ var cookieParser = require("cookie-parser");
 var session = require("express-session");
 var bodyParser = require("body-parser");
 var passport = require("passport");
-var mongo_config_1 = __importDefault(require("./mongo-config"));
-var databaseInstance = mongo_config_1.default;
+var mongo_config_1 = require("./mongo-config");
+var databaseInstance = mongo_config_1.Database.getInstance();
+databaseInstance.connect();
 var clientRouter = require("./routers/clientRouter");
 var adminRouter = require("./routers/adminRouter");
 var generalRouter = require("./routers/generalRouter");
 var express_1 = __importDefault(require("express"));
 var expressStatic = express_1.default.static;
-var controller_1 = require("./controllers/controller");
+var Controller_1 = require("./controllers/Controller");
 var initializePassport = require("./passport-config");
 var app = (0, express_1.default)();
 // Configuraciones ------------------------------------------------------------------------------
@@ -85,12 +86,13 @@ app.get("/get_user", function (req, res) { return __awaiter(void 0, void 0, void
     });
 }); });
 app.post("/signup", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, name, email, phone, password, response;
+    var _a, name, email, phone, password, controller, response;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
                 _a = req.body, name = _a.name, email = _a.email, phone = _a.phone, password = _a.password;
-                return [4 /*yield*/, (0, controller_1.registerUser)(name, email, phone, password)];
+                controller = Controller_1.Controller.getInstance();
+                return [4 /*yield*/, controller.registerUser(name, email, phone, password)];
             case 1:
                 response = _b.sent();
                 res.send(JSON.stringify(response));

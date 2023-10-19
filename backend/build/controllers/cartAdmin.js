@@ -36,36 +36,55 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.sendOrder = exports.getCart = exports.deleteProductFromCart = exports.addProductToCart = void 0;
+exports.CartAdmin = void 0;
+var CartDAO_1 = require("../daos/CartDAO");
 var fs = require("fs");
-// Agrega un producto al carrito
-// Valida que no hayan más de 5 unidades del producto en el carrito
-function addProductToCart(userId, productId, units) {
-    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
-        return [2 /*return*/];
-    }); });
-}
-exports.addProductToCart = addProductToCart;
-// Elimina una unidad de un producto del carrito
-// Si las unidades llegan a 0, se elimina el producto totalmente del carrito
-function deleteProductFromCart(userId, productId) {
-    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
-        return [2 /*return*/];
-    }); });
-}
-exports.deleteProductFromCart = deleteProductFromCart;
-// Obtiene los productos del carrito de un usuario
-function getCart(userId) {
-    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
-        return [2 /*return*/];
-    }); });
-}
-exports.getCart = getCart;
-// Genera un pedido a partir del carrito de un usuario
-// Limpia los productos del carrito
-function sendOrder(userId, address, totalPrice) {
-    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
-        return [2 /*return*/];
-    }); });
-}
-exports.sendOrder = sendOrder;
+var CartAdmin = /** @class */ (function () {
+    function CartAdmin() {
+        this.cartDAO = new CartDAO_1.CartDAO();
+    }
+    // Agrega un producto al carrito
+    // Valida que no hayan más de 5 unidades del producto en el carrito
+    CartAdmin.prototype.addProductToCart = function (userId, productId, units) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.cartDAO.addProduct(productId, units, userId)];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
+    // Elimina una unidad de un producto del carrito
+    // Si las unidades llegan a 0, se elimina el producto totalmente del carrito
+    CartAdmin.prototype.deleteProductFromCart = function (userId, productId) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.cartDAO.deleteProduct(productId, 1, userId)];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
+    // Obtiene los productos del carrito de un usuario
+    CartAdmin.prototype.getCart = function (userId) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.cartDAO.getCart(userId)];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
+    // Genera un pedido a partir del carrito de un usuario
+    // Limpia los productos del carrito
+    CartAdmin.prototype.sendOrder = function (userId, address, totalPrice, photoPath) {
+        return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
+            return [2 /*return*/];
+        }); });
+    };
+    return CartAdmin;
+}());
+exports.CartAdmin = CartAdmin;

@@ -4,11 +4,18 @@ const url =
   "mongodb+srv://nottwithtt:Nicolita1998+@cluster0.gi2w4fi.mongodb.net/DS_Project?retryWrites=true&w=majority";
 
 class Database {
-  constructor() {
-    this._connect();
+  private static instance: Database;
+
+  private constructor() {}
+
+  public static getInstance(): Database {
+    if (!Database.instance) {
+      Database.instance = new Database();
+    }
+    return Database.instance;
   }
 
-  _connect() {
+  public connect() {
     mongoose
       .connect(url)
       .then(() => {
@@ -20,4 +27,4 @@ class Database {
   }
 }
 
-export default new Database();
+export { Database };

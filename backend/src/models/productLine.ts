@@ -1,36 +1,41 @@
-class ProductLine{
+class ProductLine {
+  private productId: string;
+  private name: string;
+  private units: number;
+  private price: number;
 
-    name: String;
-    units: Number;
-    price: Number;
+  constructor(productId: string, name: string, units: number, price: number) {
+    this.productId = productId;
+    this.name = name;
+    this.units = units;
+    this.price = price;
+  }
 
-    constructor(name:String,units:Number,price:Number){
-        this.name = name;
-        this.units = units;
-        this.price = price;
-    }
+  getName(): string {
+    return this.name;
+  }
 
-    getName() : String{
-        return this.name;
-    }
+  getUnits(): number {
+    return this.units;
+  }
 
-    getUnits(): Number{
-        return this.units;
-    }
+  getPrice(): number {
+    return this.price;
+  }
 
-    getPrice() :Number {
-        return this.price;
-    }
+  getProductId(): string {
+    return this.productId;
+  }
 
-    setName(new_name:String){
-        this.name  = new_name;
-    }
+  setName(newName: string) {
+    this.name = newName;
+  }
 
-    setUnits(new_units:Number){
-        this.units = new_units;
-    }
+  setUnits(newUnits: number) {
+    this.units = newUnits;
+  }
 
-    setPrice(new_price:Number){
-        this.price = new_price;
-    }
+  setPrice(newPrice: number) {
+    this.price = newPrice;
+  }
 }

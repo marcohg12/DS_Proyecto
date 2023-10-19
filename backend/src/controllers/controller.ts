@@ -1,230 +1,262 @@
-import * as userController from "./userAdmin";
-import * as cartController from "./cartAdmin";
-import * as categoryController from "./categoryAdmin";
-import * as publicationController from "./publicationAdmin";
-import * as productController from "./productAdmin";
-import * as orderController from "./orderAdmin";
+import { CartAdmin } from "./CartAdmin";
+import { UserAdmin } from "./UserAdmin";
+import { PublicationAdmin } from "./PublicationAdmin";
+import { ProductAdmin } from "./ProductAdmin";
+import { OrderAdmin } from "./OrderAdmin";
+import { CategoryAdmin } from "./CategoryAdmin";
+import { Product } from "../models/Product";
+import { ViewableFactory } from "../models/ViewableFactory";
+import { User } from "../models/User";
 
-// Funciones de usuario ----------------------------------------------------------------
+class Controller {
+  private static instance: Controller | null = null;
+  private viewableFactory: ViewableFactory = new ViewableFactory();
+  private publicationAdmin: PublicationAdmin = new PublicationAdmin();
+  private userAdmin: UserAdmin = new UserAdmin();
+  private orderAdmin: OrderAdmin = new OrderAdmin();
+  private categoryAdmin: CategoryAdmin = new CategoryAdmin();
+  private productAdmin: ProductAdmin = new ProductAdmin();
+  private cartAdmin: CartAdmin = new CartAdmin();
 
-export async function registerUser(
-  name: String,
-  email: String,
-  phone: String,
-  password: String
-) {
-  return await userController.registerUser(name, email, phone, password);
+  private constructor() {}
+
+  public static getInstance(): Controller {
+    if (!Controller.instance) {
+      Controller.instance = new Controller();
+    }
+    return Controller.instance;
+  }
+
+  public async registerUser(
+    name: string,
+    email: string,
+    phone: string,
+    password: string
+  ) {
+    const user = new User(name, email, phone, password);
+    return await this.userAdmin.registerUser(user);
+  }
+
+  // Actualiza los datos de un usuario
+  public async updateUser(
+    userId: string,
+    name: string,
+    email: string,
+    phone: string,
+    password: string
+  ) {
+    const user = new User(name, email, phone, password);
+    user.setID(userId);
+    await this.userAdmin.updateUser(user);
+  }
+
+  // Actualiza la contraseña de un usuario
+  public async updatePassword(email: string, password: string) {
+    await this.userAdmin.updatePassword(email, password);
+  }
+
+  // Actualiza el código de recuperación de contraseña de un usuario
+  public async updateRecoverCode(email: string) {
+    await this.userAdmin.updateRecoverCode(email);
+  }
+
+  // Verifica si existe el usuario con el email del parámetro
+  public async userExists(email: string) {
+    return await this.userAdmin.userExists(email);
+  }
+
+  // Verifica si el código de recuperación ingresado por un usuario es igual al de la BD
+  public async compareRecoverCode(email: string, code: string) {
+    return await this.userAdmin.compareRecoverCode(email, code);
+  }
+
+  // Funciones de carrito ----------------------------------------------------------------
+
+  public async addProductToCart(
+    userId: string,
+    productId: string,
+    units: number
+  ) {
+    return await this.cartAdmin.addProductToCart(userId, productId, units);
+  }
+
+  public async deleteProductFromCart(userId: string, productId: string) {
+    return await this.cartAdmin.deleteProductFromCart(userId, productId);
+  }
+
+  public async getCart(userId: string) {
+    return await this.cartAdmin.getCart(userId);
+  }
+
+  public async sendOrder(
+    userId: string,
+    address: string,
+    totalPrice: number,
+    photoPath: string
+  ) {
+    return await this.cartAdmin.sendOrder(
+      userId,
+      address,
+      totalPrice,
+      photoPath
+    );
+  }
+
+  // Funciones de categorías -------------------------------------------------------------
+
+  public async registerCategory(name: string) {
+    return await this.categoryAdmin.registerCategory(name);
+  }
+
+  public async updateCategory(categoryId: string, newName: string) {
+    return await this.categoryAdmin.editCategory(categoryId, newName);
+  }
+
+  public async getCategories() {
+    return await this.categoryAdmin.getCategories();
+  }
+
+  public async getCategory(categoryId: string) {
+    return await this.categoryAdmin.getCategory(categoryId);
+  }
+
+  public async getSubCategories(fatherCategory: string) {
+    return await this.categoryAdmin.getSubCategories(fatherCategory);
+  }
+
+  public async deleteCategory(categoryId: string) {
+    return await this.categoryAdmin.deleteCategory(categoryId);
+  }
+
+  public async registerSubcategory(name: string, fatherCategory: string) {
+    return await this.categoryAdmin.registerSubCategory(name, fatherCategory);
+  }
+
+  // Funciones de publicaciones -----------------------------------------------------------
+
+  public async getPublication(publicationId: string) {
+    return await this.publicationAdmin.getPublication(publicationId);
+  }
+
+  public async getPublications() {
+    return await this.publicationAdmin.getPublications();
+  }
+
+  public async getPublicationsByCategory(categoryId: string) {
+    return await this.publicationAdmin.getPublicationsByCategory(categoryId);
+  }
+
+  public async getPublicationsByTags(tags: string[]) {
+    return await this.publicationAdmin.getPublicationsByTags(tags);
+  }
+
+  public async registerPublication(
+    description: string,
+    tags: string,
+    categoryId: string,
+    photoPath: string
+  ) {
+    const publication = this.viewableFactory.createPublication(
+      description,
+      tags,
+      categoryId,
+      photoPath
+    );
+    return await this.publicationAdmin.registerPublication(publication);
+  }
+
+  public async updatePublication(
+    publicationId: string,
+    description: string,
+    tags: string,
+    categoryId: string,
+    photoPath: string
+  ) {
+    const publication = this.viewableFactory.createPublication(
+      description,
+      tags,
+      categoryId,
+      photoPath,
+      publicationId
+    );
+    return await this.publicationAdmin.updatePublication(publication);
+  }
+
+  public async deletePublication(publicationId: string) {
+    return await this.publicationAdmin.deletePublication(publicationId);
+  }
+
+  // Funciones de productos --------------------------------------------------------------
+
+  public async registerProduct(
+    name: string,
+    description: string,
+    units: number,
+    price: number,
+    photoPath: string
+  ) {
+    const product = this.viewableFactory.createProduct(
+      name,
+      description,
+      units,
+      price,
+      photoPath
+    );
+    return await this.productAdmin.registerProduct(product);
+  }
+
+  public async getProducts() {
+    return await this.productAdmin.getProducts();
+  }
+
+  public async getProduct(productId: string) {
+    return await this.productAdmin.getProduct(productId);
+  }
+
+  public async deleteProduct(productId: string) {
+    return await this.productAdmin.deleteProduct(productId);
+  }
+
+  public async updateProduct(
+    productId: string,
+    name: string,
+    description: string,
+    units: number,
+    price: number,
+    photoPath: string
+  ) {
+    const product = new Product(
+      description,
+      photoPath,
+      name,
+      units,
+      price,
+      productId
+    );
+    return await this.productAdmin.updateProduct(product);
+  }
+
+  // Funciones de pedidos ----------------------------------------------------------------
+
+  public async getOrders() {
+    return await this.orderAdmin.getOrders();
+  }
+
+  public async getOrder(orderId: string) {
+    return await this.orderAdmin.getOrder(orderId);
+  }
+
+  public async getUserOrders(userId: string) {
+    return await this.orderAdmin.getUserOrders(userId);
+  }
+
+  public async setOrderState(orderId: string, state: number) {
+    return await this.orderAdmin.setOrderState(orderId, state);
+  }
+
+  public async confirmOrder(orderId: string) {
+    return await this.orderAdmin.confirmOrder(orderId);
+  }
 }
 
-// Actualiza los datos de un usuario
-export async function updateUser(
-  userId: String,
-  name: String,
-  email: String,
-  phone: String,
-  password: String
-) {
-  await userController.updateUser(userId, name, email, phone, password);
-}
-
-// Actualiza la contraseña de un usuario
-export async function updatePassword(email: String, password: String) {
-  await userController.updatePassword(email, password);
-}
-
-// Actualiza el código de recuperación de contraseña de un usuario
-export async function updateRecoverCode(email: String) {
-  await userController.updateRecoverCode(email);
-}
-
-// Verifica si existe el usuario con el email del parámetro
-export async function userExists(email: String) {
-  return await userController.userExists(email);
-}
-
-// Verifica si el código de recuperación ingresado por un usuario es igual al de la BD
-export async function compareRecoverCode(email: String, code: String) {
-  return await userController.compareRecoverCode(email, code);
-}
-
-// Funciones de carrito ----------------------------------------------------------------
-
-export async function addProductToCart(
-  userId: String,
-  productId: String,
-  units: Number
-) {
-  return await cartController.addProductToCart(userId, productId, units);
-}
-
-export async function deleteProductFromCart(userId: String, productId: String) {
-  return await cartController.deleteProductFromCart(userId, productId);
-}
-
-export async function getCart(userId: String) {
-  return await cartController.getCart(userId);
-}
-
-export async function sendOrder(
-  userId: String,
-  address: String,
-  totalPrice: Number,
-  photoPath: String
-) {
-  return await cartController.sendOrder(userId, address, totalPrice, photoPath);
-}
-
-// Funciones de categorías -------------------------------------------------------------
-
-export async function registerCategory(name: String) {
-  return await categoryController.registerCategory(name);
-}
-
-export async function updateCategory(categoryId: String, newName: String) {
-  return await categoryController.editCategory(categoryId, newName);
-}
-
-export async function getCategories() {
-  return await categoryController.getCategories();
-}
-
-export async function getCategory(categoryId: String) {
-  return await categoryController.getCategory(categoryId);
-}
-
-export async function getSubCategories(fatherCategory: String) {
-  return await categoryController.getSubCategories(fatherCategory);
-}
-
-export async function deleteCategory(categoryId: String) {
-  return await categoryController.deleteCategory(categoryId);
-}
-
-export async function registerSubcategory(
-  name: String,
-  fatherCategory: String
-) {
-  return await categoryController.registerSubCategory(name, fatherCategory);
-}
-
-// Funciones de publicaciones -----------------------------------------------------------
-
-export async function getPublication(publicationId: String) {
-  return await publicationController.getPublication(publicationId);
-}
-
-export async function getPublications() {
-  return await publicationController.getPublications();
-}
-
-export async function getPublicationsByCategory(categoryId: String) {
-  return await publicationController.getPublicationsByCategory(categoryId);
-}
-
-export async function getPublicationsByTags(tags: String[]) {
-  return await publicationController.getPublicationsByTags(tags);
-}
-
-export async function registerPublication(
-  description: String,
-  tags: String,
-  categoryId: String,
-  photoPath: String
-) {
-  return await publicationController.registerPublication(
-    description,
-    tags,
-    categoryId,
-    photoPath
-  );
-}
-
-export async function updatePublication(
-  publicationId: String,
-  description: String,
-  tags: String,
-  categoryId: String,
-  photoPath: String
-) {
-  return await publicationController.updatePublication(
-    publicationId,
-    description,
-    tags,
-    categoryId,
-    photoPath
-  );
-}
-
-export async function deletePublication(publicationId: String) {
-  return await publicationController.deletePublication(publicationId);
-}
-
-// Funciones de productos --------------------------------------------------------------
-
-export async function registerProduct(
-  name: String,
-  description: String,
-  units: Number,
-  price: Number,
-  photoPath: String
-) {
-  return await productController.registerProduct(
-    name,
-    description,
-    units,
-    price,
-    photoPath
-  );
-}
-
-export async function getProducts() {
-  return await productController.getProducts();
-}
-
-export async function getProduct(productId: String) {
-  return await productController.getProduct(productId);
-}
-
-export async function deleteProduct(productId: String) {
-  return await productController.deleteProduct(productId);
-}
-
-export async function updateProduct(
-  productId: String,
-  name: String,
-  description: String,
-  units: Number,
-  price: Number,
-  photoPath: String
-) {
-  return await productController.updateProduct(
-    productId,
-    name,
-    description,
-    units,
-    price,
-    photoPath
-  );
-}
-
-// Funciones de pedidos ----------------------------------------------------------------
-
-export async function getOrders() {
-  return await orderController.getOrders();
-}
-
-export async function getOrder(orderId: String) {
-    return await orderController.getOrder(orderId);
-}
-
-export async function getUserOrders(userId: String) {
-  return await orderController.getUserOrders(userId);
-}
-
-export async function setOrderState(orderId: String, state: Number) {
-  return await orderController.setOrderState(orderId, state);
-}
-
-export async function confirmOrder(orderId: String) {
-  return await orderController.confirmOrder(orderId);
-}
+export { Controller };

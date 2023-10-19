@@ -2,11 +2,11 @@ import { Schema, InferSchemaType } from "mongoose";
 import mongoose from "mongoose";
 
 const cartSchema: Schema = new Schema({
-  client: { type: String, required: true },
+  client: { type: Schema.Types.ObjectId, required: true },
   products: [
     {
-      productRef: { type: String, required: true },
-      units: { type: Number, required: true },
+      productRef: { type: Schema.Types.ObjectId },
+      units: { type: Number },
     },
   ], //Collection
 });

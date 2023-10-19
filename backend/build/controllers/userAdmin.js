@@ -1,27 +1,4 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -59,132 +36,135 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.userExists = exports.compareRecoverCode = exports.updateRecoverCode = exports.updatePassword = exports.updateUser = exports.registerUser = void 0;
-var userDAO = __importStar(require("../dao_controllers/userDAO"));
+exports.UserAdmin = void 0;
+var UserDAO_1 = require("../daos/UserDAO");
 var emailService_1 = require("./emailService");
 var bcrypt = require("bcryptjs");
-// Funciones auxiliares -------------------------------------------------------------------
-function generateNumericPasswordRecoveryCode(length) {
-    var charset = "0123456789";
-    var code = "";
-    for (var i = 0; i < length; i++) {
-        var randomIndex = Math.floor(Math.random() * charset.length);
-        code += charset[randomIndex];
+var UserAdmin = /** @class */ (function () {
+    function UserAdmin() {
+        this.userDAO = new UserDAO_1.UserDAO();
     }
-    return code;
-}
-// ----------------------------------------------------------------------------------------
-// Registra un usuario
-function registerUser(name, email, phone, password) {
-    return __awaiter(this, void 0, void 0, function () {
-        var result, err_1;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    _a.trys.push([0, 5, , 6]);
-                    return [4 /*yield*/, userDAO.getUserByEmail(email)];
-                case 1:
-                    result = _a.sent();
-                    if (!result) return [3 /*break*/, 2];
-                    return [2 /*return*/, {
-                            error: true,
-                            message: "El correo electrónico ya se encuentra en uso",
-                        }];
-                case 2: return [4 /*yield*/, userDAO.registerUser(name, email, phone, password)];
-                case 3:
-                    _a.sent();
-                    return [2 /*return*/, {
-                            error: false,
-                            message: "Usuario registrado exitosamente",
-                        }];
-                case 4: return [3 /*break*/, 6];
-                case 5:
-                    err_1 = _a.sent();
-                    return [2 /*return*/, {
-                            error: true,
-                            message: "Ocurrió un error inesperado, intente de nuevo",
-                        }];
-                case 6: return [2 /*return*/];
-            }
+    // Funciones auxiliares -------------------------------------------------------------------
+    UserAdmin.prototype.generateNumericPasswordRecoveryCode = function (length) {
+        var charset = "0123456789";
+        var code = "";
+        for (var i = 0; i < length; i++) {
+            var randomIndex = Math.floor(Math.random() * charset.length);
+            code += charset[randomIndex];
+        }
+        return code;
+    };
+    // ----------------------------------------------------------------------------------------
+    // Registra un usuario
+    UserAdmin.prototype.registerUser = function (user) {
+        return __awaiter(this, void 0, void 0, function () {
+            var result, err_1;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 5, , 6]);
+                        return [4 /*yield*/, this.userDAO.getUserByEmail(user.getEmail())];
+                    case 1:
+                        result = _a.sent();
+                        if (!result) return [3 /*break*/, 2];
+                        return [2 /*return*/, {
+                                error: true,
+                                message: "El correo electrónico ya se encuentra en uso",
+                            }];
+                    case 2: return [4 /*yield*/, this.userDAO.registerUser(user)];
+                    case 3:
+                        _a.sent();
+                        return [2 /*return*/, {
+                                error: false,
+                                message: "Usuario registrado exitosamente",
+                            }];
+                    case 4: return [3 /*break*/, 6];
+                    case 5:
+                        err_1 = _a.sent();
+                        return [2 /*return*/, {
+                                error: true,
+                                message: "Ocurrió un error inesperado, intente de nuevo",
+                            }];
+                    case 6: return [2 /*return*/];
+                }
+            });
         });
-    });
-}
-exports.registerUser = registerUser;
-// Actualiza los datos de un usuario
-function updateUser(userId, name, email, phone, password) {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, userDAO.updateUser(userId, name, email, phone, password)];
-                case 1:
-                    _a.sent();
-                    return [2 /*return*/];
-            }
+    };
+    // Actualiza los datos de un usuario
+    UserAdmin.prototype.updateUser = function (user) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.userDAO.updateUser(user)];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
         });
-    });
-}
-exports.updateUser = updateUser;
-// Actualiza la contraseña de un usuario
-function updatePassword(email, password) {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, userDAO.updatePassword(email, password)];
-                case 1:
-                    _a.sent();
-                    return [2 /*return*/];
-            }
+    };
+    // Actualiza la contraseña de un usuario
+    UserAdmin.prototype.updatePassword = function (email, password) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.userDAO.updatePassword(email, password)];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
         });
-    });
-}
-exports.updatePassword = updatePassword;
-// Actualiza el código de recuperación de contraseña de un usuario
-function updateRecoverCode(email) {
-    return __awaiter(this, void 0, void 0, function () {
-        var code, content;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    code = generateNumericPasswordRecoveryCode(8);
-                    content = "El código de recuperación es: " + code.toString();
-                    (0, emailService_1.sendEmail)(email.toString(), "Sistema Duende - Código de recuperación de contraseña", content);
-                    return [4 /*yield*/, userDAO.updateRecoverCode(email, code)];
-                case 1:
-                    _a.sent();
-                    return [2 /*return*/];
-            }
+    };
+    // Actualiza el código de recuperación de contraseña de un usuario
+    UserAdmin.prototype.updateRecoverCode = function (email) {
+        return __awaiter(this, void 0, void 0, function () {
+            var code, content;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        code = this.generateNumericPasswordRecoveryCode(8);
+                        content = "El código de recuperación es: " + code;
+                        (0, emailService_1.sendEmail)(email, "Sistema Duende - Código de recuperación de contraseña", content);
+                        return [4 /*yield*/, this.userDAO.updateRecoverCode(email, code)];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
         });
-    });
-}
-exports.updateRecoverCode = updateRecoverCode;
-// Verifica si el código de recuperación ingresado por un usuario es igual al de la BD
-function compareRecoverCode(email, code) {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, userDAO.compareRecoverCode(email, code)];
-                case 1: return [2 /*return*/, _a.sent()];
-            }
+    };
+    // Verifica si el código de recuperación ingresado por un usuario es igual al de la BD
+    UserAdmin.prototype.compareRecoverCode = function (email, code) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.userDAO.compareRecoverCode(email, code)];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
         });
-    });
-}
-exports.compareRecoverCode = compareRecoverCode;
-// Verifica si existe el usuario con el email del parámetro
-function userExists(email) {
-    return __awaiter(this, void 0, void 0, function () {
-        var user, result;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, userDAO.getUserByEmail(email)];
-                case 1:
-                    user = _a.sent();
-                    result = user ? true : false;
-                    if (result) {
-                        updateRecoverCode(email);
-                    }
-                    return [2 /*return*/, result];
-            }
+    };
+    // Verifica si existe el usuario con el email del parámetro
+    UserAdmin.prototype.userExists = function (email) {
+        return __awaiter(this, void 0, void 0, function () {
+            var user, result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.userDAO.getUserByEmail(email)];
+                    case 1:
+                        user = _a.sent();
+                        result = user ? true : false;
+                        if (!result) return [3 /*break*/, 3];
+                        return [4 /*yield*/, this.updateRecoverCode(email)];
+                    case 2:
+                        _a.sent();
+                        _a.label = 3;
+                    case 3: return [2 /*return*/, result];
+                }
+            });
         });
-    });
-}
-exports.userExists = userExists;
+    };
+    return UserAdmin;
+}());
+exports.UserAdmin = UserAdmin;

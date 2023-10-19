@@ -6,11 +6,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var mongoose_1 = require("mongoose");
 var mongoose_2 = __importDefault(require("mongoose"));
 var cartSchema = new mongoose_1.Schema({
-    client: { type: String, required: true },
+    client: { type: mongoose_1.Schema.Types.ObjectId, required: true },
     products: [
         {
-            productRef: { type: String, required: true },
-            units: { type: Number, required: true },
+            productRef: { type: mongoose_1.Schema.Types.ObjectId },
+            units: { type: Number },
         },
     ], //Collection
 });

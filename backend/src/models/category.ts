@@ -1,45 +1,50 @@
-class Category{
-    id_category: String;
-    name: String;
-    fatherCategory: String;
-    subCategories: [Category];
+class Category {
+  private categoryId: string | null;
+  private name: string;
+  private fatherCategory: string | null;
+  private subCategories: Category[];
 
-    constructor(id_category:String,name:String,fatherCategory:String,subCategories:[Category]){
-        this.id_category = id_category;
-        this.name = name;
-        this.fatherCategory = fatherCategory;
-        this.subCategories = subCategories;
-    }
+  constructor(
+    name: string,
+    fatherCategory?: string,
+    subCategories?: Category[],
+    categoryId?: string
+  ) {
+    this.categoryId = categoryId;
+    this.name = name;
+    this.fatherCategory = fatherCategory;
+    this.subCategories = subCategories;
+  }
 
-    getID() : String{
-        return this.id_category;
-    }
+  getID(): string {
+    return this.categoryId;
+  }
 
-    getName() : String {
-        return this.name;
-    }
+  getName(): string {
+    return this.name;
+  }
 
-    getFatherCategory() : String{
-        return this.fatherCategory;
-    }
+  getFatherCategory(): string {
+    return this.fatherCategory;
+  }
 
-    getSubCategories() : [Category]{
-        return this.subCategories;
-    }
+  getSubCategories(): Category[] {
+    return this.subCategories;
+  }
 
-    setId(new_id:String){
-        this.id_category = new_id;
-    }
+  setId(newId: string) {
+    this.categoryId = newId;
+  }
 
-    setName(new_name:String){
-        this.name = new_name;
-    }
+  setName(newName: string) {
+    this.name = newName;
+  }
 
-    setFatherCategory(new_father_cat:String){
-        this.fatherCategory = new_father_cat;
-    }
+  setFatherCategory(newFatherCategory: string) {
+    this.fatherCategory = newFatherCategory;
+  }
 
-    setSubcategories(new_subs:[Category]){
-        this.subCategories = new_subs;
-    }
+  setSubcategories(newSubcategories: Category[]) {
+    this.subCategories = newSubcategories;
+  }
 }

@@ -1,17 +1,18 @@
 import passportLocal from "passport-local";
 import { PassportStatic } from "passport";
 import User, { UserT } from "./schemas/userS";
-import { getUserByEmail, getUserNoPwd } from "./dao_controllers/userDAO";
+import { UserDAO } from "./daos/UserDAO";
 
 const LocalStrategy = passportLocal.Strategy;
 const bcrypt = require("bcryptjs");
+const userDAO: UserDAO = new UserDAO();
 
 function initialize(passport: PassportStatic) {
   passport.use(
     new LocalStrategy(
       { usernameField: "email", passwordField: "password" },
       async (email: string, password: string, done) => {
-        const user = await getUserByEmail(email);
+        const user = await userDAO.getUserByEmail(email);
 
         if (user == null) {
           return done(null, false, {
@@ -35,10 +36,10 @@ function initialize(passport: PassportStatic) {
   );
 
   passport.serializeUser((user: UserT, done) => {
-    done(null, user.email);
+    done(null, user._id);
   });
-  passport.deserializeUser(async (email: String, done) => {
-    return done(null, await getUserNoPwd(email));
+  passport.deserializeUser(async (_id: string, done) => {
+    return done(null, await userDAO.getUserNoPwd(_id));
   });
 }
 

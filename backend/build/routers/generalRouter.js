@@ -1,27 +1,4 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -62,7 +39,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var router = require("express").Router();
 var multer = require("multer");
 var EmailInUse = require("../exceptions/exceptions").EmailInUse;
-var controller = __importStar(require("../controllers/controller"));
+var Controller_1 = require("../controllers/Controller");
+var controller = Controller_1.Controller.getInstance();
 // Rutas de publicaciones -------------------------------------------------------------
 router.get("/get_publications", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var publications, categoryId, tags, keywords, trimmedKeywords, e_1;
@@ -73,7 +51,7 @@ router.get("/get_publications", function (req, res) { return __awaiter(void 0, v
                 publications = [];
                 if (!(Object.keys(req.query).length > 0)) return [3 /*break*/, 5];
                 if (!req.query.categoryId) return [3 /*break*/, 2];
-                categoryId = new String(req.query.categoryId);
+                categoryId = req.query.categoryId;
                 return [4 /*yield*/, controller.getPublicationsByCategory(categoryId)];
             case 1:
                 publications = _a.sent();
@@ -340,7 +318,7 @@ router.get("/check_recover_code", function (req, res) { return __awaiter(void 0,
                 _b.label = 1;
             case 1:
                 _b.trys.push([1, 3, , 4]);
-                return [4 /*yield*/, controller.compareRecoverCode(new String(email), new String(code))];
+                return [4 /*yield*/, controller.compareRecoverCode(email, code)];
             case 2:
                 result = _b.sent();
                 res.send(JSON.stringify({
@@ -369,7 +347,7 @@ router.get("/check_email_exists", function (req, res) { return __awaiter(void 0,
                 _a.label = 1;
             case 1:
                 _a.trys.push([1, 3, , 4]);
-                return [4 /*yield*/, controller.userExists(new String(email))];
+                return [4 /*yield*/, controller.userExists(email)];
             case 2:
                 result = _a.sent();
                 res.send(JSON.stringify({

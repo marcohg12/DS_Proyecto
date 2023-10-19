@@ -1,5 +1,6 @@
 var ProductLine = /** @class */ (function () {
-    function ProductLine(name, units, price) {
+    function ProductLine(productId, name, units, price) {
+        this.productId = productId;
         this.name = name;
         this.units = units;
         this.price = price;
@@ -13,14 +14,17 @@ var ProductLine = /** @class */ (function () {
     ProductLine.prototype.getPrice = function () {
         return this.price;
     };
-    ProductLine.prototype.setName = function (new_name) {
-        this.name = new_name;
+    ProductLine.prototype.getProductId = function () {
+        return this.productId;
     };
-    ProductLine.prototype.setUnits = function (new_units) {
-        this.units = new_units;
+    ProductLine.prototype.setName = function (newName) {
+        this.name = newName;
     };
-    ProductLine.prototype.setPrice = function (new_price) {
-        this.price = new_price;
+    ProductLine.prototype.setUnits = function (newUnits) {
+        this.units = newUnits;
+    };
+    ProductLine.prototype.setPrice = function (newPrice) {
+        this.price = newPrice;
     };
     return ProductLine;
 }());

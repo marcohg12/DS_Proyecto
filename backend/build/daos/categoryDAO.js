@@ -35,90 +35,145 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CategoryAdmin = void 0;
-var CategoryDAO_1 = require("../daos/CategoryDAO");
-var CategoryAdmin = /** @class */ (function () {
-    function CategoryAdmin() {
-        this.categoryDAO = new CategoryDAO_1.CategoryDAO();
+exports.CategoryDAO = void 0;
+var categoryS_1 = __importDefault(require("../schemas/categoryS"));
+var CategoryDAO = /** @class */ (function () {
+    function CategoryDAO() {
     }
-    // Registra una categoría
-    CategoryAdmin.prototype.registerCategory = function (name) {
+    // Retorna la categoria correspondiente al Id
+    CategoryDAO.prototype.getCategoryByID = function (categoryId) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.categoryDAO.registerCategory(name)];
+                    case 0: return [4 /*yield*/, categoryS_1.default.findOne({ _id: categoryId })];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
+    // Retorna la categoria por el nombre
+    CategoryDAO.prototype.getCategoryByName = function (name) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, categoryS_1.default.findOne({ name: name })];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
+    // Retorna todas las categorias
+    CategoryDAO.prototype.getCategories = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var categories, categoriesArray, i, categoryId, _a;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0: return [4 /*yield*/, categoryS_1.default.find({ fatherCategory: null }).select({
+                            _id: 1,
+                            name: 1,
+                        })];
+                    case 1:
+                        categories = _b.sent();
+                        categoriesArray = categories.map(function (category) { return category.toObject(); });
+                        i = 0;
+                        _b.label = 2;
+                    case 2:
+                        if (!(i < categoriesArray.length)) return [3 /*break*/, 5];
+                        categoryId = String(categoriesArray[i]._id);
+                        _a = categoriesArray[i];
+                        return [4 /*yield*/, this.getSubCategories(categoryId)];
+                    case 3:
+                        _a.subs = _b.sent();
+                        _b.label = 4;
+                    case 4:
+                        i++;
+                        return [3 /*break*/, 2];
+                    case 5: return [2 /*return*/, categoriesArray];
+                }
+            });
+        });
+    };
+    // Retorna todas las subcategorias de una categoria
+    CategoryDAO.prototype.getSubCategories = function (fatherCategory) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, categoryS_1.default.find({ fatherCategory: fatherCategory }).select({
+                            _id: 1,
+                            name: 1,
+                        })];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
+    // Registra una categoria padre
+    CategoryDAO.prototype.registerCategory = function (name) {
+        return __awaiter(this, void 0, void 0, function () {
+            var category;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        category = new categoryS_1.default({
+                            name: name,
+                        });
+                        return [4 /*yield*/, category.save()];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
         });
     };
     // Actualiza una categoría
-    CategoryAdmin.prototype.editCategory = function (categoryId, newName) {
+    CategoryDAO.prototype.updateCategory = function (categoryId, name) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.categoryDAO.updateCategory(categoryId, newName)];
+                    case 0: return [4 /*yield*/, categoryS_1.default.updateOne({ _id: categoryId }, { $set: { name: name } })];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
         });
     };
-    // Obtiene todas las categorías
-    CategoryAdmin.prototype.getCategories = function () {
+    // Elimina la categoria correspondiente al id
+    CategoryDAO.prototype.deleteCategory = function (categoryId) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.categoryDAO.getCategories()];
+                    case 0: 
+                    // Eliminamos las subcategorías de la categoría
+                    return [4 /*yield*/, categoryS_1.default.deleteMany({ fatherCategory: categoryId })];
+                    case 1:
+                        // Eliminamos las subcategorías de la categoría
+                        _a.sent();
+                        return [4 /*yield*/, categoryS_1.default.deleteOne({ _id: categoryId })];
+                    case 2: 
+                    // Eliminamos la categoría padre
+                    return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
+    // Registra una subcategoria de una categoría
+    CategoryDAO.prototype.registerSubCategory = function (name, fatherCategory) {
+        return __awaiter(this, void 0, void 0, function () {
+            var subcategory;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        subcategory = new categoryS_1.default({
+                            name: name,
+                            fatherCategory: fatherCategory,
+                        });
+                        return [4 /*yield*/, subcategory.save()];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
         });
     };
-    // Obtiene una categoría por Id
-    CategoryAdmin.prototype.getCategory = function (categoryId) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.categoryDAO.getCategoryByID(categoryId)];
-                    case 1: return [2 /*return*/, _a.sent()];
-                }
-            });
-        });
-    };
-    // Elimina una categoría por Id
-    CategoryAdmin.prototype.deleteCategory = function (categoryId) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.categoryDAO.deleteCategory(categoryId)];
-                    case 1: return [2 /*return*/, _a.sent()];
-                }
-            });
-        });
-    };
-    // Registra una subcategoría en una categoría
-    CategoryAdmin.prototype.registerSubCategory = function (name, fatherCategory) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.categoryDAO.registerSubCategory(name, fatherCategory)];
-                    case 1: return [2 /*return*/, _a.sent()];
-                }
-            });
-        });
-    };
-    // Retorna todas las subcategorías de una categoría padre
-    CategoryAdmin.prototype.getSubCategories = function (fatherCategory) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.categoryDAO.getSubCategories(fatherCategory)];
-                    case 1: return [2 /*return*/, _a.sent()];
-                }
-            });
-        });
-    };
-    return CategoryAdmin;
+    return CategoryDAO;
 }());
-exports.CategoryAdmin = CategoryAdmin;
+exports.CategoryDAO = CategoryDAO;

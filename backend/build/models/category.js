@@ -1,12 +1,12 @@
 var Category = /** @class */ (function () {
-    function Category(id_category, name, fatherCategory, subCategories) {
-        this.id_category = id_category;
+    function Category(name, fatherCategory, subCategories, categoryId) {
+        this.categoryId = categoryId;
         this.name = name;
         this.fatherCategory = fatherCategory;
         this.subCategories = subCategories;
     }
     Category.prototype.getID = function () {
-        return this.id_category;
+        return this.categoryId;
     };
     Category.prototype.getName = function () {
         return this.name;
@@ -17,17 +17,17 @@ var Category = /** @class */ (function () {
     Category.prototype.getSubCategories = function () {
         return this.subCategories;
     };
-    Category.prototype.setId = function (new_id) {
-        this.id_category = new_id;
+    Category.prototype.setId = function (newId) {
+        this.categoryId = newId;
     };
-    Category.prototype.setName = function (new_name) {
-        this.name = new_name;
+    Category.prototype.setName = function (newName) {
+        this.name = newName;
     };
-    Category.prototype.setFatherCategory = function (new_father_cat) {
-        this.fatherCategory = new_father_cat;
+    Category.prototype.setFatherCategory = function (newFatherCategory) {
+        this.fatherCategory = newFatherCategory;
     };
-    Category.prototype.setSubcategories = function (new_subs) {
-        this.subCategories = new_subs;
+    Category.prototype.setSubcategories = function (newSubcategories) {
+        this.subCategories = newSubcategories;
     };
     return Category;
 }());

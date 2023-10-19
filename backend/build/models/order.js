@@ -1,6 +1,6 @@
 var Order = /** @class */ (function () {
-    function Order(id_order, clientRef, orderDate, deliveryDate, address, price, photoOfPayment, lineProducts, state) {
-        this.id_order = id_order;
+    function Order(clientRef, orderDate, address, price, photoOfPayment, lineProducts, state, orderId, deliveryDate) {
+        this.orderId = orderId;
         this.clientRef = clientRef;
         this.orderDate = orderDate;
         this.deliveryDate = deliveryDate;
@@ -11,7 +11,7 @@ var Order = /** @class */ (function () {
         this.state = state;
     }
     Order.prototype.getID = function () {
-        return this.id_order;
+        return this.orderId;
     };
     Order.prototype.getClientRef = function () {
         return this.clientRef;
@@ -37,32 +37,32 @@ var Order = /** @class */ (function () {
     Order.prototype.getState = function () {
         return this.state;
     };
-    Order.prototype.setID = function (new_id) {
-        this.id_order = new_id;
+    Order.prototype.setID = function (newId) {
+        this.orderId = newId;
     };
-    Order.prototype.setClient = function (new_client) {
-        this.clientRef = new_client;
+    Order.prototype.setClient = function (newClient) {
+        this.clientRef = newClient;
     };
-    Order.prototype.setOrderDate = function (new_order_date) {
-        this.orderDate = new_order_date;
+    Order.prototype.setOrderDate = function (newOrderDate) {
+        this.orderDate = newOrderDate;
     };
-    Order.prototype.setDeliveryDate = function (new_delivery_date) {
-        this.deliveryDate = new_delivery_date;
+    Order.prototype.setDeliveryDate = function (newDeliveryDate) {
+        this.deliveryDate = newDeliveryDate;
     };
-    Order.prototype.setAddress = function (new_address) {
-        this.address = new_address;
+    Order.prototype.setAddress = function (newAddress) {
+        this.address = newAddress;
     };
-    Order.prototype.setPrice = function (new_price) {
-        this.price = new_price;
+    Order.prototype.setPrice = function (newPrice) {
+        this.price = newPrice;
     };
-    Order.prototype.setPhoto = function (new_photo) {
-        this.photoOfPayment = new_photo;
+    Order.prototype.setPhoto = function (newPhoto) {
+        this.photoOfPayment = newPhoto;
     };
-    Order.prototype.setLineProducts = function (new_lines) {
-        this.lineProducts = new_lines;
+    Order.prototype.setLineProducts = function (newLines) {
+        this.lineProducts = newLines;
     };
-    Order.prototype.setState = function (new_state) {
-        this.state = new_state;
+    Order.prototype.setState = function (newState) {
+        this.state = newState;
     };
     return Order;
 }());

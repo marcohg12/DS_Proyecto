@@ -3,14 +3,15 @@ const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const bodyParser = require("body-parser");
 const passport = require("passport");
-import Database from "./mongo-config";
-const databaseInstance = Database;
+import { Database } from "./mongo-config";
+const databaseInstance = Database.getInstance();
+databaseInstance.connect();
 const clientRouter = require("./routers/clientRouter");
 const adminRouter = require("./routers/adminRouter");
 const generalRouter = require("./routers/generalRouter");
 import express from "express";
 const expressStatic = express.static;
-import { registerUser } from "./controllers/controller";
+import { Controller } from "./controllers/Controller";
 const initializePassport = require("./passport-config");
 
 const app = express();
@@ -52,7 +53,8 @@ app.get("/get_user", async (req, res) => {
 
 app.post("/signup", async (req, res) => {
   const { name, email, phone, password } = req.body;
-  const response = await registerUser(name, email, phone, password);
+  const controller = Controller.getInstance();
+  const response = await controller.registerUser(name, email, phone, password);
   res.send(JSON.stringify(response));
 });
 

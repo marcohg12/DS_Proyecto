@@ -1,64 +1,73 @@
-class Product implements Viewable{
+import { Viewable } from "./Viewable";
 
-    id_product: String;
-    name: String;
-    description: String;
-    units: Number;
-    price: Number;
-    photo: String;
+class Product extends Viewable {
+  private productId: string | null;
+  private name: string;
+  private units: number;
+  private price: number;
 
-    constructor(id_product: String,name:String,units:Number,price:Number){
-        this.id_product = id_product;
-        this.name = name;
-        this.units = units;
-        this.price = price;
-    }
+  constructor(
+    description: string,
+    photo: string,
+    name: string,
+    units: number,
+    price: number,
+    productId?: string
+  ) {
+    super(photo, description);
+    this.productId = productId;
+    this.name = name;
+    this.units = units;
+    this.price = price;
+  }
 
-    getID() :  String{
-        return this.id_product;
-    }
+  getID(): string {
+    return this.productId;
+  }
 
-    getName() : String{
-        return this.name;
-    }
+  getName(): string {
+    return this.name;
+  }
 
-    getDescription() :String{
-        return this.description;
-    }
+  getDescription(): string {
+    return this.description;
+  }
 
-    getUnits() : Number{
-        return this.units;
-    }
+  getUnits(): number {
+    return this.units;
+  }
 
-    getPrice() : Number{
-        return this.price;
-    }
+  getPrice(): number {
+    return this.price;
+  }
 
-    getPhoto() : String{
-        return this.photo;
-    }
+  getPhoto(): string {
+    return this.photo;
+  }
 
-    setId(new_id:String){
-        this.id_product = new_id;
-    }
+  setId(newId: string) {
+    this.productId = newId;
+  }
 
-    setName(newName: String){
-        this.name = newName;
-    }
+  setName(newName: string) {
+    this.name = newName;
+  }
 
-    setDescription(new_desc:String){
-        this.description = new_desc;
-    }
+  setDescription(newDescription: string) {
+    this.description = newDescription;
+  }
 
-    setUnits(new_units:Number){
-        this.units = new_units;
-    }
+  setUnits(newUnits: number) {
+    this.units = newUnits;
+  }
 
-    setPrice(new_price: Number){
-        this.price = new_price;
-    }
+  setPrice(newPrice: number) {
+    this.price = newPrice;
+  }
 
-    setPhoto(new_photo:String){
-        this.photo = new_photo;
-    }
- }
+  setPhoto(newPhoto: string) {
+    this.photo = newPhoto;
+  }
+}
+
+export { Product };

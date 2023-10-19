@@ -1,27 +1,4 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -59,123 +36,116 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deletePublication = exports.updatePublication = exports.registerPublication = exports.getPublicationsByTags = exports.getPublicationsByCategory = exports.getPublications = exports.getPublication = void 0;
-var publicationDAO = __importStar(require("../dao_controllers/publicationDAO"));
+exports.PublicationAdmin = void 0;
+var PublicationDAO_1 = require("../daos/PublicationDAO");
 var fs = require("fs");
-// Obtiene una publicación por su Id
-function getPublication(publicationId) {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, publicationDAO.getPublication(publicationId)];
-                case 1: return [2 /*return*/, _a.sent()];
-            }
+var PublicationAdmin = /** @class */ (function () {
+    function PublicationAdmin() {
+        this.publicationDAO = new PublicationDAO_1.PublicationDAO();
+    }
+    // Obtiene una publicación por su Id
+    PublicationAdmin.prototype.getPublication = function (publicationId) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.publicationDAO.getPublication(publicationId)];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
         });
-    });
-}
-exports.getPublication = getPublication;
-// Obtiene todas las publicaciones registradas
-function getPublications() {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, publicationDAO.getPublications()];
-                case 1: return [2 /*return*/, _a.sent()];
-            }
+    };
+    // Obtiene todas las publicaciones registradas
+    PublicationAdmin.prototype.getPublications = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.publicationDAO.getPublications()];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
         });
-    });
-}
-exports.getPublications = getPublications;
-// Obtiene todas las publicaciones de una categoría
-function getPublicationsByCategory(categoryId) {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, publicationDAO.getPublicationsByCategory(categoryId)];
-                case 1: return [2 /*return*/, _a.sent()];
-            }
+    };
+    // Obtiene todas las publicaciones de una categoría
+    PublicationAdmin.prototype.getPublicationsByCategory = function (categoryId) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.publicationDAO.getPublicationsByCategory(categoryId)];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
         });
-    });
-}
-exports.getPublicationsByCategory = getPublicationsByCategory;
-// Obtiene todas las publicaciones de un conjunto de palabras clave
-function getPublicationsByTags(tags) {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, publicationDAO.getPublicationsByTags(tags)];
-                case 1: return [2 /*return*/, _a.sent()];
-            }
+    };
+    // Obtiene todas las publicaciones de un conjunto de palabras clave
+    PublicationAdmin.prototype.getPublicationsByTags = function (tags) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.publicationDAO.getPublicationsByTags(tags)];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
         });
-    });
-}
-exports.getPublicationsByTags = getPublicationsByTags;
-// Registra una publicación
-function registerPublication(description, tags, categoryId, photoPath) {
-    return __awaiter(this, void 0, void 0, function () {
-        var keywords, trimmedKeywords, publicationId;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    keywords = tags.split(",");
-                    trimmedKeywords = keywords.map(function (keyword) { return keyword.trim(); });
-                    return [4 /*yield*/, publicationDAO.registerPublication(description, trimmedKeywords, categoryId)];
-                case 1:
-                    publicationId = _a.sent();
-                    // Guardamos la foto en el sistema de archivos
-                    return [4 /*yield*/, fs.renameSync(photoPath, "photos/publications/" + publicationId + ".png")];
-                case 2:
-                    // Guardamos la foto en el sistema de archivos
-                    _a.sent();
-                    return [2 /*return*/];
-            }
+    };
+    // Registra una publicación
+    PublicationAdmin.prototype.registerPublication = function (publication) {
+        return __awaiter(this, void 0, void 0, function () {
+            var publicationId;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.publicationDAO.registerPublication(publication)];
+                    case 1:
+                        publicationId = _a.sent();
+                        // Guardamos la foto en el sistema de archivos
+                        return [4 /*yield*/, fs.renameSync(publication.getPhoto(), "photos/publications/" + publicationId + ".png")];
+                    case 2:
+                        // Guardamos la foto en el sistema de archivos
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
         });
-    });
-}
-exports.registerPublication = registerPublication;
-// Actualiza una publicación
-function updatePublication(publicationId, description, tags, categoryId, photoPath) {
-    return __awaiter(this, void 0, void 0, function () {
-        var keywords, trimmedKeywords;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    if (!(photoPath !== "")) return [3 /*break*/, 3];
-                    // Eliminamos la foto anterior
-                    return [4 /*yield*/, fs.unlink("photos/publications/" + publicationId + ".png", function () { })];
-                case 1:
-                    // Eliminamos la foto anterior
-                    _a.sent();
-                    // Guardamos la nueva foto
-                    return [4 /*yield*/, fs.renameSync(photoPath, "photos/publications/" + publicationId + ".png")];
-                case 2:
-                    // Guardamos la nueva foto
-                    _a.sent();
-                    _a.label = 3;
-                case 3:
-                    keywords = tags.split(",");
-                    trimmedKeywords = keywords.map(function (keyword) { return keyword.trim(); });
-                    return [4 /*yield*/, publicationDAO.updatePublication(publicationId, categoryId, description, trimmedKeywords)];
-                case 4:
-                    _a.sent();
-                    return [2 /*return*/];
-            }
+    };
+    // Actualiza una publicación
+    PublicationAdmin.prototype.updatePublication = function (publication) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        if (!(publication.getPhoto() !== "")) return [3 /*break*/, 3];
+                        // Eliminamos la foto anterior
+                        return [4 /*yield*/, fs.unlink("photos/publications/" + publication.getID() + ".png", function () { })];
+                    case 1:
+                        // Eliminamos la foto anterior
+                        _a.sent();
+                        // Guardamos la nueva foto
+                        return [4 /*yield*/, fs.renameSync(publication.getPhoto(), "photos/publications/" + publication.getID() + ".png")];
+                    case 2:
+                        // Guardamos la nueva foto
+                        _a.sent();
+                        _a.label = 3;
+                    case 3: return [4 /*yield*/, this.publicationDAO.updatePublication(publication)];
+                    case 4:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
         });
-    });
-}
-exports.updatePublication = updatePublication;
-// Elimina una publicación por su Id
-function deletePublication(publicationId) {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, fs.unlink("photos/publications/" + publicationId + ".png", function () { })];
-                case 1:
-                    _a.sent();
-                    return [4 /*yield*/, publicationDAO.deletePublication(publicationId)];
-                case 2: return [2 /*return*/, _a.sent()];
-            }
+    };
+    // Elimina una publicación por su Id
+    PublicationAdmin.prototype.deletePublication = function (publicationId) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, fs.unlink("photos/publications/" + publicationId + ".png", function () { })];
+                    case 1:
+                        _a.sent();
+                        return [4 /*yield*/, this.publicationDAO.deletePublication(publicationId)];
+                    case 2: return [2 /*return*/, _a.sent()];
+                }
+            });
         });
-    });
-}
-exports.deletePublication = deletePublication;
+    };
+    return PublicationAdmin;
+}());
+exports.PublicationAdmin = PublicationAdmin;

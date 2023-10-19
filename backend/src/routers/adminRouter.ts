@@ -1,9 +1,10 @@
 const router = require("express").Router();
 const multer = require("multer");
 import { Request, Response } from "express";
-import * as controller from "../controllers/controller";
+import { Controller } from "../controllers/Controller";
 const productUpload = multer({ dest: "photos/products" });
 const publicationUpload = multer({ dest: "photos/publications" });
+const controller = Controller.getInstance();
 
 // Rutas de productos --------------------------------------------------------------------
 router.post(

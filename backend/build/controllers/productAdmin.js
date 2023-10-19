@@ -1,27 +1,4 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -59,97 +36,99 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getProduct = exports.getProducts = exports.deleteProduct = exports.updateProduct = exports.registerProduct = void 0;
-var productDAO = __importStar(require("../dao_controllers/productDAO"));
+exports.ProductAdmin = void 0;
+var ProductDAO_1 = require("../daos/ProductDAO");
 var fs = require("fs");
-// Registra un producto
-function registerProduct(name, description, units, price, photoPath) {
-    return __awaiter(this, void 0, void 0, function () {
-        var productId;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, productDAO.registerProduct(name, description, units, price)];
-                case 1:
-                    productId = _a.sent();
-                    // Guardamos la foto en el sistema de archivos
-                    return [4 /*yield*/, fs.renameSync(photoPath, "photos/products/" + productId + ".png")];
-                case 2:
-                    // Guardamos la foto en el sistema de archivos
-                    _a.sent();
-                    return [2 /*return*/];
-            }
+var ProductAdmin = /** @class */ (function () {
+    function ProductAdmin() {
+        this.productDAO = new ProductDAO_1.ProductDAO();
+    }
+    // Registra un producto
+    ProductAdmin.prototype.registerProduct = function (product) {
+        return __awaiter(this, void 0, void 0, function () {
+            var productId;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.productDAO.registerProduct(product)];
+                    case 1:
+                        productId = _a.sent();
+                        // Guardamos la foto en el sistema de archivos
+                        return [4 /*yield*/, fs.renameSync(product.getPhoto(), "photos/products/" + productId + ".png")];
+                    case 2:
+                        // Guardamos la foto en el sistema de archivos
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
         });
-    });
-}
-exports.registerProduct = registerProduct;
-// Actualiza los datos de un producto
-function updateProduct(productId, name, description, units, price, photoPath) {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    if (!(photoPath !== "")) return [3 /*break*/, 3];
-                    // Eliminamos la foto anterior
-                    return [4 /*yield*/, fs.unlink("photos/products/" + productId + ".png", function () { })];
-                case 1:
-                    // Eliminamos la foto anterior
-                    _a.sent();
-                    // Guardamos la nueva foto
-                    return [4 /*yield*/, fs.renameSync(photoPath, "photos/products/" + productId + ".png")];
-                case 2:
-                    // Guardamos la nueva foto
-                    _a.sent();
-                    _a.label = 3;
-                case 3: return [4 /*yield*/, productDAO.updateProduct(productId, name, description, units, price)];
-                case 4: return [2 /*return*/, _a.sent()];
-            }
+    };
+    // Actualiza los datos de un producto
+    ProductAdmin.prototype.updateProduct = function (product) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        if (!(product.getPhoto() !== "")) return [3 /*break*/, 3];
+                        // Eliminamos la foto anterior
+                        return [4 /*yield*/, fs.unlink("photos/products/" + product.getID() + ".png", function () { })];
+                    case 1:
+                        // Eliminamos la foto anterior
+                        _a.sent();
+                        // Guardamos la nueva foto
+                        return [4 /*yield*/, fs.renameSync(product.getPhoto(), "photos/products/" + product.getID() + ".png")];
+                    case 2:
+                        // Guardamos la nueva foto
+                        _a.sent();
+                        _a.label = 3;
+                    case 3: return [4 /*yield*/, this.productDAO.updateProduct(product)];
+                    case 4: return [2 /*return*/, _a.sent()];
+                }
+            });
         });
-    });
-}
-exports.updateProduct = updateProduct;
-// Elimina un producto por su Id
-function deleteProduct(productId) {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: 
-                // Eliminamos la foto del sistema de archivos
-                return [4 /*yield*/, fs.unlink("photos/products/" + productId + ".png", function () { })];
-                case 1:
+    };
+    // Elimina un producto por su Id
+    ProductAdmin.prototype.deleteProduct = function (productId) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: 
                     // Eliminamos la foto del sistema de archivos
-                    _a.sent();
-                    // Eliminamos el producto de la BD
-                    return [4 /*yield*/, productDAO.deleteProduct(productId)];
-                case 2:
-                    // Eliminamos el producto de la BD
-                    _a.sent();
-                    return [2 /*return*/];
-            }
+                    return [4 /*yield*/, fs.unlink("photos/products/" + productId + ".png", function () { })];
+                    case 1:
+                        // Eliminamos la foto del sistema de archivos
+                        _a.sent();
+                        // Eliminamos el producto de la BD
+                        return [4 /*yield*/, this.productDAO.deleteProduct(productId)];
+                    case 2:
+                        // Eliminamos el producto de la BD
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
         });
-    });
-}
-exports.deleteProduct = deleteProduct;
-// Retorna todos los productos registrados
-function getProducts() {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, productDAO.getProducts()];
-                case 1: return [2 /*return*/, _a.sent()];
-            }
+    };
+    // Retorna todos los productos registrados
+    ProductAdmin.prototype.getProducts = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.productDAO.getProducts()];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
         });
-    });
-}
-exports.getProducts = getProducts;
-// Retorna el producto con el Id enviado por parámetro
-function getProduct(productId) {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, productDAO.getProduct(productId)];
-                case 1: return [2 /*return*/, _a.sent()];
-            }
+    };
+    // Retorna el producto con el Id enviado por parámetro
+    ProductAdmin.prototype.getProduct = function (productId) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.productDAO.getProduct(productId)];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
         });
-    });
-}
-exports.getProduct = getProduct;
+    };
+    return ProductAdmin;
+}());
+exports.ProductAdmin = ProductAdmin;
