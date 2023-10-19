@@ -15,7 +15,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ProductNotInStock = exports.EmailInUse = void 0;
+exports.ProductDoesNotExists = exports.ProductNotInStock = exports.EmailInUse = void 0;
 var EmailInUse = /** @class */ (function (_super) {
     __extends(EmailInUse, _super);
     function EmailInUse() {
@@ -48,3 +48,4 @@ var ProductDoesNotExists = /** @class */ (function (_super) {
     }
     return ProductDoesNotExists;
 }(Error));
+exports.ProductDoesNotExists = ProductDoesNotExists;

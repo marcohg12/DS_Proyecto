@@ -7,9 +7,9 @@ const orderSchema: Schema = new Schema({
   orderDate: { type: Date, required: true },
   deliveryDate: { type: Date },
   address: { type: String, required: true },
-  price: { type: Double, required: true },
+  price: { type: Number, required: true },
   photoOfPayment: { type: String, required: true },
-  lineProducts: { type: [], required: true }, //[{_id, name, units, price}]
+  lineProducts: { type: [{_id:String,name:String,units:Number,price:Number}], required: true }, //[{_id, name, units, price}]
   state: { type: Number, required: true }, // 1:Pendiente, 2:Aceptado, 3:Entregado, 4:Cancelado
 });
 

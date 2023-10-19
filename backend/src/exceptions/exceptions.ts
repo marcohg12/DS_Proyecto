@@ -22,4 +22,4 @@ class ProductDoesNotExists extends Error {
   }
 }
 
-export { EmailInUse, ProductNotInStock };
+export { EmailInUse, ProductNotInStock,ProductDoesNotExists };
