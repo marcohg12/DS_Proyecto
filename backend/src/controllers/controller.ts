@@ -68,9 +68,10 @@ export async function getCart(userId: String) {
 export async function sendOrder(
   userId: String,
   address: String,
-  totalPrice: Number
+  totalPrice: Number,
+  photoPath: String
 ) {
-  return await cartController.sendOrder(userId, address, totalPrice);
+  return await cartController.sendOrder(userId, address, totalPrice, photoPath);
 }
 
 // Funciones de categorías -------------------------------------------------------------

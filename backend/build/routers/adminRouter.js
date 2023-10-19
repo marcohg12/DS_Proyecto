@@ -346,4 +346,61 @@ router.post("/set_order_state", function (req, res) { return __awaiter(void 0, v
         return [2 /*return*/];
     });
 }); });
+// Rutas de pedidos ----------------------------------------------------------------------
+router.post("/set_order_state", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, orderId, state, e_11;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
+            case 0:
+                _a = req.body, orderId = _a.orderId, state = _a.state;
+                _b.label = 1;
+            case 1:
+                _b.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, controller.setOrderState(orderId, state)];
+            case 2:
+                _b.sent();
+                res.send(JSON.stringify({
+                    error: false,
+                    message: "Estado de pedido actualizado exitosamente",
+                }));
+                return [3 /*break*/, 4];
+            case 3:
+                e_11 = _b.sent();
+                res.send(JSON.stringify({
+                    error: true,
+                    message: "Ocurrió un error inesperado, intente de nuevo",
+                }));
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
+        }
+    });
+}); });
+router.post("/confirm_order", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var orderId, e_12;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                orderId = req.body.orderId;
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, controller.confirmOrder(orderId)];
+            case 2:
+                _a.sent();
+                res.send(JSON.stringify({
+                    error: false,
+                    message: "Pedido confirmado exitosamente",
+                }));
+                return [3 /*break*/, 4];
+            case 3:
+                e_12 = _a.sent();
+                res.send(JSON.stringify({
+                    error: true,
+                    message: "Ocurrió un error inesperado, intente de nuevo",
+                }));
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
+        }
+    });
+}); });
 module.exports = router;

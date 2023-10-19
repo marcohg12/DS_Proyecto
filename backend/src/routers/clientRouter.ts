@@ -80,8 +80,9 @@ router.post(
     const { address, totalPrice } = req.body;
     const user: any = req.user;
     const userId = user.id;
+    const photoPath = req.file ? req.file.path : "";
     try {
-      await controller.sendOrder(userId, address, totalPrice);
+      await controller.sendOrder(userId, address, totalPrice, photoPath);
       res.send(
         JSON.stringify({ error: false, message: "Orden generada exitosamente" })
       );

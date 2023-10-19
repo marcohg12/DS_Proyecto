@@ -59,12 +59,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateProduct = exports.deleteProduct = exports.getProduct = exports.getProducts = exports.registerProduct = exports.deletePublication = exports.updatePublication = exports.registerPublication = exports.getPublicationsByTags = exports.getPublicationsByCategory = exports.getPublications = exports.getPublication = exports.registerSubcategory = exports.deleteCategory = exports.getSubCategories = exports.getCategory = exports.getCategories = exports.updateCategory = exports.registerCategory = exports.getCart = exports.compareRecoverCode = exports.userExists = exports.updateRecoverCode = exports.updatePassword = exports.updateUser = exports.registerUser = void 0;
+exports.confirmOrder = exports.setOrderState = exports.getUserOrders = exports.getOrder = exports.getOrders = exports.updateProduct = exports.deleteProduct = exports.getProduct = exports.getProducts = exports.registerProduct = exports.deletePublication = exports.updatePublication = exports.registerPublication = exports.getPublicationsByTags = exports.getPublicationsByCategory = exports.getPublications = exports.getPublication = exports.registerSubcategory = exports.deleteCategory = exports.getSubCategories = exports.getCategory = exports.getCategories = exports.updateCategory = exports.registerCategory = exports.sendOrder = exports.getCart = exports.deleteProductFromCart = exports.addProductToCart = exports.compareRecoverCode = exports.userExists = exports.updateRecoverCode = exports.updatePassword = exports.updateUser = exports.registerUser = void 0;
 var userController = __importStar(require("./userAdmin"));
 var cartController = __importStar(require("./cartAdmin"));
 var categoryController = __importStar(require("./categoryAdmin"));
 var publicationController = __importStar(require("./publicationAdmin"));
 var productController = __importStar(require("./productAdmin"));
+var orderController = __importStar(require("./orderAdmin"));
 // Funciones de usuario ----------------------------------------------------------------
 function registerUser(name, email, phone, password) {
     return __awaiter(this, void 0, void 0, function () {
@@ -144,17 +145,50 @@ function compareRecoverCode(email, code) {
 }
 exports.compareRecoverCode = compareRecoverCode;
 // Funciones de carrito ----------------------------------------------------------------
-function getCart(idUser) {
+function addProductToCart(userId, productId, units) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, cartController.getCart(idUser)];
+                case 0: return [4 /*yield*/, cartController.addProductToCart(userId, productId, units)];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+exports.addProductToCart = addProductToCart;
+function deleteProductFromCart(userId, productId) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, cartController.deleteProductFromCart(userId, productId)];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+exports.deleteProductFromCart = deleteProductFromCart;
+function getCart(userId) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, cartController.getCart(userId)];
                 case 1: return [2 /*return*/, _a.sent()];
             }
         });
     });
 }
 exports.getCart = getCart;
+function sendOrder(userId, address, totalPrice) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, cartController.sendOrder(userId, address, totalPrice)];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+exports.sendOrder = sendOrder;
 // Funciones de categorías -------------------------------------------------------------
 function registerCategory(name) {
     return __awaiter(this, void 0, void 0, function () {
@@ -368,3 +402,53 @@ function updateProduct(productId, name, description, units, price, photoPath) {
 }
 exports.updateProduct = updateProduct;
 // Funciones de pedidos ----------------------------------------------------------------
+function getOrders() {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, orderController.getOrders()];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+exports.getOrders = getOrders;
+function getOrder(orderId) {
+    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
+        return [2 /*return*/];
+    }); });
+}
+exports.getOrder = getOrder;
+function getUserOrders(userId) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, orderController.getUserOrders(userId)];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+exports.getUserOrders = getUserOrders;
+function setOrderState(orderId, state) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, orderController.setOrderState(orderId, state)];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+exports.setOrderState = setOrderState;
+function confirmOrder(orderId) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, orderController.confirmOrder(orderId)];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        });
+    });
+}
+exports.confirmOrder = confirmOrder;

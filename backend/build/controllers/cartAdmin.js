@@ -36,29 +36,36 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getCart = void 0;
-var cartDAO_1 = require("../dao_controllers/cartDAO");
-function getCart(idUser) {
-    return __awaiter(this, void 0, void 0, function () {
-        var result;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, (0, cartDAO_1.getCart)(idUser)];
-                case 1:
-                    result = _a.sent();
-                    return [2 /*return*/];
-            }
-        });
-    });
+exports.sendOrder = exports.getCart = exports.deleteProductFromCart = exports.addProductToCart = void 0;
+var fs = require("fs");
+// Agrega un producto al carrito
+// Valida que no hayan más de 5 unidades del producto en el carrito
+function addProductToCart(userId, productId, units) {
+    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
+        return [2 /*return*/];
+    }); });
+}
+exports.addProductToCart = addProductToCart;
+// Elimina una unidad de un producto del carrito
+// Si las unidades llegan a 0, se elimina el producto totalmente del carrito
+function deleteProductFromCart(userId, productId) {
+    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
+        return [2 /*return*/];
+    }); });
+}
+exports.deleteProductFromCart = deleteProductFromCart;
+// Obtiene los productos del carrito de un usuario
+function getCart(userId) {
+    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
+        return [2 /*return*/];
+    }); });
 }
 exports.getCart = getCart;
-// Agregar un producto al carrito
-// Solo pueden haber 5 unidades máximo del producto en el carrito
-// Id del producto, las unidades
-// Id del usuario: req.user.id
-// Eliminar un producto del carrito
-// Id del producto
-// Productos del carrito
-// Lista de productos [{idProducto, nombre, unidades en el carrito, precio por unidad, photoURL}]
-// Confirmación del carrito
-// String con la dirección, precio ya con el envío, foto
+// Genera un pedido a partir del carrito de un usuario
+// Limpia los productos del carrito
+function sendOrder(userId, address, totalPrice) {
+    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
+        return [2 /*return*/];
+    }); });
+}
+exports.sendOrder = sendOrder;

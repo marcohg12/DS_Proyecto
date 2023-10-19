@@ -24,5 +24,6 @@ export async function getCart(userId: String) {}
 export async function sendOrder(
   userId: String,
   address: String,
-  totalPrice: Number
+  totalPrice: Number,
+  photoPath: String
 ) {}
