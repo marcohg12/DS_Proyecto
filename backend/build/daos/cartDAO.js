@@ -47,12 +47,45 @@ var CartDAO = /** @class */ (function () {
     //Obtiene Carrito
     CartDAO.prototype.getCart = function (idUser) {
         return __awaiter(this, void 0, void 0, function () {
+            var result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0:
-                        console.log(idUser);
-                        return [4 /*yield*/, cartS_1.default.findOne({ client: idUser })];
-                    case 1: return [2 /*return*/, _a.sent()];
+                    case 0: return [4 /*yield*/, cartS_1.default.aggregate([
+                            {
+                                $match: { client: idUser },
+                            },
+                            {
+                                $unwind: "$products", // Unwind the array
+                            },
+                            {
+                                $lookup: {
+                                    from: "products",
+                                    localField: "products.productRef",
+                                    foreignField: "_id",
+                                    as: "productDetails",
+                                },
+                            },
+                            {
+                                $unwind: "$productDetails", // Unwind the result array
+                            },
+                            {
+                                $group: {
+                                    _id: "$_id",
+                                    products: {
+                                        $push: {
+                                            _id: "$productDetails._id",
+                                            name: "$productDetails.name",
+                                            price: "$productDetails.price",
+                                            photo: "$productDetails.photo",
+                                            units: "$products.units",
+                                        },
+                                    },
+                                },
+                            },
+                        ])];
+                    case 1:
+                        result = _a.sent();
+                        return [2 /*return*/, result];
                 }
             });
         });
@@ -83,63 +116,6 @@ var CartDAO = /** @class */ (function () {
                             client: idProduct,
                             productRef: { units: units, idUser: idUser },
                         })];
-                    case 1: return [2 /*return*/, _a.sent()];
-                }
-            });
-        });
-    };
-    // Obtiene los productos del carrito
-    CartDAO.prototype.getProductsCart = function (idUser) {
-        return __awaiter(this, void 0, void 0, function () {
-            var cart;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, cartS_1.default.findOne({ client: idUser })];
-                    case 1:
-                        cart = _a.sent();
-                        if (cart == null) {
-                            return [2 /*return*/, null];
-                        }
-                        return [2 /*return*/, { products: cart.products }];
-                }
-            });
-        });
-    };
-    // Obtiene el tostring de los productos del carrito
-    CartDAO.prototype.getProductsTostring = function (idUser) {
-        return __awaiter(this, void 0, void 0, function () {
-            var cart, productsstring;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, cartS_1.default.findOne({ client: idUser })];
-                    case 1:
-                        cart = _a.sent();
-                        if (cart == null) {
-                            return [2 /*return*/, null];
-                        }
-                        productsstring = cart.products.tostring();
-                        return [2 /*return*/, { productsstring: productsstring }];
-                }
-            });
-        });
-    };
-    // Obtiene el precio del carrito FALTA
-    CartDAO.prototype.getPriceCart = function (idUser) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, cartS_1.default.find({ client: idUser })];
-                    case 1: return [2 /*return*/, _a.sent()];
-                }
-            });
-        });
-    };
-    // Compra el carrito FALTA
-    CartDAO.prototype.buyCart = function (idUser) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, cartS_1.default.find({ client: idUser })];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });

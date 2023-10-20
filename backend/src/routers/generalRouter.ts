@@ -2,7 +2,7 @@ const router = require("express").Router();
 const multer = require("multer");
 const { EmailInUse } = require("../exceptions/exceptions");
 import { Request, Response } from "express";
-import { Controller } from "../controllers/Controller";
+import { Controller } from "../controllers/controller";
 const controller = Controller.getInstance();
 
 // Rutas de publicaciones -------------------------------------------------------------

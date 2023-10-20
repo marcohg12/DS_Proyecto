@@ -1,5 +1,5 @@
-import { Publication } from "./Publication";
-import { Product } from "./Product";
+import { Publication } from "./publication";
+import { Product } from "./product";
 
 class ViewableFactory {
   public createProduct(

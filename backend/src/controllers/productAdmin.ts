@@ -1,5 +1,5 @@
 import { ProductDAO } from "../daos/ProductDAO";
-import { Product } from "../models/Product";
+import { Product } from "../models/product";
 const fs = require("fs");
 
 class ProductAdmin {

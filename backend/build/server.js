@@ -52,7 +52,7 @@ var adminRouter = require("./routers/adminRouter");
 var generalRouter = require("./routers/generalRouter");
 var express_1 = __importDefault(require("express"));
 var expressStatic = express_1.default.static;
-var Controller_1 = require("./controllers/Controller");
+var controller_1 = require("./controllers/controller");
 var initializePassport = require("./passport-config");
 var app = (0, express_1.default)();
 // Configuraciones ------------------------------------------------------------------------------
@@ -91,7 +91,7 @@ app.post("/signup", function (req, res) { return __awaiter(void 0, void 0, void 
         switch (_b.label) {
             case 0:
                 _a = req.body, name = _a.name, email = _a.email, phone = _a.phone, password = _a.password;
-                controller = Controller_1.Controller.getInstance();
+                controller = controller_1.Controller.getInstance();
                 return [4 /*yield*/, controller.registerUser(name, email, phone, password)];
             case 1:
                 response = _b.sent();

@@ -1,5 +1,5 @@
 import { PublicationDAO } from "../daos/PublicationDAO";
-import { Publication } from "../models/Publication";
+import { Publication } from "../models/publication";
 const fs = require("fs");
 
 class PublicationAdmin {
