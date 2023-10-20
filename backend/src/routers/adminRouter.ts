@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const multer = require("multer");
 import { Request, Response } from "express";
-import { Controller } from "../controllers/Controller";
+import { Controller } from "../controllers/controller";
 const productUpload = multer({ dest: "photos/products" });
 const publicationUpload = multer({ dest: "photos/publications" });
 const controller = Controller.getInstance();

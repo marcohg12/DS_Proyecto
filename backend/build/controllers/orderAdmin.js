@@ -94,6 +94,7 @@ var OrderAdmin = /** @class */ (function () {
     // Confirma un pedido
     // Valida que por cada producto del pedido hayan unidades suficientes o
     // que el producto exista en el inventario
+    //Test
     OrderAdmin.prototype.confirmOrder = function (orderId) {
         return __awaiter(this, void 0, void 0, function () {
             var order, productLines, i, product, productToUpdate;
