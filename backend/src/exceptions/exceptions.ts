@@ -8,7 +8,7 @@ class EmailInUse extends Error {
 
 class ProductNotInStock extends Error {
   constructor(productName: String) {
-    super("No hay suficientes unidades del producto: " + productName);
+    super("No hay suficientes unidades del producto");
     this.name = "ProductNotInStock";
     Object.setPrototypeOf(this, ProductNotInStock.prototype);
   }

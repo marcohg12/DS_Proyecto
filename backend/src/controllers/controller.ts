@@ -7,6 +7,7 @@ import { CategoryAdmin } from "./CategoryAdmin";
 import { Product } from "../models/Product";
 import { ViewableFactory } from "../models/ViewableFactory";
 import { User } from "../models/User";
+import { Double } from "mongodb";
 
 class Controller {
   private static instance: Controller | null = null;
@@ -80,8 +81,8 @@ class Controller {
     return await this.cartAdmin.addProductToCart(userId, productId, units);
   }
 
-  public async deleteProductFromCart(userId: string, productId: string) {
-    return await this.cartAdmin.deleteProductFromCart(userId, productId);
+  public async deleteProductFromCart(userId: string, productId: string, units: number) {
+    return await this.cartAdmin.deleteProductFromCart(userId, productId, units);
   }
 
   public async getCart(userId: string) {
@@ -91,7 +92,7 @@ class Controller {
   public async sendOrder(
     userId: string,
     address: string,
-    totalPrice: number,
+    totalPrice: Number,
     photoPath: string
   ) {
     return await this.cartAdmin.sendOrder(

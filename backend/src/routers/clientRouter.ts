@@ -13,7 +13,7 @@ router.post("/add_product_to_cart", async (req: Request, res: Response) => {
   const user: any = req.user;
   const userId = user.id;
   try {
-    await controller.addProductToCart(userId, productId, units);
+    await controller.addProductToCart(userId, productId, parseInt(units, 10));
     res.send(
       JSON.stringify({ error: false, message: "Producto agregado al carrito" })
     );
@@ -30,11 +30,11 @@ router.post("/add_product_to_cart", async (req: Request, res: Response) => {
 router.post(
   "/delete_product_from_cart",
   async (req: Request, res: Response) => {
-    const { productId } = req.body;
+    const { productId, units } = req.body;
     const user: any = req.user;
     const userId = user.id;
     try {
-      await controller.deleteProductFromCart(userId, productId);
+      await controller.deleteProductFromCart(userId, productId, parseInt(units, 10));
       res.send(
         JSON.stringify({
           error: false,

@@ -1,6 +1,6 @@
+import { Double } from "mongodb";
 import { CartDAO } from "../daos/CartDAO";
-const fs = require("fs");
-
+const { ProductNotInStock } = require("../exceptions/exceptions");
 class CartAdmin {
   private cartDAO: CartDAO = new CartDAO();
 
@@ -13,13 +13,33 @@ class CartAdmin {
     productId: string,
     units: number
   ) {
-    return await this.cartDAO.addProduct(productId, units, userId);
+    const actualUnits = await this.cartDAO.findProduct(productId, userId);
+    //El 10 significa que el producto todavía no está en el carrito
+    if (actualUnits == 10){
+      return await this.cartDAO.addProduct(productId, units,  userId);
+    }else{
+      //Si las unidades son mayor a 5 se envia un mensaje de error 
+      const newUnits = actualUnits + units; 
+      if (newUnits > 5){
+        throw new ProductNotInStock();
+      }else{
+        //Sí el producto esta en el carrito y las unidades no son mayor a 5
+        //se actualiza el número de unidades
+        return await this.cartDAO.updateUnits(productId, newUnits,  userId);
+      }
+    }
   }
 
   // Elimina una unidad de un producto del carrito
   // Si las unidades llegan a 0, se elimina el producto totalmente del carrito
-  public async deleteProductFromCart(userId: string, productId: string) {
-    return await this.cartDAO.deleteProduct(productId, 1, userId);
+  public async deleteProductFromCart(userId: string, productId: string, units: number) {
+    const actualUnits = await this.cartDAO.findProduct(productId, userId);
+    const newUnits = actualUnits - units; 
+    if(newUnits  <= 0){
+    return await this.cartDAO.deleteProduct(productId, userId);
+    }else{
+      return await this.cartDAO.updateUnits(productId, newUnits, userId); 
+    }
   }
 
   // Obtiene los productos del carrito de un usuario
@@ -32,9 +52,30 @@ class CartAdmin {
   public async sendOrder(
     userId: string,
     address: string,
-    totalPrice: number,
+    totalPrice: Number,
     photoPath: string
-  ) {}
+  ) {
+    //Linea de Productos 
+    const response = await this.getCart(userId);
+    const lineProducts = response[0].products.map((product: {
+      _id: string;
+      name: string;
+      units: number;
+      price: number;
+    }) => ({
+      id: product._id,
+      name: product.name,
+      units: product.units,
+      price: product.price,
+    }));
+
+    const resultOrder = await this.cartDAO.registerOrder( userId,  new Date(), address,
+     totalPrice, lineProducts, 1); 
+     
+    const resultDelete = await this.cartDAO.deleteAll(userId); 
+
+    return resultOrder; 
+  }
 }
 
 export { CartAdmin };

@@ -30,7 +30,7 @@ exports.EmailInUse = EmailInUse;
 var ProductNotInStock = /** @class */ (function (_super) {
     __extends(ProductNotInStock, _super);
     function ProductNotInStock(productName) {
-        var _this = _super.call(this, "No hay suficientes unidades del producto: " + productName) || this;
+        var _this = _super.call(this, "No hay suficientes unidades del producto") || this;
         _this.name = "ProductNotInStock";
         Object.setPrototypeOf(_this, ProductNotInStock.prototype);
         return _this;

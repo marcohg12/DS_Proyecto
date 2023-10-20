@@ -41,18 +41,52 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CartDAO = void 0;
 var cartS_1 = __importDefault(require("../schemas/cartS"));
+var orderS_1 = __importDefault(require("../schemas/orderS"));
 var CartDAO = /** @class */ (function () {
     function CartDAO() {
     }
     //Obtiene Carrito
     CartDAO.prototype.getCart = function (idUser) {
         return __awaiter(this, void 0, void 0, function () {
+            var result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0:
-                        console.log(idUser);
-                        return [4 /*yield*/, cartS_1.default.findOne({ client: idUser })];
-                    case 1: return [2 /*return*/, _a.sent()];
+                    case 0: return [4 /*yield*/, cartS_1.default.aggregate([
+                            {
+                                $match: { client: idUser },
+                            },
+                            {
+                                $unwind: "$products", // Unwind the array
+                            },
+                            {
+                                $lookup: {
+                                    from: "products",
+                                    localField: "products.productRef",
+                                    foreignField: "_id",
+                                    as: "productDetails",
+                                },
+                            },
+                            {
+                                $unwind: "$productDetails", // Unwind the result array
+                            },
+                            {
+                                $group: {
+                                    _id: "$_id",
+                                    products: {
+                                        $push: {
+                                            _id: "$productDetails._id",
+                                            name: "$productDetails.name",
+                                            price: "$productDetails.price",
+                                            photo: "$productDetails.photo",
+                                            units: "$products.units",
+                                        },
+                                    },
+                                },
+                            },
+                        ])];
+                    case 1:
+                        result = _a.sent();
+                        return [2 /*return*/, result];
                 }
             });
         });
@@ -60,87 +94,108 @@ var CartDAO = /** @class */ (function () {
     // Agrega un producto al carrito
     CartDAO.prototype.addProduct = function (idProduct, units, idUser) {
         return __awaiter(this, void 0, void 0, function () {
-            var cart;
+            var newProduct;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        cart = new cartS_1.default({
-                            client: idUser,
-                            productRef: { idProduct: idProduct, units: units },
-                        });
-                        return [4 /*yield*/, cart.save()];
+                        newProduct = { productRef: idProduct, units: units };
+                        return [4 /*yield*/, cartS_1.default.updateOne({ client: idUser }, { $push: { products: newProduct } })];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
         });
     };
     // Elimina un producto del carrito
-    CartDAO.prototype.deleteProduct = function (idProduct, units, idUser) {
+    CartDAO.prototype.deleteProduct = function (idProduct, idUser) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, cartS_1.default.deleteOne({
-                            client: idProduct,
-                            productRef: { units: units, idUser: idUser },
-                        })];
+                    case 0: return [4 /*yield*/, cartS_1.default.updateOne({ client: idUser }, { $pull: { products: { productRef: idProduct } } })];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
         });
     };
-    // Obtiene los productos del carrito
-    CartDAO.prototype.getProductsCart = function (idUser) {
+    //Actualiza el número de unidades de un prodcuto 
+    CartDAO.prototype.updateUnits = function (idProduct, units, idUser) {
         return __awaiter(this, void 0, void 0, function () {
-            var cart;
+            var filter, update;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, cartS_1.default.findOne({ client: idUser })];
+                    case 0:
+                        filter = {
+                            client: idUser,
+                            "products.productRef": idProduct,
+                        };
+                        update = {
+                            $set: {
+                                "products.$.units": units,
+                            },
+                        };
+                        return [4 /*yield*/, cartS_1.default.updateOne(filter, update)];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
+    //Encuentra en producto, en caso de que sí exista retorna la cantidad
+    //de unidades que hay del producto 
+    CartDAO.prototype.findProduct = function (idProduct, idUser) {
+        return __awaiter(this, void 0, void 0, function () {
+            var cart, product;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, cartS_1.default.findOne({ client: idUser }, { products: { $elemMatch: { productRef: idProduct } } })];
                     case 1:
                         cart = _a.sent();
-                        if (cart == null) {
-                            return [2 /*return*/, null];
+                        if (cart.products.length === 0) {
+                            return [2 /*return*/, 10];
                         }
-                        return [2 /*return*/, { products: cart.products }];
+                        else {
+                            product = cart.products[0];
+                            return [2 /*return*/, product.units];
+                        }
+                        return [2 /*return*/];
                 }
             });
         });
     };
-    // Obtiene el tostring de los productos del carrito
-    CartDAO.prototype.getProductsTostring = function (idUser) {
+    //Elimina todos los productos del carrito
+    CartDAO.prototype.deleteAll = function (idUser) {
         return __awaiter(this, void 0, void 0, function () {
-            var cart, productsstring;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, cartS_1.default.findOne({ client: idUser })];
+                    case 0: return [4 /*yield*/, cartS_1.default.updateOne({ client: idUser }, { $set: { products: [] } })];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
+    // Registrar un pedido
+    CartDAO.prototype.registerOrder = function (client, orderDate, address, priceWithDelivery, photoPath, lineProducts, state) {
+        return __awaiter(this, void 0, void 0, function () {
+            var order, result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        order = new orderS_1.default({
+                            clientRef: client,
+                            orderDate: orderDate,
+                            address: address,
+                            price: priceWithDelivery,
+                            photoOfPayment: photoPath,
+                            lineProducts: lineProducts,
+                            state: state,
+                        });
+                        return [4 /*yield*/, order.save()];
                     case 1:
-                        cart = _a.sent();
-                        if (cart == null) {
-                            return [2 /*return*/, null];
-                        }
-                        productsstring = cart.products.tostring();
-                        return [2 /*return*/, { productsstring: productsstring }];
-                }
-            });
-        });
-    };
-    // Obtiene el precio del carrito FALTA
-    CartDAO.prototype.getPriceCart = function (idUser) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, cartS_1.default.find({ client: idUser })];
-                    case 1: return [2 /*return*/, _a.sent()];
-                }
-            });
-        });
-    };
-    // Compra el carrito FALTA
-    CartDAO.prototype.buyCart = function (idUser) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, cartS_1.default.find({ client: idUser })];
-                    case 1: return [2 /*return*/, _a.sent()];
+                        result = _a.sent();
+                        //Actualizar foto del pago de la orden
+                        return [4 /*yield*/, orderS_1.default.updateOne({ _id: result._id }, { photo: "/photos/orders/" + result._id + ".png" })];
+                    case 2:
+                        //Actualizar foto del pago de la orden
+                        _a.sent();
+                        return [2 /*return*/, result._id];
                 }
             });
         });

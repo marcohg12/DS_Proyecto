@@ -87,36 +87,6 @@ var OrderDAO = /** @class */ (function () {
             });
         });
     };
-    // Registrar un pedido
-    OrderDAO.prototype.registerOrder = function (client, orderDate, deliveryDate, address, priceWithDelivery, lineProducts, state) {
-        return __awaiter(this, void 0, void 0, function () {
-            var order, result;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        order = new orderS_1.default({
-                            clientRef: client,
-                            orderDate: orderDate,
-                            deliveryDate: deliveryDate,
-                            address: address,
-                            price: priceWithDelivery,
-                            photoOfPayment: "TEMPORAL",
-                            lineProducts: lineProducts,
-                            state: state,
-                        });
-                        return [4 /*yield*/, order.save()];
-                    case 1:
-                        result = _a.sent();
-                        //Actualizar foto del pago de la orden
-                        return [4 /*yield*/, orderS_1.default.updateOne({ _id: result._id }, { photo: "/photos/orders/" + result._id + ".png" })];
-                    case 2:
-                        //Actualizar foto del pago de la orden
-                        _a.sent();
-                        return [2 /*return*/, result._id];
-                }
-            });
-        });
-    };
     return OrderDAO;
 }());
 exports.OrderDAO = OrderDAO;
