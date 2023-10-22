@@ -27,7 +27,7 @@ function AdminMenu() {
             <Link to="/admin_categories" className="link-dark fs-4 mb-4">
               <b>Administrar categorías</b>
             </Link>
-            <Link className="link-dark fs-4 mb-4">
+            <Link to="/admin_orders" className="link-dark fs-4 mb-4">
               <b>Administrar pedidos</b>
             </Link>
             <Link className="link-dark fs-4 mb-4">

@@ -38,7 +38,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CartAdmin = void 0;
 var CartDAO_1 = require("../daos/CartDAO");
-var ProductNotInStock = require("../exceptions/exceptions").ProductNotInStock;
+var ToManyProductsInCart = require("../exceptions/exceptions").ToManyProductsInCart;
+var fs = require("fs");
 var CartAdmin = /** @class */ (function () {
     function CartAdmin() {
         this.cartDAO = new CartDAO_1.CartDAO();
@@ -53,13 +54,13 @@ var CartAdmin = /** @class */ (function () {
                     case 0: return [4 /*yield*/, this.cartDAO.findProduct(productId, userId)];
                     case 1:
                         actualUnits = _a.sent();
-                        if (!(actualUnits == 10)) return [3 /*break*/, 3];
+                        if (!(actualUnits === -1)) return [3 /*break*/, 3];
                         return [4 /*yield*/, this.cartDAO.addProduct(productId, units, userId)];
                     case 2: return [2 /*return*/, _a.sent()];
                     case 3:
                         newUnits = actualUnits + units;
                         if (!(newUnits > 5)) return [3 /*break*/, 4];
-                        throw new ProductNotInStock();
+                        throw new ToManyProductsInCart();
                     case 4: return [4 /*yield*/, this.cartDAO.updateUnits(productId, newUnits, userId)];
                     case 5: 
                     //Sí el producto esta en el carrito y las unidades no son mayor a 5
@@ -104,27 +105,33 @@ var CartAdmin = /** @class */ (function () {
     // Limpia los productos del carrito
     CartAdmin.prototype.sendOrder = function (userId, address, totalPrice, photoPath) {
         return __awaiter(this, void 0, void 0, function () {
-            var response, lineProducts, resultOrder, resultDelete;
+            var response, lineProducts, orderId;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.getCart(userId)];
                     case 1:
                         response = _a.sent();
-                        lineProducts = response[0].products.map(function (product) { return ({
+                        console.log(response);
+                        lineProducts = response.products.map(function (product) { return ({
                             id: product._id,
                             name: product.name,
-                            price: product.price,
                             units: product.units,
+                            price: product.price,
                         }); });
-                        return [4 /*yield*/, this.cartDAO.registerOrder(userId, new Date(), address, totalPrice, photoPath, lineProducts, 1)];
+                        return [4 /*yield*/, this.cartDAO.registerOrder(userId, new Date(), address, totalPrice, lineProducts, 1)];
                     case 2:
-                        resultOrder = _a.sent();
-                        console.log(resultOrder);
+                        orderId = _a.sent();
+                        // Vaciamos el carrito
                         return [4 /*yield*/, this.cartDAO.deleteAll(userId)];
                     case 3:
-                        resultDelete = _a.sent();
-                        console.log(resultDelete);
-                        return [2 /*return*/, resultOrder];
+                        // Vaciamos el carrito
+                        _a.sent();
+                        // Actualizamos el nombre de la foto en el sistema de archivos
+                        return [4 /*yield*/, fs.renameSync(photoPath, "photos/payments/" + orderId + ".png")];
+                    case 4:
+                        // Actualizamos el nombre de la foto en el sistema de archivos
+                        _a.sent();
+                        return [2 /*return*/, orderId];
                 }
             });
         });

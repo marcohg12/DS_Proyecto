@@ -110,4 +110,5 @@ app.use("/general", generalRouter);
 app.use("/client", clientRouter);
 app.use("/photos/products", expressStatic("./photos/products"));
 app.use("/photos/publications", expressStatic("./photos/publications"));
+app.use("/photos/payments", expressStatic("./photos/payments"));
 app.listen(port);

@@ -96,18 +96,19 @@ var OrderAdmin = /** @class */ (function () {
     // que el producto exista en el inventario
     OrderAdmin.prototype.confirmOrder = function (orderId) {
         return __awaiter(this, void 0, void 0, function () {
-            var order, productLines, i, product, productToUpdate;
+            var order, productLines, i, product;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.orderDAO.getDetail(orderId)];
                     case 1:
                         order = _a.sent();
+                        console.log(order.lineProducts);
                         productLines = order.lineProducts;
                         i = 0;
                         _a.label = 2;
                     case 2:
                         if (!(i < productLines.length)) return [3 /*break*/, 6];
-                        return [4 /*yield*/, this.productDAO.getProduct(productLines[i]._id)];
+                        return [4 /*yield*/, this.productDAO.getProduct(productLines[i].id)];
                     case 3:
                         product = _a.sent();
                         if (product == undefined) {
@@ -116,11 +117,10 @@ var OrderAdmin = /** @class */ (function () {
                         if (product.units - productLines[i].units < 0) {
                             throw new exceptions_1.ProductNotInStock(productLines[i].name);
                         }
-                        productToUpdate = this.viewableFactory.createProduct(product.name, product.description, product.units - productLines[i].units, product.price, product.photo, productLines[i]._id);
-                        //Update the product stock
-                        return [4 /*yield*/, this.productDAO.updateProduct(productToUpdate)];
+                        // Actualizamos las unidades en stock
+                        return [4 /*yield*/, this.productDAO.updateProductUnits(productLines[i].id, product.units - productLines[i].units)];
                     case 4:
-                        //Update the product stock
+                        // Actualizamos las unidades en stock
                         _a.sent();
                         _a.label = 5;
                     case 5:

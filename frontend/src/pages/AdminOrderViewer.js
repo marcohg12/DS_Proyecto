@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { BACKEND_ROUTE } from "../scripts/constants";
-import ClientWindow from "../components/ClientWindow";
+import AdminWindow from "../components/AdminWindow";
 import OrderCard from "../components/OrderCard";
 import Axios from "axios";
 import { getState } from "../scripts/orderStates";
 
-function ClientOrderViewer() {
+function AdminOrderViewer() {
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
     // Obtenemos los pedidos del client
-    Axios.get(BACKEND_ROUTE + "/client/get_orders", {
+    Axios.get(BACKEND_ROUTE + "/admin/get_ordes", {
       withCredentials: true,
     }).then((res) => {
       const response = res.data;
@@ -21,7 +21,7 @@ function ClientOrderViewer() {
   }, []);
 
   return (
-    <ClientWindow>
+    <AdminWindow>
       <div className="mt-4 mb-4">
         {orders.map((order) => {
           return (
@@ -37,13 +37,16 @@ function ClientOrderViewer() {
               }
               direction={order.address}
               totalPrice={order.price}
-              toLink={"/client_order_detail/" + order._id}
+              toLink={"/admin_order_detail/" + order._id}
+              name={order.userInfo.name}
+              email={order.userInfo.email}
+              phone={order.userInfo.phone}
             ></OrderCard>
           );
         })}
       </div>
-    </ClientWindow>
+    </AdminWindow>
   );
 }
 
-export default ClientOrderViewer;
+export default AdminOrderViewer;

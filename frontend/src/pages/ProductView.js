@@ -3,13 +3,19 @@ import { Link, useParams } from "react-router-dom";
 import Button from "../components/Button";
 import ClientWindow from "../components/ClientWindow";
 import Axios from "axios";
+import axios from "axios";
 import { BACKEND_ROUTE, MAX_PRODUCT_AMOUNT } from "../scripts/constants";
+import MessageModal from "../components/MessageModal";
 
 function ProductView() {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [photoURL, setPhotoURL] = useState("");
+  const [units, setUnits] = useState(1);
+  const [showModal, setShowModal] = useState(false);
+  const [error, setError] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
   const { id } = useParams(null);
 
   useEffect(() => {
@@ -26,8 +32,44 @@ function ProductView() {
     });
   }, [id]);
 
+  const addProductToCart = (event) => {
+    event.preventDefault();
+    axios({
+      method: "post",
+      data: {
+        productId: id,
+        units: units,
+      },
+      withCredentials: true,
+      url: BACKEND_ROUTE + "/client/add_product_to_cart",
+    }).then((res) => {
+      const response = res.data;
+      handleResponse(response);
+    });
+  };
+
+  const handleResponse = (response) => {
+    if (response.error) {
+      setError(true);
+    } else {
+      setError(false);
+    }
+    setModalMessage(response.message);
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+  };
+
   return (
     <ClientWindow>
+      <MessageModal
+        message={modalMessage}
+        is_open={showModal}
+        close={closeModal}
+        error={error}
+      ></MessageModal>
       <div className="row mt-4 mb-4">
         <div
           className="mt-4 col-md-6 d-flex flex-column"
@@ -61,7 +103,7 @@ function ProductView() {
             <p> ₡{Intl.NumberFormat("en-US").format(price)}</p>
           </div>
           <div className="row mb-4 md-4">
-            <form className="d-flex">
+            <form onSubmit={addProductToCart} className="d-flex">
               <div className="col mb-4 me-3">
                 <input
                   type="number"
@@ -69,6 +111,7 @@ function ProductView() {
                   min="1"
                   max={MAX_PRODUCT_AMOUNT}
                   defaultValue="1"
+                  onChange={(e) => setUnits(e.target.value)}
                   required
                 />
               </div>

@@ -40,10 +40,11 @@ class OrderAdmin {
     const order = await this.orderDAO.getDetail(orderId);
 
     //Sacar la lista con las lineas de productos
-    let productLines = order.lineProducts;
+    const productLines = (<any>order).lineProducts;
 
+    // Revisamos que cada producto exista y que hayan suficientes unidades
     for (let i = 0; i < productLines.length; i++) {
-      const product = await this.productDAO.getProduct(productLines[i]._id);
+      const product = await this.productDAO.getProduct(productLines[i].id);
       if (product == undefined) {
         throw new ProductDoesNotExists(productLines[i].name);
       }
@@ -51,16 +52,11 @@ class OrderAdmin {
         throw new ProductNotInStock(productLines[i].name);
       }
 
-      const productToUpdate = this.viewableFactory.createProduct(
-        product.name,
-        product.description,
-        product.units - productLines[i].units,
-        product.price,
-        product.photo,
-        productLines[i]._id
+      // Actualizamos las unidades en stock
+      await this.productDAO.updateProductUnits(
+        productLines[i].id,
+        product.units - productLines[i].units
       );
-      //Update the product stock
-      await this.productDAO.updateProduct(productToUpdate);
     }
 
     await this.orderDAO.changeOrderState(orderId, 2);

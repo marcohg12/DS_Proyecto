@@ -41,6 +41,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OrderDAO = void 0;
 var orderS_1 = __importDefault(require("../schemas/orderS"));
+var mongoose_1 = __importDefault(require("mongoose"));
 var OrderDAO = /** @class */ (function () {
     function OrderDAO() {
     }
@@ -49,7 +50,25 @@ var OrderDAO = /** @class */ (function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, orderS_1.default.find()];
+                    case 0: return [4 /*yield*/, orderS_1.default.aggregate([
+                            {
+                                $lookup: {
+                                    from: "users",
+                                    localField: "clientRef",
+                                    foreignField: "_id",
+                                    as: "userInfo",
+                                },
+                            },
+                            {
+                                $unwind: "$userInfo",
+                            },
+                            {
+                                $project: {
+                                    "userInfo.password": 0,
+                                    "userInfo.recoverCode": 0,
+                                },
+                            },
+                        ])];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
@@ -60,7 +79,30 @@ var OrderDAO = /** @class */ (function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, orderS_1.default.find({ clientRef: idUser })];
+                    case 0: return [4 /*yield*/, orderS_1.default.aggregate([
+                            {
+                                $match: {
+                                    clientRef: new mongoose_1.default.Types.ObjectId(idUser),
+                                },
+                            },
+                            {
+                                $lookup: {
+                                    from: "users",
+                                    localField: "clientRef",
+                                    foreignField: "_id",
+                                    as: "userInfo",
+                                },
+                            },
+                            {
+                                $unwind: "$userInfo",
+                            },
+                            {
+                                $project: {
+                                    "userInfo.password": 0,
+                                    "userInfo.recoverCode": 0,
+                                },
+                            },
+                        ])];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
@@ -69,10 +111,36 @@ var OrderDAO = /** @class */ (function () {
     // Obtiene el detalle de una orden
     OrderDAO.prototype.getDetail = function (orderId) {
         return __awaiter(this, void 0, void 0, function () {
+            var result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, orderS_1.default.findOne({ _id: orderId })];
-                    case 1: return [2 /*return*/, _a.sent()];
+                    case 0: return [4 /*yield*/, orderS_1.default.aggregate([
+                            {
+                                $match: {
+                                    _id: new mongoose_1.default.Types.ObjectId(orderId),
+                                },
+                            },
+                            {
+                                $lookup: {
+                                    from: "users",
+                                    localField: "clientRef",
+                                    foreignField: "_id",
+                                    as: "userInfo",
+                                },
+                            },
+                            {
+                                $unwind: "$userInfo",
+                            },
+                            {
+                                $project: {
+                                    "userInfo.password": 0,
+                                    "userInfo.recoverCode": 0,
+                                },
+                            },
+                        ])];
+                    case 1:
+                        result = _a.sent();
+                        return [2 /*return*/, result[0]];
                 }
             });
         });

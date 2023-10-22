@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { BACKEND_ROUTE } from "../scripts/constants";
 
 function OrderCard({
   orderId,
@@ -14,35 +15,42 @@ function OrderCard({
   phone,
   photoLink,
 }) {
+  const openImageWindow = () => {
+    window.open(BACKEND_ROUTE + photoLink);
+  };
+
   return (
-    <div class="card">
-      <h5 class="card-header">
+    <div className="card mb-4">
+      <h5 className="card-header">
         <div className="row">
           <div className="col">Pedido: {orderId}</div>
           <div className="col">{state ? "Estado: " + state : ""}</div>
         </div>
       </h5>
       <div className="row g-0">
-        <div className={photoLink ? "col-md-8" : "col-md-12"}>
-          <div class="card-body">
+        <div className={"col-md-12"}>
+          <div className="card-body">
             <div className="row mb-3 g-0">
               <div className="col">
-                <p class="card-text">Fecha de orden: {orderDate}</p>
-                <p class="card-text">Fecha de entrega: {deliveryDate}</p>
-                <p class="card-text">Precio con envío: {totalPrice}</p>
+                <p className="card-text">Fecha de orden: {orderDate}</p>
+                <p className="card-text">Fecha de entrega: {deliveryDate}</p>
+                <p className="card-text">
+                  Precio con envío: ₡
+                  {Intl.NumberFormat("en-US").format(totalPrice)}
+                </p>
               </div>
               <div className="col">
-                <p class="card-text">{name ? "Nombre: " + name : ""}</p>
-                <p class="card-text">
+                <p className="card-text">{name ? "Nombre: " + name : ""}</p>
+                <p className="card-text">
                   {email ? "Correo electrónico: " + email : ""}
                 </p>
-                <p class="card-text">{phone ? "Teléfono: " + phone : ""}</p>
+                <p className="card-text">{phone ? "Teléfono: " + phone : ""}</p>
               </div>
             </div>
 
-            <p class="card-text">Dirección de entrega: {direction}</p>
+            <p className="card-text">Dirección de entrega: {direction}</p>
             {!photoLink ? (
-              <div class="d-flex justify-content-end">
+              <div className="d-flex justify-content-end">
                 <Link
                   to={toLink}
                   className="btn btn-outline-secondary"
@@ -52,19 +60,18 @@ function OrderCard({
                 </Link>
               </div>
             ) : (
-              <></>
+              <div className="d-flex justify-content-end">
+                <button
+                  onClick={() => openImageWindow()}
+                  className="btn btn-outline-secondary"
+                  style={{ width: "150px" }}
+                >
+                  Ver comprobante
+                </button>
+              </div>
             )}
           </div>
         </div>
-        {photoLink ? (
-          <div className="col-md-4">
-            <div className="col">
-              <img src={photoLink} alt="" className="card-img" />
-            </div>
-          </div>
-        ) : (
-          <></>
-        )}
       </div>
     </div>
   );

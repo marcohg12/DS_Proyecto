@@ -1,18 +1,17 @@
-import Cart, { CartT } from "../schemas/cartS";
-import Order, { OrderT } from "../schemas/orderS";
-import { Double } from "mongodb";
+import Cart from "../schemas/cartS";
+import Order from "../schemas/orderS";
 
 class CartDAO {
   constructor() {}
 
-  //Obtiene Carrito
+  //Obtiene el carrito de un usuario
   public async getCart(idUser: string) {
     const result = await Cart.aggregate([
       {
         $match: { client: idUser },
       },
       {
-        $unwind: "$products", // Unwind the array
+        $unwind: "$products",
       },
       {
         $lookup: {
@@ -23,7 +22,7 @@ class CartDAO {
         },
       },
       {
-        $unwind: "$productDetails", // Unwind the result array
+        $unwind: "$productDetails",
       },
       {
         $group: {
@@ -40,26 +39,31 @@ class CartDAO {
         },
       },
     ]);
-    return result;
+    if (result.length > 0) {
+      return result[0];
+    }
+    return { products: [] };
   }
 
   // Agrega un producto al carrito
-  public async addProduct(idProduct: string, units: Number, idUser: string){
-    const newProduct = {productRef: idProduct, units: units}
-    return await Cart.updateOne({client: idUser},
-        {$push: {products: newProduct}});
+  public async addProduct(idProduct: string, units: Number, idUser: string) {
+    const newProduct = { productRef: idProduct, units: units };
+    return await Cart.updateOne(
+      { client: idUser },
+      { $push: { products: newProduct } }
+    );
   }
 
   // Elimina un producto del carrito
-  public async deleteProduct(idProduct: string, idUser: string){
+  public async deleteProduct(idProduct: string, idUser: string) {
     return await Cart.updateOne(
       { client: idUser },
       { $pull: { products: { productRef: idProduct } } }
     );
   }
 
-  //Actualiza el número de unidades de un prodcuto 
-  public async updateUnits(idProduct: String, units: Number, idUser: String){
+  //Actualiza el número de unidades de un prodcuto
+  public async updateUnits(idProduct: String, units: Number, idUser: String) {
     const filter = {
       client: idUser,
       "products.productRef": idProduct,
@@ -73,24 +77,23 @@ class CartDAO {
   }
 
   //Encuentra en producto, en caso de que sí exista retorna la cantidad
-  //de unidades que hay del producto 
-  public async findProduct(idProduct: String, idUser: String){
+  //de unidades que hay del producto
+  public async findProduct(idProduct: String, idUser: String) {
     const cart = await Cart.findOne(
       { client: idUser },
       { products: { $elemMatch: { productRef: idProduct } } }
     );
-    if (cart.products.length === 0){
-      return 10; 
-    }else{
-      const product = cart.products[0]; // Assuming there's only one match
+    if (cart.products.length === 0) {
+      return -1;
+    } else {
+      const product = cart.products[0];
       return product.units;
     }
   }
 
   //Elimina todos los productos del carrito
   public async deleteAll(idUser: String) {
-    return await Cart.updateOne(
-      { client: idUser }, { $set: { products: [] } } )
+    return await Cart.updateOne({ client: idUser }, { $set: { products: [] } });
   }
 
   // Registrar un pedido
@@ -111,13 +114,13 @@ class CartDAO {
       lineProducts: lineProducts,
       state: state,
     });
- 
+
     const result = await order.save();
 
     //Actualizar foto del pago de la orden
     await Order.updateOne(
       { _id: result._id },
-      { photo: "/photos/orders/" + result._id + ".png" }
+      { photoOfPayment: "/photos/payments/" + result._id + ".png" }
     );
 
     return result._id;
