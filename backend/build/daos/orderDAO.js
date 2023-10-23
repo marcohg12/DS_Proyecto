@@ -63,6 +63,9 @@ var OrderDAO = /** @class */ (function () {
                                 $unwind: "$userInfo",
                             },
                             {
+                                $sort: { orderDate: -1 },
+                            },
+                            {
                                 $project: {
                                     "userInfo.password": 0,
                                     "userInfo.recoverCode": 0,
@@ -95,6 +98,9 @@ var OrderDAO = /** @class */ (function () {
                             },
                             {
                                 $unwind: "$userInfo",
+                            },
+                            {
+                                $sort: { orderDate: -1 },
                             },
                             {
                                 $project: {

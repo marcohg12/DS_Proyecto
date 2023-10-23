@@ -38,11 +38,11 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var router = require("express").Router();
 var multer = require("multer");
-var Controller_1 = require("../controllers/Controller");
+var controller_1 = require("../controllers/controller");
 var exceptions_1 = require("../exceptions/exceptions");
 var productUpload = multer({ dest: "photos/products" });
 var publicationUpload = multer({ dest: "photos/publications" });
-var controller = Controller_1.Controller.getInstance();
+var controller = controller_1.Controller.getInstance();
 // Rutas de productos --------------------------------------------------------------------
 router.post("/register_product", productUpload.single("photo"), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var _a, name, description, units, price, photoPath, e_1;
@@ -312,20 +312,6 @@ router.post("/delete_publication/:id", function (req, res) { return __awaiter(vo
     });
 }); });
 // Rutas de pedidos ----------------------------------------------------------------------
-router.post("/set_order_state", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    return __generator(this, function (_a) {
-        try {
-        }
-        catch (e) {
-            res.send(JSON.stringify({
-                error: true,
-                message: "Ocurrió un error inesperado, intente de nuevo",
-            }));
-        }
-        return [2 /*return*/];
-    });
-}); });
-// Rutas de pedidos ----------------------------------------------------------------------
 router.get("/get_ordes", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var orders, e_11;
     return __generator(this, function (_a) {
@@ -353,15 +339,15 @@ router.get("/get_ordes", function (req, res) { return __awaiter(void 0, void 0, 
     });
 }); });
 router.post("/set_order_state", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, orderId, state, e_12;
+    var _a, orderId, newState, e_12;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
-                _a = req.body, orderId = _a.orderId, state = _a.state;
+                _a = req.body, orderId = _a.orderId, newState = _a.newState;
                 _b.label = 1;
             case 1:
                 _b.trys.push([1, 3, , 4]);
-                return [4 /*yield*/, controller.setOrderState(orderId, state)];
+                return [4 /*yield*/, controller.setOrderState(orderId, newState)];
             case 2:
                 _b.sent();
                 res.send(JSON.stringify({
@@ -399,9 +385,11 @@ router.post("/confirm_order", function (req, res) { return __awaiter(void 0, voi
                 return [3 /*break*/, 4];
             case 3:
                 e_13 = _a.sent();
-                console.log(e_13);
                 message = "Ocurrió un error inesperado, intente de nuevo";
                 if (e_13 instanceof exceptions_1.ProductDoesNotExists) {
+                    message = e_13.message;
+                }
+                if (e_13 instanceof exceptions_1.ProductNotInStock) {
                     message = e_13.message;
                 }
                 res.send(JSON.stringify({

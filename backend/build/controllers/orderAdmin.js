@@ -103,7 +103,6 @@ var OrderAdmin = /** @class */ (function () {
                     case 0: return [4 /*yield*/, this.orderDAO.getDetail(orderId)];
                     case 1:
                         order = _a.sent();
-                        console.log(order.lineProducts);
                         productLines = order.lineProducts;
                         i = 0;
                         _a.label = 2;
