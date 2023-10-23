@@ -38,13 +38,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var router = require("express").Router();
 var multer = require("multer");
-var EmailInUse = require("../exceptions/exceptions").EmailInUse;
+var ToManyProductsInCart = require("../exceptions/exceptions").ToManyProductsInCart;
 var paymentUpload = multer({ dest: "photos/payments" });
 var controller_1 = require("../controllers/controller");
 var controller = controller_1.Controller.getInstance();
 // Funciones de carrito -------------------------------------------------------------------------
 router.post("/add_product_to_cart", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, productId, units, user, userId, e_1;
+    var _a, productId, units, user, userId, e_1, message;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
@@ -54,16 +54,20 @@ router.post("/add_product_to_cart", function (req, res) { return __awaiter(void 
                 _b.label = 1;
             case 1:
                 _b.trys.push([1, 3, , 4]);
-                return [4 /*yield*/, controller.addProductToCart(userId, productId, units)];
+                return [4 /*yield*/, controller.addProductToCart(userId, productId, parseInt(units, 10))];
             case 2:
                 _b.sent();
                 res.send(JSON.stringify({ error: false, message: "Producto agregado al carrito" }));
                 return [3 /*break*/, 4];
             case 3:
                 e_1 = _b.sent();
+                message = "Ocurrió un error inesperado, intente de nuevo";
+                if (e_1 instanceof ToManyProductsInCart) {
+                    message = e_1.message;
+                }
                 res.send(JSON.stringify({
                     error: true,
-                    message: "Ocurrió un error inesperado, intente de nuevo",
+                    message: message,
                 }));
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
@@ -71,26 +75,26 @@ router.post("/add_product_to_cart", function (req, res) { return __awaiter(void 
     });
 }); });
 router.post("/delete_product_from_cart", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var productId, user, userId, e_2;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
+    var _a, productId, units, user, userId, e_2;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
             case 0:
-                productId = req.body.productId;
+                _a = req.body, productId = _a.productId, units = _a.units;
                 user = req.user;
                 userId = user.id;
-                _a.label = 1;
+                _b.label = 1;
             case 1:
-                _a.trys.push([1, 3, , 4]);
-                return [4 /*yield*/, controller.deleteProductFromCart(userId, productId)];
+                _b.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, controller.deleteProductFromCart(userId, productId, parseInt(units, 10))];
             case 2:
-                _a.sent();
+                _b.sent();
                 res.send(JSON.stringify({
                     error: false,
                     message: "Producto eliminado",
                 }));
                 return [3 /*break*/, 4];
             case 3:
-                e_2 = _a.sent();
+                e_2 = _b.sent();
                 res.send(JSON.stringify({
                     error: true,
                     message: "Ocurrió un error inesperado, intente de nuevo",
@@ -145,10 +149,14 @@ router.post("/confirm_order", paymentUpload.single("photo"), function (req, res)
                 return [4 /*yield*/, controller.sendOrder(userId, address, totalPrice, photoPath)];
             case 2:
                 _b.sent();
-                res.send(JSON.stringify({ error: false, message: "Orden generada exitosamente" }));
+                res.send(JSON.stringify({
+                    error: false,
+                    message: "Pedido generado exitosamente",
+                }));
                 return [3 /*break*/, 4];
             case 3:
                 e_4 = _b.sent();
+                console.log(e_4);
                 res.send(JSON.stringify({
                     error: true,
                     message: "Ocurrió un error inesperado, intente de nuevo",

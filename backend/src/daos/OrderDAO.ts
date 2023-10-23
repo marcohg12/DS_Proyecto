@@ -1,22 +1,93 @@
-import { Double } from "mongodb";
 import Order, { OrderT } from "../schemas/orderS";
+import mongoose from "mongoose";
 
 class OrderDAO {
   constructor() {}
 
   // Obtiene todas las ordenes
   public async getOrders() {
-    return await Order.find();
+    return await Order.aggregate([
+      {
+        $lookup: {
+          from: "users",
+          localField: "clientRef",
+          foreignField: "_id",
+          as: "userInfo",
+        },
+      },
+      {
+        $unwind: "$userInfo",
+      },
+      {
+        $sort: { orderDate: -1 },
+      },
+      {
+        $project: {
+          "userInfo.password": 0,
+          "userInfo.recoverCode": 0,
+        },
+      },
+    ]);
   }
 
   // Obtiene todas las ordenes de un Usuario
   public async getOrdersUser(idUser: string) {
-    return await Order.find({ clientRef: idUser });
+    return await Order.aggregate([
+      {
+        $match: {
+          clientRef: new mongoose.Types.ObjectId(idUser),
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "clientRef",
+          foreignField: "_id",
+          as: "userInfo",
+        },
+      },
+      {
+        $unwind: "$userInfo",
+      },
+      {
+        $sort: { orderDate: -1 },
+      },
+      {
+        $project: {
+          "userInfo.password": 0,
+          "userInfo.recoverCode": 0,
+        },
+      },
+    ]);
   }
 
   // Obtiene el detalle de una orden
   public async getDetail(orderId: string) {
-    return await Order.findOne({ _id: orderId });
+    const result = await Order.aggregate([
+      {
+        $match: {
+          _id: new mongoose.Types.ObjectId(orderId),
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "clientRef",
+          foreignField: "_id",
+          as: "userInfo",
+        },
+      },
+      {
+        $unwind: "$userInfo",
+      },
+      {
+        $project: {
+          "userInfo.password": 0,
+          "userInfo.recoverCode": 0,
+        },
+      },
+    ]);
+    return result[0];
   }
 
   public async changeOrderState(orderId: string, newState: number) {
@@ -24,37 +95,6 @@ class OrderDAO {
       { _id: orderId },
       { $set: { state: newState } }
     );
-  }
-
-  // Registrar un pedido
-  public async registerOrder(
-    client: string,
-    orderDate: Date,
-    deliveryDate: Date,
-    address: string,
-    priceWithDelivery: Double,
-    lineProducts: [{ _id: string; name: string; units: number; price: number }],
-    state: number
-  ) {
-    const order = new Order({
-      clientRef: client,
-      orderDate: orderDate,
-      deliveryDate: deliveryDate,
-      address: address,
-      price: priceWithDelivery,
-      photoOfPayment: "TEMPORAL",
-      lineProducts: lineProducts,
-      state: state,
-    });
-
-    const result = await order.save();
-    //Actualizar foto del pago de la orden
-    await Order.updateOne(
-      { _id: result._id },
-      { photo: "/photos/orders/" + result._id + ".png" }
-    );
-
-    return result._id;
   }
 }
 

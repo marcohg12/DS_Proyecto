@@ -17,6 +17,11 @@ import PublicationView from "../pages/PublicationView";
 import Profile from "../pages/Profile";
 import PasswordRecover from "../pages/PasswordRecover";
 import ClientOrderViewer from "../pages/ClientOrderViewer";
+import CartView from "../pages/CartView";
+import CartPayment from "../pages/CartPayment";
+import ClientOrderView from "../pages/ClientOrderView";
+import AdminOrderViewer from "../pages/AdminOrderViewer";
+import AdminOrderView from "../pages/AdminOrderView";
 
 function App() {
   const ctx = useContext(appContext).user;
@@ -132,6 +137,14 @@ function App() {
           }
         />
         <Route
+          path="/admin_orders"
+          element={
+            <Protected ctx={ctx} loggedIn={true} forRole={2}>
+              <AdminOrderViewer />
+            </Protected>
+          }
+        />
+        <Route
           path="/edit_category/:id"
           element={
             <Protected ctx={ctx} loggedIn={true} forRole={2}>
@@ -144,6 +157,38 @@ function App() {
           element={
             <Protected ctx={ctx} loggedIn={true} forRole={2}>
               <AdminMenu />
+            </Protected>
+          }
+        />
+        <Route
+          path="/client_order_detail/:id"
+          element={
+            <Protected ctx={ctx} loggedIn={true} forRole={1}>
+              <ClientOrderView />
+            </Protected>
+          }
+        />
+        <Route
+          path="/admin_order_detail/:id"
+          element={
+            <Protected ctx={ctx} loggedIn={true} forRole={2}>
+              <AdminOrderView />
+            </Protected>
+          }
+        />
+        <Route
+          path="/my_cart"
+          element={
+            <Protected ctx={ctx} loggedIn={true} forRole={1}>
+              <CartView />
+            </Protected>
+          }
+        />
+        <Route
+          path="/pay_cart"
+          element={
+            <Protected ctx={ctx} loggedIn={true} forRole={1}>
+              <CartPayment />
             </Protected>
           }
         />

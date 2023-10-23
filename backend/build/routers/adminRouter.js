@@ -38,10 +38,11 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var router = require("express").Router();
 var multer = require("multer");
-var controller_1 = require("../controllers/controller");
+var Controller_1 = require("../controllers/Controller");
+var exceptions_1 = require("../exceptions/exceptions");
 var productUpload = multer({ dest: "photos/products" });
 var publicationUpload = multer({ dest: "photos/publications" });
-var controller = controller_1.Controller.getInstance();
+var controller = Controller_1.Controller.getInstance();
 // Rutas de productos --------------------------------------------------------------------
 router.post("/register_product", productUpload.single("photo"), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var _a, name, description, units, price, photoPath, e_1;
@@ -325,8 +326,34 @@ router.post("/set_order_state", function (req, res) { return __awaiter(void 0, v
     });
 }); });
 // Rutas de pedidos ----------------------------------------------------------------------
+router.get("/get_ordes", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var orders, e_11;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, controller.getOrders()];
+            case 1:
+                orders = _a.sent();
+                res.send(JSON.stringify({
+                    error: false,
+                    message: "Pedidos consultado exitosamente",
+                    result: orders,
+                }));
+                return [3 /*break*/, 3];
+            case 2:
+                e_11 = _a.sent();
+                res.send(JSON.stringify({
+                    error: true,
+                    message: "Ocurrió un error inesperado, intente de nuevo",
+                }));
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); });
 router.post("/set_order_state", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, orderId, state, e_11;
+    var _a, orderId, state, e_12;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
@@ -343,7 +370,7 @@ router.post("/set_order_state", function (req, res) { return __awaiter(void 0, v
                 }));
                 return [3 /*break*/, 4];
             case 3:
-                e_11 = _b.sent();
+                e_12 = _b.sent();
                 res.send(JSON.stringify({
                     error: true,
                     message: "Ocurrió un error inesperado, intente de nuevo",
@@ -354,7 +381,7 @@ router.post("/set_order_state", function (req, res) { return __awaiter(void 0, v
     });
 }); });
 router.post("/confirm_order", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var orderId, e_12;
+    var orderId, e_13, message;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -371,10 +398,15 @@ router.post("/confirm_order", function (req, res) { return __awaiter(void 0, voi
                 }));
                 return [3 /*break*/, 4];
             case 3:
-                e_12 = _a.sent();
+                e_13 = _a.sent();
+                console.log(e_13);
+                message = "Ocurrió un error inesperado, intente de nuevo";
+                if (e_13 instanceof exceptions_1.ProductDoesNotExists) {
+                    message = e_13.message;
+                }
                 res.send(JSON.stringify({
                     error: true,
-                    message: "Ocurrió un error inesperado, intente de nuevo",
+                    message: message,
                 }));
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];

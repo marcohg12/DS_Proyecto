@@ -15,7 +15,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ProductDoesNotExists = exports.ProductNotInStock = exports.EmailInUse = void 0;
+exports.ToManyProductsInCart = exports.ProductDoesNotExists = exports.ProductNotInStock = exports.EmailInUse = void 0;
 var EmailInUse = /** @class */ (function (_super) {
     __extends(EmailInUse, _super);
     function EmailInUse() {
@@ -30,7 +30,7 @@ exports.EmailInUse = EmailInUse;
 var ProductNotInStock = /** @class */ (function (_super) {
     __extends(ProductNotInStock, _super);
     function ProductNotInStock(productName) {
-        var _this = _super.call(this, "No hay suficientes unidades del producto: " + productName) || this;
+        var _this = _super.call(this, "No hay suficientes unidades del producto con el nombre: " + productName) || this;
         _this.name = "ProductNotInStock";
         Object.setPrototypeOf(_this, ProductNotInStock.prototype);
         return _this;
@@ -40,8 +40,8 @@ var ProductNotInStock = /** @class */ (function (_super) {
 exports.ProductNotInStock = ProductNotInStock;
 var ProductDoesNotExists = /** @class */ (function (_super) {
     __extends(ProductDoesNotExists, _super);
-    function ProductDoesNotExists(productId) {
-        var _this = _super.call(this, "No existe el producto en el inventario con el Id: " + productId) || this;
+    function ProductDoesNotExists(productName) {
+        var _this = _super.call(this, "No existe el producto en el inventario con el nombre: " + productName) || this;
         _this.name = "ProductDoesNotExists";
         Object.setPrototypeOf(_this, ProductDoesNotExists.prototype);
         return _this;
@@ -49,3 +49,14 @@ var ProductDoesNotExists = /** @class */ (function (_super) {
     return ProductDoesNotExists;
 }(Error));
 exports.ProductDoesNotExists = ProductDoesNotExists;
+var ToManyProductsInCart = /** @class */ (function (_super) {
+    __extends(ToManyProductsInCart, _super);
+    function ToManyProductsInCart() {
+        var _this = _super.call(this, "No se pueden agregar más unidades del producto al carrito") || this;
+        _this.name = "ToManyProductsInCart";
+        Object.setPrototypeOf(_this, ToManyProductsInCart.prototype);
+        return _this;
+    }
+    return ToManyProductsInCart;
+}(Error));
+exports.ToManyProductsInCart = ToManyProductsInCart;

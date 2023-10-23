@@ -110,6 +110,19 @@ var ProductDAO = /** @class */ (function () {
             });
         });
     };
+    // Actualiza las unidades de un producto
+    ProductDAO.prototype.updateProductUnits = function (productId, units) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, productS_1.default.updateOne({ _id: productId }, {
+                            units: units,
+                        })];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
     // Elimina un producto
     // Nota: también elimina los productos de los carritos en los que se encontrara el producto
     ProductDAO.prototype.deleteProduct = function (productId) {

@@ -279,26 +279,6 @@ router.post("/update_user_password", async (req: Request, res: Response) => {
 
 // Rutas de pedidos -----------------------------------------------------------------------------------
 
-router.get("/get_ordes", async (req: Request, res: Response) => {
-  try {
-    const orders = await controller.getOrders();
-    res.send(
-      JSON.stringify({
-        error: false,
-        message: "Pedidos consultado exitosamente",
-        result: orders,
-      })
-    );
-  } catch (e) {
-    res.send(
-      JSON.stringify({
-        error: true,
-        message: "Ocurrió un error inesperado, intente de nuevo",
-      })
-    );
-  }
-});
-
 router.get("/get_order/:orderId", async (req: Request, res: Response) => {
   const orderId = req.params.orderId;
   try {

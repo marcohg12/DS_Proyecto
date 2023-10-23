@@ -48,6 +48,16 @@ class ProductDAO {
     );
   }
 
+  // Actualiza las unidades de un producto
+  public async updateProductUnits(productId: string, units: number) {
+    return await Product.updateOne(
+      { _id: productId },
+      {
+        units: units,
+      }
+    );
+  }
+
   // Elimina un producto
   // Nota: también elimina los productos de los carritos en los que se encontrara el producto
   public async deleteProduct(productId: string) {

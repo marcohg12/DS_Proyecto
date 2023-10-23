@@ -1,7 +1,11 @@
 const router = require("express").Router();
 const multer = require("multer");
 import { Request, Response } from "express";
-import { Controller } from "../controllers/controller";
+import { Controller } from "../controllers/Controller";
+import {
+  ProductDoesNotExists,
+  ProductNotInStock,
+} from "../exceptions/exceptions";
 const productUpload = multer({ dest: "photos/products" });
 const publicationUpload = multer({ dest: "photos/publications" });
 const controller = Controller.getInstance();
@@ -240,8 +244,16 @@ router.post("/delete_publication/:id", async (req: Request, res: Response) => {
 
 // Rutas de pedidos ----------------------------------------------------------------------
 
-router.post("/set_order_state", async (req: Request, res: Response) => {
+router.get("/get_ordes", async (req: Request, res: Response) => {
   try {
+    const orders = await controller.getOrders();
+    res.send(
+      JSON.stringify({
+        error: false,
+        message: "Pedidos consultado exitosamente",
+        result: orders,
+      })
+    );
   } catch (e) {
     res.send(
       JSON.stringify({
@@ -252,12 +264,10 @@ router.post("/set_order_state", async (req: Request, res: Response) => {
   }
 });
 
-// Rutas de pedidos ----------------------------------------------------------------------
-
 router.post("/set_order_state", async (req: Request, res: Response) => {
-  const { orderId, state } = req.body;
+  const { orderId, newState } = req.body;
   try {
-    await controller.setOrderState(orderId, state);
+    await controller.setOrderState(orderId, newState);
     res.send(
       JSON.stringify({
         error: false,
@@ -285,10 +295,17 @@ router.post("/confirm_order", async (req: Request, res: Response) => {
       })
     );
   } catch (e) {
+    let message = "Ocurrió un error inesperado, intente de nuevo";
+    if (e instanceof ProductDoesNotExists) {
+      message = e.message;
+    }
+    if (e instanceof ProductNotInStock) {
+      message = e.message;
+    }
     res.send(
       JSON.stringify({
         error: true,
-        message: "Ocurrió un error inesperado, intente de nuevo",
+        message: message,
       })
     );
   }
