@@ -1,5 +1,6 @@
 import React, { createContext, useEffect, useState } from "react";
 import Axios from "axios";
+Axios.defaults.withCredentials = true;
 import { BACKEND_ROUTE } from "./scripts/constants";
 
 export const appContext = createContext({});
@@ -13,10 +14,7 @@ export default function Context({ children }) {
   });
 
   useEffect(() => {
-    Axios.get(BACKEND_ROUTE + "/get_user", {
-      withCredentials: true,
-      credentials: "include",
-    }).then((res) => {
+    Axios.get(BACKEND_ROUTE + "/get_user").then((res) => {
       setUser(res.data);
       localStorage.setItem("session", JSON.stringify(res.data));
     });
