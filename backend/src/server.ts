@@ -54,6 +54,7 @@ app.post("/login", passport.authenticate("local"), async (req, res) => {
 
 app.get("/get_user", async (req, res) => {
   console.log(req.user);
+  console.log(req.headers.cookie);
   res.send(JSON.stringify(req.user));
 });
 
