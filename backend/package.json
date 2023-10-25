@@ -5,6 +5,7 @@
   "main": "server.js",
   "scripts": {
     "build": "tsc",
+    "start": "node ./build/server.ts",
     "start:dev": "npx nodemon"
   },
   "author": "",
