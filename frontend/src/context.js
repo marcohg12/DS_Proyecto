@@ -13,12 +13,13 @@ export default function Context({ children }) {
   });
 
   useEffect(() => {
-    Axios.get(BACKEND_ROUTE + "/get_user", { withCredentials: true }).then(
-      (res) => {
-        setUser(res.data);
-        localStorage.setItem("session", JSON.stringify(res.data));
-      }
-    );
+    Axios.get(BACKEND_ROUTE + "/get_user", {
+      withCredentials: true,
+      credentials: "include",
+    }).then((res) => {
+      setUser(res.data);
+      localStorage.setItem("session", JSON.stringify(res.data));
+    });
   }, []);
 
   const updateUserSessionData = () => {
