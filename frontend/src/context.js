@@ -15,6 +15,8 @@ export default function Context({ children }) {
   useEffect(() => {
     Axios.get(BACKEND_ROUTE + "/get_user", { withCredentials: true }).then(
       (res) => {
+        console.log(res);
+        console.log("AQUI");
         setUser(res.data);
         localStorage.setItem("session", JSON.stringify(res.data));
       }
@@ -24,7 +26,6 @@ export default function Context({ children }) {
   const updateUserSessionData = () => {
     Axios.get(BACKEND_ROUTE + "/get_user", { withCredentials: true }).then(
       (res) => {
-        console.log(res);
         setUser(res.data);
         localStorage.removeItem("session");
         localStorage.setItem("session", JSON.stringify(res.data));
