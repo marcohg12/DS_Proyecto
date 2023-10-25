@@ -31,7 +31,12 @@ app.use(
 
 app.use(
   session({
-    cookie: { maxAge: 86400000, sameSite: "none", secure: true },
+    cookie: {
+      maxAge: 86400000,
+      sameSite: "none",
+      secure: true,
+      domain: ".onrender.com",
+    },
     store: new MemoryStore({
       checkPeriod: 86400000, // prune expired entries every 24h
     }),
