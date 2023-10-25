@@ -15,10 +15,6 @@ export default function Context({ children }) {
   useEffect(() => {
     Axios.get(BACKEND_ROUTE + "/get_user", {
       withCredentials: true,
-      headers: {
-        "Access-Control-Allow-Origin": "https://frontend-5glq.onrender.com",
-        "Content-Type": "application/json",
-      },
     }).then((res) => {
       setUser(res.data);
       localStorage.setItem("session", JSON.stringify(res.data));

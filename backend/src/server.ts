@@ -38,6 +38,11 @@ app.use(
     secret: "secretcode",
     resave: true,
     saveUninitialized: true,
+    cookie: {
+      secure: true, // For HTTPS-only cookies
+      sameSite: "none", // For cross-site cookies
+      domain: ".onrender.com", // Set to your top-level domain
+    },
   })
 );
 
