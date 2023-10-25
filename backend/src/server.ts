@@ -34,7 +34,6 @@ app.use(
     cookie: {
       maxAge: 86400000,
       sameSite: "none",
-      domain: ".onrender.com",
     },
     store: new MemoryStore({
       checkPeriod: 86400000, // prune expired entries every 24h
