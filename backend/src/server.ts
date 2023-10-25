@@ -54,6 +54,7 @@ initializePassport(passport);
 // Rutas ----------------------------------------------------------------------------------------
 
 app.post("/login", passport.authenticate("local"), async (req, res) => {
+  res.cookie("connect.sid", { sameSite: "none", secure: true });
   res.send(JSON.stringify({ error: false, message: "SUCCESS_LOGIN" }));
 });
 
