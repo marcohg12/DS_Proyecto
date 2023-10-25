@@ -1,6 +1,6 @@
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
-const session = require("express-session");
+const session = require("cookie-session");
 const bodyParser = require("body-parser");
 const passport = require("passport");
 import { Database } from "./mongo-config";
