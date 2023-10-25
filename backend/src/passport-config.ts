@@ -39,6 +39,7 @@ function initialize(passport: PassportStatic) {
     done(null, user._id);
   });
   passport.deserializeUser(async (_id: string, done) => {
+    console.log(_id);
     return done(null, await userDAO.getUserNoPwd(_id));
   });
 }
