@@ -1,6 +1,6 @@
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
-const session = require("cookie-session");
+const session = require("express-session");
 const bodyParser = require("body-parser");
 const passport = require("passport");
 import { Database } from "./mongo-config";
@@ -31,7 +31,7 @@ app.use(
 app.use(
   session({
     secret: "secretcode",
-    resave: true,
+    resave: false,
     saveUninitialized: true,
   })
 );
