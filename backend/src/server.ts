@@ -31,7 +31,7 @@ app.use(
 
 app.use(
   session({
-    cookie: { maxAge: 86400000, secure: true },
+    cookie: { maxAge: 86400000 },
     store: new MemoryStore({
       checkPeriod: 86400000, // prune expired entries every 24h
     }),
