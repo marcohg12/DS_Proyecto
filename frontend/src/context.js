@@ -1,8 +1,7 @@
 import React, { createContext, useEffect, useState } from "react";
-import Axios from "axios";
-Axios.defaults.withCredentials = true;
+import axios from "axios";
 import { BACKEND_ROUTE } from "./scripts/constants";
-
+axios.defaults.withCredentials = true;
 export const appContext = createContext({});
 
 export default function Context({ children }) {
@@ -14,20 +13,20 @@ export default function Context({ children }) {
   });
 
   useEffect(() => {
-    Axios.get(BACKEND_ROUTE + "/get_user").then((res) => {
+    axios.get(BACKEND_ROUTE + "/get_user").then((res) => {
       setUser(res.data);
       localStorage.setItem("session", JSON.stringify(res.data));
     });
   }, []);
 
   const updateUserSessionData = () => {
-    Axios.get(BACKEND_ROUTE + "/get_user", { withCredentials: true }).then(
-      (res) => {
+    axios
+      .get(BACKEND_ROUTE + "/get_user", { withCredentials: true })
+      .then((res) => {
         setUser(res.data);
         localStorage.removeItem("session");
         localStorage.setItem("session", JSON.stringify(res.data));
-      }
-    );
+      });
   };
 
   return (
