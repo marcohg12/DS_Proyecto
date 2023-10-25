@@ -26,6 +26,7 @@ app.use(
   cors({
     origin: "https://frontend-5glq.onrender.com", // <-- Dirección de la aplicación de React
     credentials: true,
+    methods: "GET, POST",
   })
 );
 
