@@ -48,6 +48,7 @@ app.post("/login", passport.authenticate("local"), async (req, res) => {
 });
 
 app.get("/get_user", async (req, res) => {
+  console.log("ME LLAMARON AQUI");
   res.send(JSON.stringify(req.user));
 });
 
