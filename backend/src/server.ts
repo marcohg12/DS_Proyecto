@@ -34,7 +34,6 @@ app.use(
     cookie: {
       maxAge: 86400000,
       sameSite: "none",
-      secure: true,
       domain: ".onrender.com",
     },
     store: new MemoryStore({
