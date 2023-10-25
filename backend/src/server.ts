@@ -49,10 +49,7 @@ initializePassport(passport);
 // Rutas ----------------------------------------------------------------------------------------
 
 app.post("/login", passport.authenticate("local"), async (req, res) => {
-  console.log("OTRA", req.user);
-  req.logIn(req.user, () => {
-    res.send(JSON.stringify({ error: false, message: "SUCCESS_LOGIN" }));
-  });
+  res.send(JSON.stringify({ error: false, message: "SUCCESS_LOGIN" }));
 });
 
 app.get("/get_user", async (req, res) => {
