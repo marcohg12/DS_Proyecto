@@ -26,6 +26,10 @@ app.use(
   cors({
     origin: "https://frontend-5glq.onrender.com", // <-- Dirección de la aplicación de React
     credentials: true,
+    cookie: {
+      secure: true, // For HTTPS-only cookies
+      sameSite: "none", // For cross-site cookies
+    },
   })
 );
 
@@ -37,10 +41,6 @@ app.use(
     secret: "secretcode",
     resave: true,
     saveUninitialized: true,
-    cookie: {
-      secure: true, // For HTTPS-only cookies
-      sameSite: "none", // For cross-site cookies
-    },
   })
 );
 
