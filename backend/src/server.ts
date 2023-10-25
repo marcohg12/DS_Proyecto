@@ -48,15 +48,11 @@ initializePassport(passport);
 // Rutas ----------------------------------------------------------------------------------------
 
 app.post("/login", passport.authenticate("local"), async (req, res) => {
-  res.header(
-    "Access-Control-Allow-Origin",
-    "https://frontend-5glq.onrender.com"
-  );
   res.send(JSON.stringify({ error: false, message: "SUCCESS_LOGIN" }));
 });
 
 app.get("/get_user", async (req, res) => {
-  console.log(req.headers.cookie);
+  console.log(req);
   res.send(JSON.stringify(req.user));
 });
 
