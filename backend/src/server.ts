@@ -40,7 +40,7 @@ app.use(
     cookie: {
       secure: false, // For HTTPS-only cookies
       sameSite: "none", // For cross-site cookies
-      domain: "https://backend-g58j.onrender.com", // Set to your top-level domain
+      domain: "backend-g58j.onrender.com", // Set to your top-level domain
     },
   })
 );
