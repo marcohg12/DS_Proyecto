@@ -39,7 +39,7 @@ app.use(
     resave: true,
     saveUninitialized: true,
     cookie: {
-      secure: true, // For HTTPS-only cookies
+      secure: false, // For HTTPS-only cookies
       sameSite: "none", // For cross-site cookies
       domain: ".onrender.com", // Set to your top-level domain
     },
@@ -54,7 +54,6 @@ initializePassport(passport);
 // Rutas ----------------------------------------------------------------------------------------
 
 app.post("/login", passport.authenticate("local"), async (req, res) => {
-  res.cookie("connect.sid", { sameSite: "none", secure: true });
   res.send(JSON.stringify({ error: false, message: "SUCCESS_LOGIN" }));
 });
 
