@@ -37,8 +37,6 @@ app.use(
     secret: "secretcode",
     resave: true,
     saveUninitialized: true,
-    sameSite: "none",
-    secure: true,
   })
 );
 
