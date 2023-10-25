@@ -22,12 +22,7 @@ const app = express();
 const port = 5000;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(
-  cors({
-    origin: "https://frontend-5glq.onrender.com", // <-- Dirección de la aplicación de React
-    credentials: true,
-  })
-);
+app.use(cors());
 
 app.use(
   session({
