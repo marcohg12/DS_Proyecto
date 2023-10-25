@@ -31,11 +31,6 @@ app.use(
 
 app.use(
   session({
-    cookie: {
-      sameSite: "none",
-      secure: true,
-      domain: ".onrender.com",
-    },
     store: new MemoryStore({
       checkPeriod: 86400000, // prune expired entries every 24h
     }),
@@ -53,6 +48,7 @@ initializePassport(passport);
 // Rutas ----------------------------------------------------------------------------------------
 
 app.post("/login", passport.authenticate("local"), async (req, res) => {
+  console.log(res.getHeaders());
   res.send(JSON.stringify({ error: false, message: "SUCCESS_LOGIN" }));
 });
 
