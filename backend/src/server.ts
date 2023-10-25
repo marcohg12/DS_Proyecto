@@ -24,7 +24,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(
   cors({
-    origin: "https://frontend-5glq.onrender.com", // <-- Dirección de la aplicación de React
+    origin: ".onrender.com", // <-- Dirección de la aplicación de React
     credentials: true,
     methods: "GET, POST",
   })
