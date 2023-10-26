@@ -14,6 +14,7 @@ export default function Context({ children }) {
 
   useEffect(() => {
     Axios.get(BACKEND_ROUTE + "/get_user", {
+      headers: { "Content-Type": "application/json" },
       withCredentials: true,
     }).then((res) => {
       setUser(res.data);
