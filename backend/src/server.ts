@@ -37,11 +37,6 @@ app.use(
     secret: "secretcode",
     resave: true,
     saveUninitialized: true,
-    cookie: {
-      secure: true,
-      sameSite: "none",
-      domain: "onrender.com",
-    },
   })
 );
 
