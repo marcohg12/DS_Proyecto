@@ -42,6 +42,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var cors = require("cors");
 var cookieParser = require("cookie-parser");
 var session = require("express-session");
+var MemoryStore = require("memorystore")(session);
 var bodyParser = require("body-parser");
 var passport = require("passport");
 var mongo_config_1 = require("./mongo-config");
@@ -60,10 +61,13 @@ var port = 5000;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors({
-    origin: "http://localhost:3000",
+    origin: "https://frontend-5glq.onrender.com",
     credentials: true,
 }));
 app.use(session({
+    store: new MemoryStore({
+        checkPeriod: 86400000, // prune expired entries every 24h
+    }),
     secret: "secretcode",
     resave: true,
     saveUninitialized: true,
@@ -81,6 +85,7 @@ app.post("/login", passport.authenticate("local"), function (req, res) { return 
 }); });
 app.get("/get_user", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
+        console.log(req);
         res.send(JSON.stringify(req.user));
         return [2 /*return*/];
     });
