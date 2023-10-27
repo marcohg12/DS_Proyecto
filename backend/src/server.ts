@@ -1,6 +1,7 @@
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
+const MemoryStore = require("memorystore")(session);
 const bodyParser = require("body-parser");
 const passport = require("passport");
 import { Database } from "./mongo-config";
@@ -23,13 +24,16 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(
   cors({
-    origin: "http://localhost:3000", // <-- Dirección de la aplicación de React
+    origin: "https://frontend-5glq.onrender.com", // <-- Dirección de la aplicación de React
     credentials: true,
   })
 );
 
 app.use(
   session({
+    store: new MemoryStore({
+      checkPeriod: 86400000, // prune expired entries every 24h
+    }),
     secret: "secretcode",
     resave: true,
     saveUninitialized: true,
@@ -48,6 +52,7 @@ app.post("/login", passport.authenticate("local"), async (req, res) => {
 });
 
 app.get("/get_user", async (req, res) => {
+  console.log(req);
   res.send(JSON.stringify(req.user));
 });
 
