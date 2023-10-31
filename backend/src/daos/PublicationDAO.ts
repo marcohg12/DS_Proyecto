@@ -1,7 +1,7 @@
 import { ObjectId } from "mongodb";
 import mongoose from "mongoose";
 import Publication from "../schemas/publicationS";
-import { Publication as PublicationModel } from "../models/Publication";
+import { Publication as PublicationModel } from "../models/publication";
 
 class PublicationDAO {
   constructor() {}
