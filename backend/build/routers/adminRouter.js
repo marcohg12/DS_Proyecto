@@ -38,11 +38,11 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var router = require("express").Router();
 var multer = require("multer");
-var Controller_1 = require("../controllers/Controller");
+var controller_1 = require("../controllers/controller");
 var exceptions_1 = require("../exceptions/exceptions");
 var productUpload = multer({ dest: "photos/products" });
 var publicationUpload = multer({ dest: "photos/publications" });
-var controller = Controller_1.Controller.getInstance();
+var controller = controller_1.Controller.getInstance();
 // Rutas de productos --------------------------------------------------------------------
 router.post("/register_product", productUpload.single("photo"), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var _a, name, description, units, price, photoPath, e_1;

@@ -37,24 +37,24 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Controller = void 0;
-var CartAdmin_1 = require("./CartAdmin");
-var UserAdmin_1 = require("./UserAdmin");
-var PublicationAdmin_1 = require("./PublicationAdmin");
-var ProductAdmin_1 = require("./ProductAdmin");
-var OrderAdmin_1 = require("./OrderAdmin");
-var CategoryAdmin_1 = require("./CategoryAdmin");
-var Product_1 = require("../models/Product");
-var ViewableFactory_1 = require("../models/ViewableFactory");
-var User_1 = require("../models/User");
+var cartAdmin_1 = require("./cartAdmin");
+var userAdmin_1 = require("./userAdmin");
+var publicationAdmin_1 = require("./publicationAdmin");
+var productAdmin_1 = require("./productAdmin");
+var orderAdmin_1 = require("./orderAdmin");
+var categoryAdmin_1 = require("./categoryAdmin");
+var product_1 = require("../models/product");
+var viewableFactory_1 = require("../models/viewableFactory");
+var user_1 = require("../models/user");
 var Controller = /** @class */ (function () {
     function Controller() {
-        this.viewableFactory = new ViewableFactory_1.ViewableFactory();
-        this.publicationAdmin = new PublicationAdmin_1.PublicationAdmin();
-        this.userAdmin = new UserAdmin_1.UserAdmin();
-        this.orderAdmin = new OrderAdmin_1.OrderAdmin();
-        this.categoryAdmin = new CategoryAdmin_1.CategoryAdmin();
-        this.productAdmin = new ProductAdmin_1.ProductAdmin();
-        this.cartAdmin = new CartAdmin_1.CartAdmin();
+        this.viewableFactory = new viewableFactory_1.ViewableFactory();
+        this.publicationAdmin = new publicationAdmin_1.PublicationAdmin();
+        this.userAdmin = new userAdmin_1.UserAdmin();
+        this.orderAdmin = new orderAdmin_1.OrderAdmin();
+        this.categoryAdmin = new categoryAdmin_1.CategoryAdmin();
+        this.productAdmin = new productAdmin_1.ProductAdmin();
+        this.cartAdmin = new cartAdmin_1.CartAdmin();
     }
     Controller.getInstance = function () {
         if (!Controller.instance) {
@@ -68,7 +68,7 @@ var Controller = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        user = new User_1.User(name, email, phone, password);
+                        user = new user_1.User(name, email, phone, password);
                         return [4 /*yield*/, this.userAdmin.registerUser(user)];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
@@ -82,7 +82,7 @@ var Controller = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        user = new User_1.User(name, email, phone, password);
+                        user = new user_1.User(name, email, phone, password);
                         user.setID(userId);
                         return [4 /*yield*/, this.userAdmin.updateUser(user)];
                     case 1:
@@ -379,7 +379,7 @@ var Controller = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        product = new Product_1.Product(description, photoPath, name, units, price, productId);
+                        product = new product_1.Product(description, photoPath, name, units, price, productId);
                         return [4 /*yield*/, this.productAdmin.updateProduct(product)];
                     case 1: return [2 /*return*/, _a.sent()];
                 }

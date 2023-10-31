@@ -1,6 +1,6 @@
 import { OrderDAO } from "../daos/OrderDAO";
 import { ProductDAO } from "../daos/ProductDAO";
-import { ViewableFactory } from "../models/ViewableFactory";
+import { ViewableFactory } from "../models/viewableFactory";
 import {
   ProductDoesNotExists,
   ProductNotInStock,
@@ -35,6 +35,7 @@ class OrderAdmin {
   // Confirma un pedido
   // Valida que por cada producto del pedido hayan unidades suficientes o
   // que el producto exista en el inventario
+  //Test
   public async confirmOrder(orderId: string) {
     //Traer la orden que se va a confirmar
     const order = await this.orderDAO.getDetail(orderId);

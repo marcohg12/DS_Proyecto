@@ -39,13 +39,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.OrderAdmin = void 0;
 var OrderDAO_1 = require("../daos/OrderDAO");
 var ProductDAO_1 = require("../daos/ProductDAO");
-var ViewableFactory_1 = require("../models/ViewableFactory");
+var viewableFactory_1 = require("../models/viewableFactory");
 var exceptions_1 = require("../exceptions/exceptions");
 var OrderAdmin = /** @class */ (function () {
     function OrderAdmin() {
         this.productDAO = new ProductDAO_1.ProductDAO();
         this.orderDAO = new OrderDAO_1.OrderDAO();
-        this.viewableFactory = new ViewableFactory_1.ViewableFactory();
+        this.viewableFactory = new viewableFactory_1.ViewableFactory();
     }
     // Obtiene todos los pedidos registrados
     OrderAdmin.prototype.getOrders = function () {
@@ -94,6 +94,7 @@ var OrderAdmin = /** @class */ (function () {
     // Confirma un pedido
     // Valida que por cada producto del pedido hayan unidades suficientes o
     // que el producto exista en el inventario
+    //Test
     OrderAdmin.prototype.confirmOrder = function (orderId) {
         return __awaiter(this, void 0, void 0, function () {
             var order, productLines, i, product;

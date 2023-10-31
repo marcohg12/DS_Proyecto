@@ -1,6 +1,6 @@
 import User, { UserT } from "../schemas/userS";
 import Cart from "../schemas/cartS";
-import { User as UserModel } from "../models/User";
+import { User as UserModel } from "../models/user";
 const { EmailInUse } = require("../exceptions/exceptions");
 const bcrypt = require("bcryptjs");
 

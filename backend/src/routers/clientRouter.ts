@@ -3,11 +3,10 @@ const multer = require("multer");
 const { ToManyProductsInCart } = require("../exceptions/exceptions");
 const paymentUpload = multer({ dest: "photos/payments" });
 import { Request, Response } from "express";
-import { Controller } from "../controllers/Controller";
+import { Controller } from "../controllers/controller";
 const controller = Controller.getInstance();
 
 // Funciones de carrito -------------------------------------------------------------------------
-
 router.post("/add_product_to_cart", async (req: Request, res: Response) => {
   const { productId, units } = req.body;
   const user: any = req.user;

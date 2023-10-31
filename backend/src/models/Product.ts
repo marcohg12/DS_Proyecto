@@ -1,4 +1,4 @@
-import { Viewable } from "./Viewable";
+import { Viewable } from "./viewable";
 
 class Product extends Viewable {
   private productId: string | null;
