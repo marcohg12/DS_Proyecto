@@ -1,12 +1,12 @@
-import { CartAdmin } from "./cartAdmin";
-import { UserAdmin } from "./userAdmin";
-import { PublicationAdmin } from "./publicationAdmin";
-import { ProductAdmin } from "./productAdmin";
-import { OrderAdmin } from "./orderAdmin";
-import { CategoryAdmin } from "./categoryAdmin";
-import { Product } from "../models/product";
-import { ViewableFactory } from "../models/viewableFactory";
-import { User } from "../models/user";
+import { CartAdmin } from "./CartAdmin";
+import { UserAdmin } from "./UserAdmin";
+import { PublicationAdmin } from "./PublicationAdmin";
+import { ProductAdmin } from "./ProductAdmin";
+import { OrderAdmin } from "./OrderAdmin";
+import { CategoryAdmin } from "./CategoryAdmin";
+import { Product } from "../models/Product";
+import { ViewableFactory } from "../models/ViewableFactory";
+import { User } from "../models/User";
 
 class Controller {
   private static instance: Controller | null = null;

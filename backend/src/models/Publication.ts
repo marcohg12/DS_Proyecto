@@ -1,4 +1,4 @@
-import { Viewable } from "./viewable";
+import { Viewable } from "./Viewable";
 
 class Publication extends Viewable {
   publicationId: string | null;

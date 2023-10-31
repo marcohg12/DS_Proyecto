@@ -1,6 +1,6 @@
 import Product from "../schemas/productS";
 import Cart from "../schemas/cartS";
-import { Product as ProductModel } from "../models/product";
+import { Product as ProductModel } from "../models/Product";
 
 class ProductDAO {
   constructor() {}

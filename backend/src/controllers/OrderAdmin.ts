@@ -1,6 +1,6 @@
 import { OrderDAO } from "../daos/OrderDAO";
 import { ProductDAO } from "../daos/ProductDAO";
-import { ViewableFactory } from "../models/viewableFactory";
+import { ViewableFactory } from "../models/ViewableFactory";
 import {
   ProductDoesNotExists,
   ProductNotInStock,

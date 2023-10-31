@@ -11,7 +11,7 @@ const adminRouter = require("./routers/adminRouter");
 const generalRouter = require("./routers/generalRouter");
 import express from "express";
 const expressStatic = express.static;
-import { Controller } from "./controllers/controller";
+import { Controller } from "./controllers/Controller";
 const initializePassport = require("./passport-config");
 
 const app = express();

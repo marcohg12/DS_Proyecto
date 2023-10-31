@@ -1,6 +1,6 @@
 import { UserDAO } from "../daos/UserDAO";
-import { User } from "../models/user";
-import { sendEmail } from "./emailService";
+import { User } from "../models/User";
+import { sendEmail } from "./EmailService";
 const bcrypt = require("bcryptjs");
 
 class UserAdmin {
