@@ -3,7 +3,7 @@ const multer = require("multer");
 const { ToManyProductsInCart } = require("../exceptions/exceptions");
 const paymentUpload = multer({ dest: "photos/payments" });
 import { Request, Response } from "express";
-import { Controller } from "../controllers/controller";
+import { Controller } from "../controllers/Controller";
 const controller = Controller.getInstance();
 
 // Funciones de carrito -------------------------------------------------------------------------

@@ -4,9 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "build": "tsc",
-    "start": "node ./build/server.js",
-    "dev": "npx nodemon"
+    "start:dev": "npx nodemon"
   },
   "author": "",
   "license": "ISC",

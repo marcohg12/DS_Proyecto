@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const multer = require("multer");
 import { Request, Response } from "express";
-import { Controller } from "../controllers/controller";
+import { Controller } from "../controllers/Controller";
 import {
   ProductDoesNotExists,
   ProductNotInStock,
