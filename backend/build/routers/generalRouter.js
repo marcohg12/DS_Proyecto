@@ -39,8 +39,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var router = require("express").Router();
 var multer = require("multer");
 var EmailInUse = require("../exceptions/exceptions").EmailInUse;
-var controller_1 = require("../controllers/controller");
-var controller = controller_1.Controller.getInstance();
+var Controller_1 = require("../controllers/Controller");
+var controller = Controller_1.Controller.getInstance();
 // Rutas de publicaciones -------------------------------------------------------------
 router.get("/get_publications", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var publications, categoryId, tags, keywords, trimmedKeywords, e_1;

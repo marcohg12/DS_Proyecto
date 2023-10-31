@@ -39,13 +39,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.OrderAdmin = void 0;
 var OrderDAO_1 = require("../daos/OrderDAO");
 var ProductDAO_1 = require("../daos/ProductDAO");
-var viewableFactory_1 = require("../models/viewableFactory");
+var ViewableFactory_1 = require("../models/ViewableFactory");
 var exceptions_1 = require("../exceptions/exceptions");
 var OrderAdmin = /** @class */ (function () {
     function OrderAdmin() {
         this.productDAO = new ProductDAO_1.ProductDAO();
         this.orderDAO = new OrderDAO_1.OrderDAO();
-        this.viewableFactory = new viewableFactory_1.ViewableFactory();
+        this.viewableFactory = new ViewableFactory_1.ViewableFactory();
     }
     // Obtiene todos los pedidos registrados
     OrderAdmin.prototype.getOrders = function () {

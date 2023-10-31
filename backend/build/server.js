@@ -42,7 +42,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var cors = require("cors");
 var cookieParser = require("cookie-parser");
 var session = require("express-session");
-var MemoryStore = require("memorystore")(session);
 var bodyParser = require("body-parser");
 var passport = require("passport");
 var mongo_config_1 = require("./mongo-config");
@@ -53,7 +52,7 @@ var adminRouter = require("./routers/adminRouter");
 var generalRouter = require("./routers/generalRouter");
 var express_1 = __importDefault(require("express"));
 var expressStatic = express_1.default.static;
-var controller_1 = require("./controllers/controller");
+var Controller_1 = require("./controllers/Controller");
 var initializePassport = require("./passport-config");
 var app = (0, express_1.default)();
 // Configuraciones ------------------------------------------------------------------------------
@@ -61,13 +60,10 @@ var port = 5000;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors({
-    origin: "https://frontend-5glq.onrender.com",
+    origin: "http://localhost:3000",
     credentials: true,
 }));
 app.use(session({
-    store: new MemoryStore({
-        checkPeriod: 86400000, // prune expired entries every 24h
-    }),
     secret: "secretcode",
     resave: true,
     saveUninitialized: true,
@@ -85,7 +81,6 @@ app.post("/login", passport.authenticate("local"), function (req, res) { return 
 }); });
 app.get("/get_user", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
-        console.log(req);
         res.send(JSON.stringify(req.user));
         return [2 /*return*/];
     });
@@ -96,7 +91,7 @@ app.post("/signup", function (req, res) { return __awaiter(void 0, void 0, void 
         switch (_b.label) {
             case 0:
                 _a = req.body, name = _a.name, email = _a.email, phone = _a.phone, password = _a.password;
-                controller = controller_1.Controller.getInstance();
+                controller = Controller_1.Controller.getInstance();
                 return [4 /*yield*/, controller.registerUser(name, email, phone, password)];
             case 1:
                 response = _b.sent();

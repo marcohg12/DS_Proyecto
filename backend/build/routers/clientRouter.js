@@ -40,8 +40,8 @@ var router = require("express").Router();
 var multer = require("multer");
 var ToManyProductsInCart = require("../exceptions/exceptions").ToManyProductsInCart;
 var paymentUpload = multer({ dest: "photos/payments" });
-var controller_1 = require("../controllers/controller");
-var controller = controller_1.Controller.getInstance();
+var Controller_1 = require("../controllers/Controller");
+var controller = Controller_1.Controller.getInstance();
 // Funciones de carrito -------------------------------------------------------------------------
 router.post("/add_product_to_cart", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var _a, productId, units, user, userId, e_1, message;

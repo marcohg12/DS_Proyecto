@@ -16,7 +16,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Product = void 0;
-var viewable_1 = require("./viewable");
+var Viewable_1 = require("./Viewable");
 var Product = /** @class */ (function (_super) {
     __extends(Product, _super);
     function Product(description, photo, name, units, price, productId) {
@@ -64,5 +64,5 @@ var Product = /** @class */ (function (_super) {
         this.photo = newPhoto;
     };
     return Product;
-}(viewable_1.Viewable));
+}(Viewable_1.Viewable));
 exports.Product = Product;
