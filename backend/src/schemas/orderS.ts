@@ -1,6 +1,5 @@
 import { Schema, InferSchemaType } from "mongoose";
 import mongoose from "mongoose";
-import { Double } from "mongodb";
 
 const orderSchema: Schema = new Schema({
   clientRef: { type: Schema.Types.ObjectId, required: true },
