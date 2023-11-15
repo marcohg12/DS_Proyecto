@@ -1,4 +1,7 @@
-class CalendarEvent {
+import { CalendarEventI } from "../interfaces/CalendarEventI";
+import { CustomFieldsI } from "../interfaces/CalendarEventI";
+
+class CalendarEvent implements CalendarEventI {
   private eventId: string | null;
   private date: Date;
   private duration: number;
@@ -33,6 +36,10 @@ class CalendarEvent {
 
   public getDescription() {
     return this.description;
+  }
+
+  public getCustomFields(): CustomFieldsI[] {
+    return [];
   }
 }
 
