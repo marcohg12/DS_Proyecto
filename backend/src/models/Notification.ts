@@ -1,5 +1,6 @@
 class Notification {
   private notificationId: string;
+  private userId: string;
   private date: Date;
   private title: string;
   private content: string;
@@ -8,11 +9,13 @@ class Notification {
     date: Date,
     title: string,
     content: string,
+    userId: string,
     notificationId?: string
   ) {
     this.date = date;
     this.title = title;
     this.content = content;
+    this.userId = userId
     this.notificationId = notificationId;
   }
 
@@ -34,6 +37,10 @@ class Notification {
 
   public getContent() {
     return this.content;
+  }
+
+  public getUserId(){
+    return this.userId;
   }
 }
 

@@ -6,6 +6,7 @@ const notificationSchema: Schema = new Schema({
   date: { type: Date, required: true },
   title: { type: String, required: true },
   content: { type: String, required: true },
+  isRead: {type: Boolean, required: true},
 });
 
 export type OrderT = InferSchemaType<typeof notificationSchema>;

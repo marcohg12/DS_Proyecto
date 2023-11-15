@@ -1,15 +1,33 @@
+import Notification from "../schemas/notificationS";
 import { Notification as NotificationModel } from "../models/Notification";
+
 
 class NotificationDAO {
   constructor() {}
 
-  public async registerNotification(notification: NotificationModel) {}
+  public async registerNotification(notificationToRegister: NotificationModel) {
+    const notification = new Notification({
+      userRef: notificationToRegister.getUserId(),
+      date: notificationToRegister.getDate(),
+      title: notificationToRegister.getTitle(),
+      content: notificationToRegister.getContent(),
+      isRead: false, 
+    });
 
-  public async markAsRead(userId: string) {}
+    return await notification.save();
+  }
 
-  public async getUserNotifications(userId: string) {}
+  public async markAsRead(userId: string) {
+    return await Notification.updateOne({userRef: userId}, {$set: {isRead: true}})
+  }
 
-  public async unreadAmount(userId: string) {}
+  public async getUserNotifications(userId: string) {
+    return await Notification.findOne({userRef: userId}); 
+  }
+
+  public async unreadAmount(userId: string) {
+    return await Notification.countDocuments({userRef: userId}, {$set: {isRead: false}})
+  }
 }
 
 export { NotificationDAO };
