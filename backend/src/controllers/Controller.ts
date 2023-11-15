@@ -7,6 +7,7 @@ import { CategoryAdmin } from "./CategoryAdmin";
 import { Product } from "../models/Product";
 import { ViewableFactory } from "../models/ViewableFactory";
 import { User } from "../models/User";
+import { CalendarAdmin } from "./CalendarAdmin";
 
 class Controller {
   private static instance: Controller | null = null;
@@ -17,6 +18,7 @@ class Controller {
   private categoryAdmin: CategoryAdmin = new CategoryAdmin();
   private productAdmin: ProductAdmin = new ProductAdmin();
   private cartAdmin: CartAdmin = new CartAdmin();
+  private calendarAdmin: CalendarAdmin = new CalendarAdmin();
 
   private constructor() {}
 
@@ -261,6 +263,7 @@ class Controller {
   public async confirmOrder(orderId: string) {
     return await this.orderAdmin.confirmOrder(orderId);
   }
+  
 }
 
 export { Controller };
