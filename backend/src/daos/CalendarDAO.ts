@@ -1,41 +1,45 @@
-import { CalendarEvent as CalendarEventModel } from "../models/CalendarEvent";
-import Calendar from "../schemas/calendarEventS"
+import { CalendarEventI } from "../interfaces/interfaces";
+import CalendarEvent from "../schemas/calendarEventS";
 
 class CalendarDAO {
   constructor() {}
 
-  public async registerEvent(event: CalendarEventModel) {
-    const newEvent = new Calendar({
+  public async registerEvent(event: CalendarEventI) {
+    const newEvent = new CalendarEvent({
       date: event.getDate(),
       duration: event.getDuration(),
-      description: event.getDescription()
-    })
+      description: event.getDescription(),
+      type: event.getType(),
+      customFields: event.getCustomFields(),
+    });
 
     const regEvent = await newEvent.save();
     return regEvent;
   }
 
-  public async updateEvent(event: CalendarEventModel) {
-    return await Calendar.updateOne(
-      { _id: event.getEventId()} ,
+  public async updateEvent(event: CalendarEventI) {
+    return await CalendarEvent.updateOne(
+      { _id: event.getEventId() },
       {
         date: event.getDate(),
         duration: event.getDuration(),
         description: event.getDescription(),
+        type: event.getType(),
+        customFields: event.getCustomFields(),
       }
-    )
+    );
   }
 
   public async deleteEvent(eventId: string) {
-    return await Calendar.deleteOne({ _id: eventId } );
+    return await CalendarEvent.deleteOne({ _id: eventId });
   }
 
   public async getEvent(eventId: string) {
-    return await Calendar.findOne({ _id: eventId});
+    return await CalendarEvent.findOne({ _id: eventId });
   }
 
   public async getEventsInRange(initDate: Date, endDate: Date) {
-    return await Calendar.find({
+    return await CalendarEvent.find({
       date: {
         $gte: initDate,
         $lte: endDate,
@@ -43,36 +47,40 @@ class CalendarDAO {
     });
   }
 
-  public async overlap(event: CalendarEventModel){
-    let dateEv = event.getDate();
+  public async overlap(event: CalendarEventI) {
+    // Calculamos horas de inicio y fin del evento
+    const eventDate = new Date(event.getDate());
+    const initHour = eventDate.getHours();
+    const endHour = initHour + event.getDuration();
+    var overlap = false;
 
-    let year = dateEv.getFullYear();
-    let month = dateEv.getMonth();
-    let day = dateEv.getDay();
-    let hour = dateEv.getHours();
-    let end = dateEv.getHours() + event.getDuration();
+    // Obtenemos los eventos del día
+    const initDate = new Date(event.getDate());
+    const endDate = new Date(event.getDate());
+    initDate.setHours(0, 0, 0, 0);
+    endDate.setHours(23, 59, 59, 999);
+    const events = await this.getEventsInRange(initDate, endDate);
 
-    const startOfDay = new Date(`${year}-${month}-${day}T00:00:00.000Z`);
-    const endOfDay = new Date(`${year}-${month}-${day}T23:59:59.999Z`);
-    const result = await Calendar.find(
-      {date: {
-        $gte: startOfDay,
-        $lte: endOfDay,
-      }});
+    // Por cada evento del día verificamos si chocan las horas
+    for (const calEvent of events) {
+      if (calEvent._id === event.getEventId()) {
+        continue;
+      }
 
-    for(let i = 0; i < result.length; i++){
-       let otherEnd = result[i].date.getHours() + result[i].duration;
+      // Verificamos si la hora inicial se traslapa
+      const eventInitHour = new Date(calEvent.date).getHours();
+      if (initHour <= eventInitHour && eventInitHour < endHour) {
+        overlap = true;
+      }
 
-       if((result[i].date.getHours() <= hour && hour < otherEnd)|| 
-           (hour <= result[i].date.getHours() && result[i].date.getHours() < end))
-           {
-             return true;
-           }
+      // Verificamos si la hora de fin se traslapa
+      const eventEndHour = eventInitHour + calEvent.duration;
+      if (initHour < eventEndHour && eventEndHour < endHour) {
+        overlap = true;
+      }
     }
-    return false;
-
+    return overlap;
   }
-
 }
 
 export { CalendarDAO };

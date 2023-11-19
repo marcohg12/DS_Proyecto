@@ -90,10 +90,19 @@ class OrderDAO {
     return result[0];
   }
 
+  // Actualiza el estado de una orden
   public async changeOrderState(orderId: string, newState: number) {
     return await Order.updateOne(
       { _id: orderId },
       { $set: { state: newState } }
+    );
+  }
+
+  // Actualiza la fecha de entrega de un pedido
+  public async setDeliveryDate(orderId: string, date: Date) {
+    return await Order.updateOne(
+      { _id: orderId },
+      { $set: { deliveryDate: date } }
     );
   }
 }

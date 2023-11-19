@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import Button from "./Button";
 import { BACKEND_ROUTE } from "../scripts/constants";
 import Axios from "axios";
+import NotificationButton from "./NotificationButton";
 
 function ClientNavbar() {
   const logout = () => {
@@ -47,6 +48,9 @@ function ClientNavbar() {
               <Link to="/client_orders" className="nav-link text-white">
                 Mis pedidos
               </Link>
+            </li>
+            <li className="nav-item me-4 mt-3">
+              <NotificationButton></NotificationButton>
             </li>
           </ul>
         </div>

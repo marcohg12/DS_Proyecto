@@ -5,6 +5,7 @@ import { BACKEND_ROUTE } from "./scripts/constants";
 export const appContext = createContext({});
 
 export default function Context({ children }) {
+  // Estado inicial del usuario en sesión
   const [user, setUser] = useState(() => {
     if (localStorage.getItem("session")) {
       return JSON.parse(localStorage.getItem("session"));
@@ -12,6 +13,7 @@ export default function Context({ children }) {
     return null;
   });
 
+  // Obtención del usuario autenticado
   useEffect(() => {
     Axios.get(BACKEND_ROUTE + "/get_user", {
       withCredentials: true,
@@ -21,6 +23,7 @@ export default function Context({ children }) {
     });
   }, []);
 
+  // Actualización de los datos de la sesión
   const updateUserSessionData = () => {
     Axios.get(BACKEND_ROUTE + "/get_user", { withCredentials: true }).then(
       (res) => {

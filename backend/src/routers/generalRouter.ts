@@ -300,4 +300,74 @@ router.get("/get_order/:orderId", async (req: Request, res: Response) => {
   }
 });
 
+// Rutas de notificaciones -----------------------------------------------------------------------------
+
+router.get("/get_notifications", async (req: Request, res: Response) => {
+  const user: any = req.user;
+  const userId = user.id;
+  try {
+    const notifications = await controller.getUserNotifications(userId);
+    res.send(
+      JSON.stringify({
+        error: false,
+        message: "Notificaciones consultadas exitosamente",
+        result: notifications,
+      })
+    );
+  } catch (e) {
+    res.send(
+      JSON.stringify({
+        error: true,
+        message: "Ocurrió un error inesperado, intente de nuevo",
+      })
+    );
+  }
+});
+
+router.get("/get_unread_amount", async (req: Request, res: Response) => {
+  const user: any = req.user;
+  const userId = user.id;
+  try {
+    const amount = await controller.unreadAmount(userId);
+    res.send(
+      JSON.stringify({
+        error: false,
+        message: "Número de notificaciones no leídas consultadas exitosamente",
+        result: amount,
+      })
+    );
+  } catch (e) {
+    res.send(
+      JSON.stringify({
+        error: true,
+        message: "Ocurrió un error inesperado, intente de nuevo",
+      })
+    );
+  }
+});
+
+router.post(
+  "/mark_notifications_as_read",
+  async (req: Request, res: Response) => {
+    const user: any = req.user;
+    const userId = user.id;
+    try {
+      await controller.markAsRead(userId);
+      res.send(
+        JSON.stringify({
+          error: false,
+          message: "Notificaciones marcadas como leídas exitosamente",
+        })
+      );
+    } catch (e) {
+      res.send(
+        JSON.stringify({
+          error: true,
+          message: "Ocurrió un error inesperado, intente de nuevo",
+        })
+      );
+    }
+  }
+);
+
 module.exports = router;

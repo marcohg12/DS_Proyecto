@@ -1,34 +1,33 @@
-import { CalendarEvent } from "../models/CalendarEvent";
+import { CalendarEventI } from "../interfaces/interfaces";
 import { CalendarDAO } from "../daos/CalendarDAO";
 
 class CalendarAdmin {
-
-  private calendarDao : CalendarDAO  = new CalendarDAO();
+  private calendarDAO: CalendarDAO = new CalendarDAO();
 
   constructor() {}
 
-  public async registerEvent(event: CalendarEvent) {
-    return this.calendarDao.registerEvent(event);
+  public async registerEvent(event: CalendarEventI) {
+    return await this.calendarDAO.registerEvent(event);
   }
 
-  public async updateEvent(event: CalendarEvent) {
-    return this.calendarDao.updateEvent(event);
+  public async updateEvent(event: CalendarEventI) {
+    return await this.calendarDAO.updateEvent(event);
   }
 
   public async deleteEvent(eventId: string) {
-    return this.calendarDao.deleteEvent(eventId);
+    return await this.calendarDAO.deleteEvent(eventId);
   }
 
   public async getEvent(eventId: string) {
-    return this.calendarDao.getEvent(eventId);
+    return await this.calendarDAO.getEvent(eventId);
   }
 
   public async getEventsInRange(initDate: Date, endDate: Date) {
-    return this.calendarDao.getEventsInRange(initDate, endDate);
+    return await this.calendarDAO.getEventsInRange(initDate, endDate);
   }
 
-  public async overlap(event: CalendarEvent){
-    return this.calendarDao.overlap(event);
+  public async overlap(event: CalendarEventI) {
+    return await this.calendarDAO.overlap(event);
   }
 }
 

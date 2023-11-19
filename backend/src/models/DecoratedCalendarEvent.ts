@@ -1,6 +1,6 @@
 import { Decorator } from "./Decorator";
 import { CalendarEvent } from "./CalendarEvent";
-import { CustomFieldsI } from "../interfaces/CalendarEventI";
+import { CustomFields } from "../interfaces/interfaces";
 
 class DecoratedCalendarEvent extends Decorator {
   private fieldName: string;
@@ -14,7 +14,7 @@ class DecoratedCalendarEvent extends Decorator {
 
   public getCustomFields() {
     const customFields = this.decoratedEvent.getCustomFields();
-    const result: CustomFieldsI[] = customFields.concat([
+    const result: CustomFields[] = customFields.concat([
       { name: this.fieldName, value: this.fieldValue },
     ]);
     return result;

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import Button from "./Button";
 import { BACKEND_ROUTE } from "../scripts/constants";
 import Axios from "axios";
+import NotificationButton from "./NotificationButton";
 
 function AdminNavbar() {
   const logout = () => {
@@ -27,6 +28,9 @@ function AdminNavbar() {
               <Link to="/admin_menu" className="nav-link text-white">
                 Menú principal
               </Link>
+            </li>
+            <li className="nav-item me-4 mt-3">
+              <NotificationButton></NotificationButton>
             </li>
           </ul>
         </div>

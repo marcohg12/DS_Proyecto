@@ -46,6 +46,9 @@ var CategoryAdmin_1 = require("./CategoryAdmin");
 var Product_1 = require("../models/Product");
 var ViewableFactory_1 = require("../models/ViewableFactory");
 var User_1 = require("../models/User");
+var CalendarAdmin_1 = require("./CalendarAdmin");
+var NotificationAdmin_1 = require("./NotificationAdmin");
+var CalendarEvent_1 = require("../models/CalendarEvent");
 var Controller = /** @class */ (function () {
     function Controller() {
         this.viewableFactory = new ViewableFactory_1.ViewableFactory();
@@ -55,6 +58,10 @@ var Controller = /** @class */ (function () {
         this.categoryAdmin = new CategoryAdmin_1.CategoryAdmin();
         this.productAdmin = new ProductAdmin_1.ProductAdmin();
         this.cartAdmin = new CartAdmin_1.CartAdmin();
+        this.calendarAdmin = new CalendarAdmin_1.CalendarAdmin();
+        this.notificationAdmin = new NotificationAdmin_1.NotificationAdmin();
+        // Susbribe el centro de notificaciones al centro de ordenes
+        this.orderAdmin.suscribe(this.notificationAdmin);
     }
     Controller.getInstance = function () {
         if (!Controller.instance) {
@@ -432,6 +439,107 @@ var Controller = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.orderAdmin.confirmOrder(orderId)];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
+    // Funciones de notificaciones ---------------------------------------------------------
+    Controller.prototype.markAsRead = function (userId) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.notificationAdmin.markAsRead(userId)];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
+    Controller.prototype.getUserNotifications = function (userId) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.notificationAdmin.getUserNotifications(userId)];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
+    Controller.prototype.unreadAmount = function (userId) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.notificationAdmin.unreadAmount(userId)];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
+    // Funciones de agenda -----------------------------------------------------------------
+    Controller.prototype.registerEvent = function (date, duration, description, type) {
+        return __awaiter(this, void 0, void 0, function () {
+            var event;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        event = new CalendarEvent_1.CalendarEvent(date, duration, description, type);
+                        return [4 /*yield*/, this.calendarAdmin.registerEvent(event)];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
+    Controller.prototype.updateEvent = function (eventId, date, duration, description, type) {
+        return __awaiter(this, void 0, void 0, function () {
+            var event;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        event = new CalendarEvent_1.CalendarEvent(date, duration, description, type, eventId);
+                        return [4 /*yield*/, this.calendarAdmin.updateEvent(event)];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
+    Controller.prototype.deleteEvent = function (eventId) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.calendarAdmin.deleteEvent(eventId)];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
+    Controller.prototype.getEvent = function (eventId) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.calendarAdmin.getEvent(eventId)];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
+    Controller.prototype.getEventsInRange = function (initDate, endDate) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.calendarAdmin.getEventsInRange(initDate, endDate)];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
+    Controller.prototype.overlap = function (date, duration, description, type) {
+        return __awaiter(this, void 0, void 0, function () {
+            var event;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        event = new CalendarEvent_1.CalendarEvent(date, duration, description, type);
+                        return [4 /*yield*/, this.calendarAdmin.overlap(event)];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });

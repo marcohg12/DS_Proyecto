@@ -425,4 +425,94 @@ router.get("/get_order/:orderId", function (req, res) { return __awaiter(void 0,
         }
     });
 }); });
+// Rutas de notificaciones -----------------------------------------------------------------------------
+router.get("/get_notifications", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var user, userId, notifications, e_14;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                user = req.user;
+                userId = user.id;
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, controller.getUserNotifications(userId)];
+            case 2:
+                notifications = _a.sent();
+                res.send(JSON.stringify({
+                    error: false,
+                    message: "Notificaciones consultadas exitosamente",
+                    result: notifications,
+                }));
+                return [3 /*break*/, 4];
+            case 3:
+                e_14 = _a.sent();
+                res.send(JSON.stringify({
+                    error: true,
+                    message: "Ocurrió un error inesperado, intente de nuevo",
+                }));
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
+        }
+    });
+}); });
+router.get("/get_unread_amount", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var user, userId, amount, e_15;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                user = req.user;
+                userId = user.id;
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, controller.unreadAmount(userId)];
+            case 2:
+                amount = _a.sent();
+                res.send(JSON.stringify({
+                    error: false,
+                    message: "Número de notificaciones no leídas consultadas exitosamente",
+                    result: amount,
+                }));
+                return [3 /*break*/, 4];
+            case 3:
+                e_15 = _a.sent();
+                res.send(JSON.stringify({
+                    error: true,
+                    message: "Ocurrió un error inesperado, intente de nuevo",
+                }));
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
+        }
+    });
+}); });
+router.post("/mark_notifications_as_read", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var user, userId, e_16;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                user = req.user;
+                userId = user.id;
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, controller.markAsRead(userId)];
+            case 2:
+                _a.sent();
+                res.send(JSON.stringify({
+                    error: false,
+                    message: "Notificaciones marcadas como leídas exitosamente",
+                }));
+                return [3 /*break*/, 4];
+            case 3:
+                e_16 = _a.sent();
+                res.send(JSON.stringify({
+                    error: true,
+                    message: "Ocurrió un error inesperado, intente de nuevo",
+                }));
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
+        }
+    });
+}); });
 module.exports = router;

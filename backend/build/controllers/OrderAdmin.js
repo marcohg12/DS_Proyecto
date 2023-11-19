@@ -39,13 +39,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.OrderAdmin = void 0;
 var OrderDAO_1 = require("../daos/OrderDAO");
 var ProductDAO_1 = require("../daos/ProductDAO");
-var ViewableFactory_1 = require("../models/ViewableFactory");
+var Notification_1 = require("../models/Notification");
+var date_fns_1 = require("date-fns");
+var CalendarEvent_1 = require("../models/CalendarEvent");
+var DecoratedCalendarEvent_1 = require("../models/DecoratedCalendarEvent");
+var CalendarAdmin_1 = require("./CalendarAdmin");
 var exceptions_1 = require("../exceptions/exceptions");
 var OrderAdmin = /** @class */ (function () {
     function OrderAdmin() {
         this.productDAO = new ProductDAO_1.ProductDAO();
         this.orderDAO = new OrderDAO_1.OrderDAO();
-        this.viewableFactory = new ViewableFactory_1.ViewableFactory();
+        this.suscribers = [];
+        this.calendarAdmin = new CalendarAdmin_1.CalendarAdmin();
     }
     // Obtiene todos los pedidos registrados
     OrderAdmin.prototype.getOrders = function () {
@@ -80,13 +85,81 @@ var OrderAdmin = /** @class */ (function () {
             });
         });
     };
+    // Actualiza la fecha de envío de un pedido
+    OrderAdmin.prototype.setDeliveryDate = function (orderId) {
+        return __awaiter(this, void 0, void 0, function () {
+            var today, deliveryDate;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        today = (0, date_fns_1.startOfDay)(new Date());
+                        deliveryDate = (0, date_fns_1.startOfDay)(new Date());
+                        // Calculamos la fecha de envía al martes, jueves o sábado más inmediado
+                        switch ((0, date_fns_1.getDay)(today)) {
+                            case 0: // Domingo
+                                (0, date_fns_1.addDays)(deliveryDate, 2);
+                                break;
+                            case 1: // Lunes
+                                (0, date_fns_1.addDays)(deliveryDate, 1);
+                                break;
+                            case 2: // Martes
+                                (0, date_fns_1.addDays)(deliveryDate, 2);
+                                break;
+                            case 3: // Miércoles
+                                (0, date_fns_1.addDays)(deliveryDate, 1);
+                                break;
+                            case 4: // Jueves
+                                (0, date_fns_1.addDays)(deliveryDate, 2);
+                                break;
+                            case 5: // Viernes
+                                (0, date_fns_1.addDays)(deliveryDate, 1);
+                                break;
+                            case 6: // Sábado
+                                (0, date_fns_1.addDays)(deliveryDate, 3);
+                                break;
+                        }
+                        return [4 /*yield*/, this.orderDAO.setDeliveryDate(orderId, deliveryDate)];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
     // Cambia el estado de un pedido
     OrderAdmin.prototype.setOrderState = function (orderId, state) {
         return __awaiter(this, void 0, void 0, function () {
+            var order, notification, baseEvent, orderIdField, order, notification;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.orderDAO.changeOrderState(orderId, state)];
-                    case 1: return [2 /*return*/, _a.sent()];
+                    case 1:
+                        _a.sent();
+                        if (!(state === 2)) return [3 /*break*/, 4];
+                        // Actualizamos fecha de entrega
+                        return [4 /*yield*/, this.setDeliveryDate(orderId)];
+                    case 2:
+                        // Actualizamos fecha de entrega
+                        _a.sent();
+                        return [4 /*yield*/, this.getOrder(orderId)];
+                    case 3:
+                        order = _a.sent();
+                        notification = new Notification_1.Notification(new Date(), "PEDIDO APROBADO", "Su pedido con el ID ".concat(orderId, " ha sido aprobado y ser\u00E1 enviado el d\u00EDa ").concat(order.deliveryDate), order.clientRef);
+                        // Generar la notificación al usuario
+                        this.notify(notification);
+                        baseEvent = new CalendarEvent_1.CalendarEvent(order.deliveryDate, 1, "Preparar los productos y empaque del pedido", "ENTREGA PEDIDO");
+                        orderIdField = new DecoratedCalendarEvent_1.DecoratedCalendarEvent(baseEvent, "ID Pedido", orderId);
+                        console.log(order);
+                        return [3 /*break*/, 6];
+                    case 4:
+                        if (!(state === 4)) return [3 /*break*/, 6];
+                        return [4 /*yield*/, this.getOrder(orderId)];
+                    case 5:
+                        order = _a.sent();
+                        notification = new Notification_1.Notification(new Date(), "PEDIDO CANCELADO", "Su pedido con el ID ".concat(orderId, " ha sido cancelado, ser\u00E1 contactado por la administradora en los siguientes d\u00EDas"), order.clientRef);
+                        this.notify(notification);
+                        _a.label = 6;
+                    case 6: return [2 /*return*/];
                 }
             });
         });
@@ -132,6 +205,20 @@ var OrderAdmin = /** @class */ (function () {
                         return [2 /*return*/];
                 }
             });
+        });
+    };
+    OrderAdmin.prototype.suscribe = function (o) {
+        this.suscribers.push(o);
+    };
+    OrderAdmin.prototype.unsuscribe = function (o) {
+        var index = this.suscribers.indexOf(o);
+        if (index !== -1) {
+            this.suscribers.splice(index, 1);
+        }
+    };
+    OrderAdmin.prototype.notify = function (n) {
+        this.suscribers.forEach(function (suscriber) {
+            suscriber.update(n);
         });
     };
     return OrderAdmin;

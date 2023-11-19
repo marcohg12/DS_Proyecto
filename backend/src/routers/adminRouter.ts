@@ -311,4 +311,133 @@ router.post("/confirm_order", async (req: Request, res: Response) => {
   }
 });
 
+// Rutas de agenda -----------------------------------------------------------------------
+
+router.post("/register_event", async (req: Request, res: Response) => {
+  const { date, duration, description, type } = req.body;
+  try {
+    await controller.registerEvent(date, duration, description, type);
+    res.send(
+      JSON.stringify({
+        error: false,
+        message: "Evento registrado exitosamente",
+      })
+    );
+  } catch (e) {
+    res.send(
+      JSON.stringify({
+        error: true,
+        message: "Ocurrió un error inesperado, intente de nuevo",
+      })
+    );
+  }
+});
+
+router.post("/event_overlaps", async (req: Request, res: Response) => {
+  const { date, duration, description, type } = req.body;
+  try {
+    const result = await controller.overlap(date, duration, description, type);
+    res.send(
+      JSON.stringify({
+        error: false,
+        message: "Traslape consultado exitosamente",
+        result: result,
+      })
+    );
+  } catch (e) {
+    console.log(e);
+    res.send(
+      JSON.stringify({
+        error: true,
+        message: "Ocurrió un error inesperado, intente de nuevo",
+      })
+    );
+  }
+});
+
+router.post("/update_event", async (req: Request, res: Response) => {
+  const { eventId, date, duration, description, type } = req.body;
+  try {
+    await controller.updateEvent(eventId, date, duration, description, type);
+    res.send(
+      JSON.stringify({
+        error: false,
+        message: "Evento actualizado exitosamente",
+      })
+    );
+  } catch (e) {
+    res.send(
+      JSON.stringify({
+        error: true,
+        message: "Ocurrió un error inesperado, intente de nuevo",
+      })
+    );
+  }
+});
+
+router.post("/delete_event", async (req: Request, res: Response) => {
+  const { eventId } = req.body;
+  try {
+    await controller.deleteEvent(eventId);
+    res.send(
+      JSON.stringify({
+        error: false,
+        message: "Evento eliminado exitosamente",
+      })
+    );
+  } catch (e) {
+    res.send(
+      JSON.stringify({
+        error: true,
+        message: "Ocurrió un error inesperado, intente de nuevo",
+      })
+    );
+  }
+});
+
+router.get("/get_event/:eventId", async (req: Request, res: Response) => {
+  try {
+    const event = await controller.getEvent(req.params.eventId);
+    res.send(
+      JSON.stringify({
+        error: false,
+        message: "Evento consultado exitosamente",
+        result: event,
+      })
+    );
+  } catch (e) {
+    res.send(
+      JSON.stringify({
+        error: true,
+        message: "Ocurrió un error inesperado, intente de nuevo",
+      })
+    );
+  }
+});
+
+router.get("/get_events", async (req: Request, res: Response) => {
+  const initDateStr: string = req.query.initDate as string;
+  const endDateStr: string = req.query.endDate as string;
+  try {
+    const events = await controller.getEventsInRange(
+      new Date(initDateStr),
+      new Date(endDateStr)
+    );
+    res.send(
+      JSON.stringify({
+        error: false,
+        message: "Eventos consultados exitosamente",
+        result: events,
+      })
+    );
+  } catch (e) {
+    res.send(
+      JSON.stringify({
+        error: true,
+        message: "Ocurrió un error inesperado, intente de nuevo",
+      })
+    );
+  }
+});
+
 module.exports = router;

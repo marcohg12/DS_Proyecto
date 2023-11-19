@@ -151,11 +151,23 @@ var OrderDAO = /** @class */ (function () {
             });
         });
     };
+    // Actualiza el estado de una orden
     OrderDAO.prototype.changeOrderState = function (orderId, newState) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, orderS_1.default.updateOne({ _id: orderId }, { $set: { state: newState } })];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
+    // Actualiza la fecha de entrega de un pedido
+    OrderDAO.prototype.setDeliveryDate = function (orderId, date) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, orderS_1.default.updateOne({ _id: orderId }, { $set: { deliveryDate: date } })];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });

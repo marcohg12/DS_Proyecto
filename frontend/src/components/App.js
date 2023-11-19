@@ -22,6 +22,7 @@ import CartPayment from "../pages/CartPayment";
 import ClientOrderView from "../pages/ClientOrderView";
 import AdminOrderViewer from "../pages/AdminOrderViewer";
 import AdminOrderView from "../pages/AdminOrderView";
+import Notifications from "../pages/Notifications";
 
 function App() {
   const ctx = useContext(appContext).user;
@@ -219,6 +220,14 @@ function App() {
           element={
             <Protected ctx={ctx} loggedIn={false} forRole={null}>
               <PasswordRecover />
+            </Protected>
+          }
+        />
+        <Route
+          path="/notifications"
+          element={
+            <Protected ctx={ctx} loggedIn={true} forRole={null}>
+              <Notifications forUser={ctx.role === 2 ? "admin" : "client"} />
             </Protected>
           }
         />

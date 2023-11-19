@@ -8,6 +8,8 @@ import { Product } from "../models/Product";
 import { ViewableFactory } from "../models/ViewableFactory";
 import { User } from "../models/User";
 import { CalendarAdmin } from "./CalendarAdmin";
+import { NotificationAdmin } from "./NotificationAdmin";
+import { CalendarEvent } from "../models/CalendarEvent";
 
 class Controller {
   private static instance: Controller | null = null;
@@ -19,8 +21,12 @@ class Controller {
   private productAdmin: ProductAdmin = new ProductAdmin();
   private cartAdmin: CartAdmin = new CartAdmin();
   private calendarAdmin: CalendarAdmin = new CalendarAdmin();
+  private notificationAdmin: NotificationAdmin = new NotificationAdmin();
 
-  private constructor() {}
+  private constructor() {
+    // Susbribe el centro de notificaciones al centro de ordenes
+    this.orderAdmin.suscribe(this.notificationAdmin);
+  }
 
   public static getInstance(): Controller {
     if (!Controller.instance) {
@@ -263,7 +269,65 @@ class Controller {
   public async confirmOrder(orderId: string) {
     return await this.orderAdmin.confirmOrder(orderId);
   }
-  
+
+  // Funciones de notificaciones ---------------------------------------------------------
+
+  public async markAsRead(userId: string) {
+    return await this.notificationAdmin.markAsRead(userId);
+  }
+
+  public async getUserNotifications(userId: string) {
+    return await this.notificationAdmin.getUserNotifications(userId);
+  }
+
+  public async unreadAmount(userId: string) {
+    return await this.notificationAdmin.unreadAmount(userId);
+  }
+
+  // Funciones de agenda -----------------------------------------------------------------
+
+  public async registerEvent(
+    date: Date,
+    duration: number,
+    description: string,
+    type: string
+  ) {
+    const event = new CalendarEvent(date, duration, description, type);
+    return await this.calendarAdmin.registerEvent(event);
+  }
+
+  public async updateEvent(
+    eventId: string,
+    date: Date,
+    duration: number,
+    description: string,
+    type: string
+  ) {
+    const event = new CalendarEvent(date, duration, description, type, eventId);
+    return await this.calendarAdmin.updateEvent(event);
+  }
+
+  public async deleteEvent(eventId: string) {
+    return await this.calendarAdmin.deleteEvent(eventId);
+  }
+
+  public async getEvent(eventId: string) {
+    return await this.calendarAdmin.getEvent(eventId);
+  }
+
+  public async getEventsInRange(initDate: Date, endDate: Date) {
+    return await this.calendarAdmin.getEventsInRange(initDate, endDate);
+  }
+
+  public async overlap(
+    date: Date,
+    duration: number,
+    description: string,
+    type: string
+  ) {
+    const event = new CalendarEvent(date, duration, description, type);
+    return await this.calendarAdmin.overlap(event);
+  }
 }
 
 export { Controller };

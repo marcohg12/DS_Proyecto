@@ -1,7 +1,6 @@
 import Notification from "../schemas/notificationS";
 import { Notification as NotificationModel } from "../models/Notification";
 
-
 class NotificationDAO {
   constructor() {}
 
@@ -11,22 +10,28 @@ class NotificationDAO {
       date: notificationToRegister.getDate(),
       title: notificationToRegister.getTitle(),
       content: notificationToRegister.getContent(),
-      isRead: false, 
+      isRead: false,
     });
 
     return await notification.save();
   }
 
   public async markAsRead(userId: string) {
-    return await Notification.updateOne({userRef: userId}, {$set: {isRead: true}})
+    return await Notification.updateOne(
+      { userRef: userId },
+      { $set: { isRead: true } }
+    );
   }
 
   public async getUserNotifications(userId: string) {
-    return await Notification.findOne({userRef: userId}); 
+    return await Notification.find({ userRef: userId });
   }
 
   public async unreadAmount(userId: string) {
-    return await Notification.countDocuments({userRef: userId}, {$set: {isRead: false}})
+    return await Notification.countDocuments({
+      userRef: userId,
+      isRead: false,
+    });
   }
 }
 
