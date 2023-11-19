@@ -325,9 +325,9 @@ router.get("/get_notifications", async (req: Request, res: Response) => {
 });
 
 router.get("/get_unread_amount", async (req: Request, res: Response) => {
-  const user: any = req.user;
-  const userId = user.id;
   try {
+    const user: any = req.user;
+    const userId = user.id;
     const amount = await controller.unreadAmount(userId);
     res.send(
       JSON.stringify({

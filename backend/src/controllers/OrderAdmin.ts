@@ -37,30 +37,30 @@ class OrderAdmin {
   // Actualiza la fecha de envío de un pedido
   public async setDeliveryDate(orderId: string) {
     const today = startOfDay(new Date());
-    const deliveryDate = startOfDay(new Date());
+    var deliveryDate = startOfDay(new Date());
 
     // Calculamos la fecha de envía al martes, jueves o sábado más inmediado
     switch (getDay(today)) {
       case 0: // Domingo
-        addDays(deliveryDate, 2);
+        deliveryDate = addDays(deliveryDate, 2);
         break;
       case 1: // Lunes
-        addDays(deliveryDate, 1);
+        deliveryDate = addDays(deliveryDate, 1);
         break;
       case 2: // Martes
-        addDays(deliveryDate, 2);
+        deliveryDate = addDays(deliveryDate, 2);
         break;
       case 3: // Miércoles
-        addDays(deliveryDate, 1);
+        deliveryDate = addDays(deliveryDate, 1);
         break;
       case 4: // Jueves
-        addDays(deliveryDate, 2);
+        deliveryDate = addDays(deliveryDate, 2);
         break;
       case 5: // Viernes
-        addDays(deliveryDate, 1);
+        deliveryDate = addDays(deliveryDate, 1);
         break;
       case 6: // Sábado
-        addDays(deliveryDate, 3);
+        deliveryDate = addDays(deliveryDate, 3);
         break;
     }
 
@@ -81,7 +81,7 @@ class OrderAdmin {
       const notification = new Notification(
         new Date(),
         "PEDIDO APROBADO",
-        `Su pedido con el ID ${orderId} ha sido aprobado y será enviado el día ${order.deliveryDate}`,
+        `Su pedido con el ID ${orderId} ha sido aprobado y será enviado el día ${order.deliveryDate.toLocaleDateString()}`,
         order.clientRef
       );
 
@@ -103,12 +103,41 @@ class OrderAdmin {
         orderId
       );
 
-      console.log(order);
-
       // Decorador del nombre del cliente
+      const orderClientNameField = new DecoratedCalendarEvent(
+        orderIdField,
+        "Nombre",
+        order.userInfo.name
+      );
+
       // Decorador de detalle de productos
+      var productsString = "";
+      for (let i = 0; i < order.lineProducts.length; i++) {
+        const product = order.lineProducts[i];
+        productsString += `Nombre: ${product.name} Unidades: ${product.units} Precio: ${product.price} \n`;
+      }
+      const orderProductsField = new DecoratedCalendarEvent(
+        orderClientNameField,
+        "Productos",
+        productsString
+      );
+
       // Decorador de dirección en envío
+      const orderAddressField = new DecoratedCalendarEvent(
+        orderProductsField,
+        "Dirección",
+        order.address
+      );
+
       // Decorador de precio con envío
+      const orderPriceField = new DecoratedCalendarEvent(
+        orderAddressField,
+        "Precio",
+        order.price
+      );
+
+      // Registramos el evento en la agenda
+      this.calendarAdmin.registerEvent(orderPriceField);
     }
     // Cancelado
     else if (state === 4) {
@@ -128,7 +157,6 @@ class OrderAdmin {
   // Confirma un pedido
   // Valida que por cada producto del pedido hayan unidades suficientes o
   // que el producto exista en el inventario
-  //Test
   public async confirmOrder(orderId: string) {
     //Traer la orden que se va a confirmar
     const order = await this.orderDAO.getDetail(orderId);
@@ -153,7 +181,7 @@ class OrderAdmin {
       );
     }
 
-    await this.orderDAO.changeOrderState(orderId, 2);
+    await this.setOrderState(orderId, 2);
   }
 
   public suscribe(o: Observer) {

@@ -17,7 +17,7 @@ class NotificationDAO {
   }
 
   public async markAsRead(userId: string) {
-    return await Notification.updateOne(
+    return await Notification.updateMany(
       { userRef: userId },
       { $set: { isRead: true } }
     );

@@ -227,7 +227,7 @@ function App() {
           path="/notifications"
           element={
             <Protected ctx={ctx} loggedIn={true} forRole={null}>
-              <Notifications forUser={ctx.role === 2 ? "admin" : "client"} />
+              <Notifications user={ctx} />
             </Protected>
           }
         />

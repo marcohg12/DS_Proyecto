@@ -1,4 +1,4 @@
-import Order, { OrderT } from "../schemas/orderS";
+import Order from "../schemas/orderS";
 import mongoose from "mongoose";
 
 class OrderDAO {
@@ -101,7 +101,7 @@ class OrderDAO {
   // Actualiza la fecha de entrega de un pedido
   public async setDeliveryDate(orderId: string, date: Date) {
     return await Order.updateOne(
-      { _id: orderId },
+      { _id: new mongoose.Types.ObjectId(orderId) },
       { $set: { deliveryDate: date } }
     );
   }

@@ -7,19 +7,22 @@ function NotificationButton() {
   const [unreadNotifications, setUnreadNotifications] = useState(0);
 
   useEffect(() => {
-    // Configuración del intervalo de peticiones
-    const interval = setInterval(() => {
-      // Pedimos la cantidad de notificaciones no leídas
+    const sendRequest = () => {
       axios({
         method: "get",
         withCredentials: true,
         url: BACKEND_ROUTE + "/general/get_unread_amount",
       }).then((res) => {
         const response = res.data;
-        if (response.result !== 0) {
-          setUnreadNotifications(response.result);
-        }
+        setUnreadNotifications(response.result);
       });
+    };
+
+    sendRequest();
+
+    // Configuración del intervalo de peticiones
+    const interval = setInterval(() => {
+      sendRequest();
     }, 5000);
 
     // Función de limpieza
@@ -30,7 +33,7 @@ function NotificationButton() {
     <Link to="/notifications" className="nav-link text-white">
       Notificaciones{" "}
       {unreadNotifications > 0 ? (
-        <span class="badge bg-danger">unreadNotifications</span>
+        <span className="badge bg-danger">{unreadNotifications}</span>
       ) : (
         <></>
       )}

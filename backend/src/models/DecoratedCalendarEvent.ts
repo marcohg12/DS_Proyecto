@@ -1,15 +1,15 @@
 import { Decorator } from "./Decorator";
-import { CalendarEvent } from "./CalendarEvent";
 import { CustomFields } from "../interfaces/interfaces";
+import { CalendarEventI } from "../interfaces/interfaces";
 
 class DecoratedCalendarEvent extends Decorator {
   private fieldName: string;
   private fieldValue: string;
 
-  constructor(e: CalendarEvent, fieldName: string, fieldValue: string) {
+  constructor(e: CalendarEventI, fieldName: string, fieldValue: string) {
     super(e);
-    fieldName = this.fieldName;
-    fieldValue = this.fieldValue;
+    this.fieldName = fieldName;
+    this.fieldValue = fieldValue;
   }
 
   public getCustomFields() {
