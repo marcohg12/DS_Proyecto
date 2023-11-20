@@ -23,6 +23,11 @@ import ClientOrderView from "../pages/ClientOrderView";
 import AdminOrderViewer from "../pages/AdminOrderViewer";
 import AdminOrderView from "../pages/AdminOrderView";
 import Notifications from "../pages/Notifications";
+import CalendarView from "../pages/CalendarView";
+import EventView from "../pages/EventView";
+import EventEdit from "../pages/EventEdit";
+import CreateEvent from "../pages/CreateEvent";
+import "react-big-calendar/lib/css/react-big-calendar.css";
 
 function App() {
   const ctx = useContext(appContext).user;
@@ -146,6 +151,30 @@ function App() {
           }
         />
         <Route
+          path="/view_event/:id"
+          element={
+            <Protected ctx={ctx} loggedIn={true} forRole={2}>
+              <EventView />
+            </Protected>
+          }
+        />
+        <Route
+          path="/edit_event/:id"
+          element={
+            <Protected ctx={ctx} loggedIn={true} forRole={2}>
+              <EventEdit />
+            </Protected>
+          }
+        />
+        <Route
+          path="/register_event"
+          element={
+            <Protected ctx={ctx} loggedIn={true} forRole={2}>
+              <CreateEvent />
+            </Protected>
+          }
+        />
+        <Route
           path="/edit_category/:id"
           element={
             <Protected ctx={ctx} loggedIn={true} forRole={2}>
@@ -174,6 +203,14 @@ function App() {
           element={
             <Protected ctx={ctx} loggedIn={true} forRole={2}>
               <AdminOrderView />
+            </Protected>
+          }
+        />
+        <Route
+          path="/calendar"
+          element={
+            <Protected ctx={ctx} loggedIn={true} forRole={2}>
+              <CalendarView />
             </Protected>
           }
         />

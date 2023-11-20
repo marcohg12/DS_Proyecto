@@ -1,3 +1,4 @@
+import { addHours } from "date-fns";
 import { CalendarEventI } from "../interfaces/interfaces";
 import CalendarEvent from "../schemas/calendarEventS";
 
@@ -47,36 +48,38 @@ class CalendarDAO {
     });
   }
 
-  public async overlap(event: CalendarEventI) {
+  public async getEvents() {
+    return await CalendarEvent.find();
+  }
+
+  public async overlaps(event: CalendarEventI) {
     // Calculamos horas de inicio y fin del evento
-    const eventDate = new Date(event.getDate());
-    const initHour = eventDate.getHours();
-    const endHour = initHour + event.getDuration();
+    const eventInit = new Date(event.getDate());
+    const eventEnd = addHours(eventInit, event.getDuration());
     var overlap = false;
 
-    // Obtenemos los eventos del día
-    const initDate = new Date(event.getDate());
-    const endDate = new Date(event.getDate());
-    initDate.setHours(0, 0, 0, 0);
-    endDate.setHours(23, 59, 59, 999);
-    const events = await this.getEventsInRange(initDate, endDate);
+    // Obtenemos los eventos
+    const events = await this.getEvents();
 
     // Por cada evento del día verificamos si chocan las horas
     for (const calEvent of events) {
-      if (calEvent._id === event.getEventId()) {
+      // Ignoramos el propio evento si ya estuviera registrado
+      if (calEvent._id.toString() === event.getEventId()) {
         continue;
       }
 
-      // Verificamos si la hora inicial se traslapa
-      const eventInitHour = new Date(calEvent.date).getHours();
-      if (initHour <= eventInitHour && eventInitHour < endHour) {
+      // Verificamos si la fecha inicial se traslapa
+      const eventInit2 = new Date(calEvent.date);
+      if (eventInit <= eventInit2 && eventInit2 < eventEnd) {
         overlap = true;
+        break;
       }
 
-      // Verificamos si la hora de fin se traslapa
-      const eventEndHour = eventInitHour + calEvent.duration;
-      if (initHour < eventEndHour && eventEndHour < endHour) {
+      // Verificamos si la fecha de fin se traslapa
+      const eventEnd2 = addHours(eventInit2, calEvent.duration);
+      if (eventInit < eventEnd2 && eventEnd2 < eventEnd) {
         overlap = true;
+        break;
       }
     }
     return overlap;

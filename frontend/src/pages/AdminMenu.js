@@ -46,7 +46,7 @@ function AdminMenu() {
             <Link to="/admin_categories" className="link-dark fs-4 mb-4">
               <b>Crear categoría</b>
             </Link>
-            <Link className="link-dark fs-4 mb-4">
+            <Link to="/calendar" className="link-dark fs-4 mb-4">
               <b>Ver agenda</b>
             </Link>
           </div>

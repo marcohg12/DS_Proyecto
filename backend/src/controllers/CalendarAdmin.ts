@@ -22,12 +22,12 @@ class CalendarAdmin {
     return await this.calendarDAO.getEvent(eventId);
   }
 
-  public async getEventsInRange(initDate: Date, endDate: Date) {
-    return await this.calendarDAO.getEventsInRange(initDate, endDate);
+  public async getEvents() {
+    return await this.calendarDAO.getEvents();
   }
 
-  public async overlap(event: CalendarEventI) {
-    return await this.calendarDAO.overlap(event);
+  public async overlaps(event: CalendarEventI) {
+    return await this.calendarDAO.overlaps(event);
   }
 }
 

@@ -315,18 +315,19 @@ class Controller {
     return await this.calendarAdmin.getEvent(eventId);
   }
 
-  public async getEventsInRange(initDate: Date, endDate: Date) {
-    return await this.calendarAdmin.getEventsInRange(initDate, endDate);
+  public async getEvents() {
+    return await this.calendarAdmin.getEvents();
   }
 
-  public async overlap(
+  public async overlaps(
     date: Date,
     duration: number,
     description: string,
-    type: string
+    type: string,
+    eventId: string
   ) {
-    const event = new CalendarEvent(date, duration, description, type);
-    return await this.calendarAdmin.overlap(event);
+    const event = new CalendarEvent(date, duration, description, type, eventId);
+    return await this.calendarAdmin.overlaps(event);
   }
 }
 

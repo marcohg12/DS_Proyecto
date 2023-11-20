@@ -24,7 +24,7 @@ class NotificationDAO {
   }
 
   public async getUserNotifications(userId: string) {
-    return await Notification.find({ userRef: userId });
+    return await Notification.find({ userRef: userId }).sort({ date: -1 });
   }
 
   public async unreadAmount(userId: string) {

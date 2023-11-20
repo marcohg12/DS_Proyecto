@@ -334,9 +334,15 @@ router.post("/register_event", async (req: Request, res: Response) => {
 });
 
 router.post("/event_overlaps", async (req: Request, res: Response) => {
-  const { date, duration, description, type } = req.body;
+  const { date, duration, description, type, eventId } = req.body;
   try {
-    const result = await controller.overlap(date, duration, description, type);
+    const result = await controller.overlaps(
+      date,
+      duration,
+      description,
+      type,
+      eventId
+    );
     res.send(
       JSON.stringify({
         error: false,
@@ -345,7 +351,6 @@ router.post("/event_overlaps", async (req: Request, res: Response) => {
       })
     );
   } catch (e) {
-    console.log(e);
     res.send(
       JSON.stringify({
         error: true,
@@ -416,13 +421,8 @@ router.get("/get_event/:eventId", async (req: Request, res: Response) => {
 });
 
 router.get("/get_events", async (req: Request, res: Response) => {
-  const initDateStr: string = req.query.initDate as string;
-  const endDateStr: string = req.query.endDate as string;
   try {
-    const events = await controller.getEventsInRange(
-      new Date(initDateStr),
-      new Date(endDateStr)
-    );
+    const events = await controller.getEvents();
     res.send(
       JSON.stringify({
         error: false,

@@ -64,6 +64,9 @@ class OrderAdmin {
         break;
     }
 
+    // La hora por defecto de entrega es a las 8 de la mañana
+    deliveryDate.setHours(8, 0, 0, 0);
+
     await this.orderDAO.setDeliveryDate(orderId, deliveryDate);
   }
 
