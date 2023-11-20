@@ -36,7 +36,6 @@ router.get("/get_publications", async (req: Request, res: Response) => {
       })
     );
   } catch (e) {
-    console.log(e);
     res.send(
       JSON.stringify({
         error: true,

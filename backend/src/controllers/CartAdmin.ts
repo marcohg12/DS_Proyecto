@@ -62,7 +62,6 @@ class CartAdmin {
   ) {
     //Linea de Productos
     const response = await this.getCart(userId);
-    console.log(response);
     const lineProducts = response.products.map(
       (product: {
         _id: string;
