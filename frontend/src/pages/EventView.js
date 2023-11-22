@@ -33,7 +33,7 @@ function EventView() {
                 {new Date(event.date).toLocaleTimeString()}
               </p>
               <p className="card-text">Duración: {event.duration} horas</p>
-              {event.customFields.length > 0 ? (
+              {event.customFields && event.customFields.length > 0 ? (
                 <>
                   <p className="card-text fw-bolder">
                     Información adicional: <br />

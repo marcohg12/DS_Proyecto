@@ -13,11 +13,13 @@ import express from "express";
 const expressStatic = express.static;
 import { Controller } from "./controllers/Controller";
 const initializePassport = require("./passport-config");
+const moment = require("moment-timezone");
 
 const app = express();
 
 // Configuraciones ------------------------------------------------------------------------------
 
+moment.tz.setDefault("America/Costa_Rica");
 const port = 5000;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
