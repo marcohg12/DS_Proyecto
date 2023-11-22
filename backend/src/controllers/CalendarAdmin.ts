@@ -11,9 +11,6 @@ class CalendarAdmin {
   }
 
   public async updateEvent(event: CalendarEventI) {
-    console.log(new Date());
-    const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    console.log("User Time Zone:", userTimeZone);
     return await this.calendarDAO.updateEvent(event);
   }
 
