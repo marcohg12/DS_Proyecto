@@ -431,15 +431,15 @@ router.post("/register_event", function (req, res) { return __awaiter(void 0, vo
     });
 }); });
 router.post("/event_overlaps", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, date, duration, description, type, result, e_15;
+    var _a, date, duration, description, type, eventId, result, e_15;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
-                _a = req.body, date = _a.date, duration = _a.duration, description = _a.description, type = _a.type;
+                _a = req.body, date = _a.date, duration = _a.duration, description = _a.description, type = _a.type, eventId = _a.eventId;
                 _b.label = 1;
             case 1:
                 _b.trys.push([1, 3, , 4]);
-                return [4 /*yield*/, controller.overlap(date, duration, description, type)];
+                return [4 /*yield*/, controller.overlaps(date, duration, description, type, eventId)];
             case 2:
                 result = _b.sent();
                 res.send(JSON.stringify({
@@ -450,7 +450,6 @@ router.post("/event_overlaps", function (req, res) { return __awaiter(void 0, vo
                 return [3 /*break*/, 4];
             case 3:
                 e_15 = _b.sent();
-                console.log(e_15);
                 res.send(JSON.stringify({
                     error: true,
                     message: "Ocurrió un error inesperado, intente de nuevo",
@@ -543,32 +542,28 @@ router.get("/get_event/:eventId", function (req, res) { return __awaiter(void 0,
     });
 }); });
 router.get("/get_events", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var initDateStr, endDateStr, events, e_19;
+    var events, e_19;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                initDateStr = req.query.initDate;
-                endDateStr = req.query.endDate;
-                _a.label = 1;
+                _a.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, controller.getEvents()];
             case 1:
-                _a.trys.push([1, 3, , 4]);
-                return [4 /*yield*/, controller.getEventsInRange(new Date(initDateStr), new Date(endDateStr))];
-            case 2:
                 events = _a.sent();
                 res.send(JSON.stringify({
                     error: false,
                     message: "Eventos consultados exitosamente",
                     result: events,
                 }));
-                return [3 /*break*/, 4];
-            case 3:
+                return [3 /*break*/, 3];
+            case 2:
                 e_19 = _a.sent();
                 res.send(JSON.stringify({
                     error: true,
                     message: "Ocurrió un error inesperado, intente de nuevo",
                 }));
-                return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
         }
     });
 }); });

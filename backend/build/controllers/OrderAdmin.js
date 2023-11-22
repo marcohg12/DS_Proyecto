@@ -97,27 +97,29 @@ var OrderAdmin = /** @class */ (function () {
                         // Calculamos la fecha de envía al martes, jueves o sábado más inmediado
                         switch ((0, date_fns_1.getDay)(today)) {
                             case 0: // Domingo
-                                (0, date_fns_1.addDays)(deliveryDate, 2);
+                                deliveryDate = (0, date_fns_1.addDays)(deliveryDate, 2);
                                 break;
                             case 1: // Lunes
-                                (0, date_fns_1.addDays)(deliveryDate, 1);
+                                deliveryDate = (0, date_fns_1.addDays)(deliveryDate, 1);
                                 break;
                             case 2: // Martes
-                                (0, date_fns_1.addDays)(deliveryDate, 2);
+                                deliveryDate = (0, date_fns_1.addDays)(deliveryDate, 2);
                                 break;
                             case 3: // Miércoles
-                                (0, date_fns_1.addDays)(deliveryDate, 1);
+                                deliveryDate = (0, date_fns_1.addDays)(deliveryDate, 1);
                                 break;
                             case 4: // Jueves
-                                (0, date_fns_1.addDays)(deliveryDate, 2);
+                                deliveryDate = (0, date_fns_1.addDays)(deliveryDate, 2);
                                 break;
                             case 5: // Viernes
-                                (0, date_fns_1.addDays)(deliveryDate, 1);
+                                deliveryDate = (0, date_fns_1.addDays)(deliveryDate, 1);
                                 break;
                             case 6: // Sábado
-                                (0, date_fns_1.addDays)(deliveryDate, 3);
+                                deliveryDate = (0, date_fns_1.addDays)(deliveryDate, 3);
                                 break;
                         }
+                        // La hora por defecto de entrega es a las 8 de la mañana
+                        deliveryDate.setHours(8, 0, 0, 0);
                         return [4 /*yield*/, this.orderDAO.setDeliveryDate(orderId, deliveryDate)];
                     case 1:
                         _a.sent();
@@ -129,7 +131,7 @@ var OrderAdmin = /** @class */ (function () {
     // Cambia el estado de un pedido
     OrderAdmin.prototype.setOrderState = function (orderId, state) {
         return __awaiter(this, void 0, void 0, function () {
-            var order, notification, baseEvent, orderIdField, order, notification;
+            var order, notification, baseEvent, orderIdField, orderClientNameField, productsString, i, product, orderProductsField, orderAddressField, orderPriceField, order, notification;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.orderDAO.changeOrderState(orderId, state)];
@@ -144,12 +146,22 @@ var OrderAdmin = /** @class */ (function () {
                         return [4 /*yield*/, this.getOrder(orderId)];
                     case 3:
                         order = _a.sent();
-                        notification = new Notification_1.Notification(new Date(), "PEDIDO APROBADO", "Su pedido con el ID ".concat(orderId, " ha sido aprobado y ser\u00E1 enviado el d\u00EDa ").concat(order.deliveryDate), order.clientRef);
+                        notification = new Notification_1.Notification(new Date(), "PEDIDO APROBADO", "Su pedido con el ID ".concat(orderId, " ha sido aprobado y ser\u00E1 enviado el d\u00EDa ").concat(order.deliveryDate.toLocaleDateString()), order.clientRef);
                         // Generar la notificación al usuario
                         this.notify(notification);
                         baseEvent = new CalendarEvent_1.CalendarEvent(order.deliveryDate, 1, "Preparar los productos y empaque del pedido", "ENTREGA PEDIDO");
                         orderIdField = new DecoratedCalendarEvent_1.DecoratedCalendarEvent(baseEvent, "ID Pedido", orderId);
-                        console.log(order);
+                        orderClientNameField = new DecoratedCalendarEvent_1.DecoratedCalendarEvent(orderIdField, "Nombre", order.userInfo.name);
+                        productsString = "";
+                        for (i = 0; i < order.lineProducts.length; i++) {
+                            product = order.lineProducts[i];
+                            productsString += "Nombre: ".concat(product.name, " Unidades: ").concat(product.units, " Precio: ").concat(product.price, " \n");
+                        }
+                        orderProductsField = new DecoratedCalendarEvent_1.DecoratedCalendarEvent(orderClientNameField, "Productos", productsString);
+                        orderAddressField = new DecoratedCalendarEvent_1.DecoratedCalendarEvent(orderProductsField, "Dirección", order.address);
+                        orderPriceField = new DecoratedCalendarEvent_1.DecoratedCalendarEvent(orderAddressField, "Precio", order.price);
+                        // Registramos el evento en la agenda
+                        this.calendarAdmin.registerEvent(orderPriceField);
                         return [3 /*break*/, 6];
                     case 4:
                         if (!(state === 4)) return [3 /*break*/, 6];
@@ -167,7 +179,6 @@ var OrderAdmin = /** @class */ (function () {
     // Confirma un pedido
     // Valida que por cada producto del pedido hayan unidades suficientes o
     // que el producto exista en el inventario
-    //Test
     OrderAdmin.prototype.confirmOrder = function (orderId) {
         return __awaiter(this, void 0, void 0, function () {
             var order, productLines, i, product;
@@ -199,7 +210,7 @@ var OrderAdmin = /** @class */ (function () {
                     case 5:
                         i++;
                         return [3 /*break*/, 2];
-                    case 6: return [4 /*yield*/, this.orderDAO.changeOrderState(orderId, 2)];
+                    case 6: return [4 /*yield*/, this.setOrderState(orderId, 2)];
                     case 7:
                         _a.sent();
                         return [2 /*return*/];

@@ -67,7 +67,7 @@ var NotificationDAO = /** @class */ (function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, notificationS_1.default.updateOne({ userRef: userId }, { $set: { isRead: true } })];
+                    case 0: return [4 /*yield*/, notificationS_1.default.updateMany({ userRef: userId }, { $set: { isRead: true } })];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
@@ -77,7 +77,7 @@ var NotificationDAO = /** @class */ (function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, notificationS_1.default.find({ userRef: userId })];
+                    case 0: return [4 /*yield*/, notificationS_1.default.find({ userRef: userId }).sort({ date: -1 })];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });

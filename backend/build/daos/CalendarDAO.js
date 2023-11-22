@@ -40,6 +40,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CalendarDAO = void 0;
+var date_fns_1 = require("date-fns");
 var calendarEventS_1 = __importDefault(require("../schemas/calendarEventS"));
 var CalendarDAO = /** @class */ (function () {
     function CalendarDAO() {
@@ -116,36 +117,44 @@ var CalendarDAO = /** @class */ (function () {
             });
         });
     };
-    CalendarDAO.prototype.overlap = function (event) {
+    CalendarDAO.prototype.getEvents = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var eventDate, initHour, endHour, overlap, initDate, endDate, events, _i, events_1, calEvent, eventInitHour, eventEndHour;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, calendarEventS_1.default.find()];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
+    CalendarDAO.prototype.overlaps = function (event) {
+        return __awaiter(this, void 0, void 0, function () {
+            var eventInit, eventEnd, overlap, events, _i, events_1, calEvent, eventInit2, eventEnd2;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        eventDate = new Date(event.getDate());
-                        initHour = eventDate.getHours();
-                        endHour = initHour + event.getDuration();
+                        eventInit = new Date(event.getDate());
+                        eventEnd = (0, date_fns_1.addHours)(eventInit, event.getDuration());
                         overlap = false;
-                        initDate = new Date(event.getDate());
-                        endDate = new Date(event.getDate());
-                        initDate.setHours(0, 0, 0, 0);
-                        endDate.setHours(23, 59, 59, 999);
-                        return [4 /*yield*/, this.getEventsInRange(initDate, endDate)];
+                        return [4 /*yield*/, this.getEvents()];
                     case 1:
                         events = _a.sent();
                         // Por cada evento del día verificamos si chocan las horas
                         for (_i = 0, events_1 = events; _i < events_1.length; _i++) {
                             calEvent = events_1[_i];
-                            if (calEvent._id === event.getEventId()) {
+                            // Ignoramos el propio evento si ya estuviera registrado
+                            if (calEvent._id.toString() === event.getEventId()) {
                                 continue;
                             }
-                            eventInitHour = new Date(calEvent.date).getHours();
-                            if (initHour <= eventInitHour && eventInitHour < endHour) {
+                            eventInit2 = new Date(calEvent.date);
+                            if (eventInit <= eventInit2 && eventInit2 < eventEnd) {
                                 overlap = true;
+                                break;
                             }
-                            eventEndHour = eventInitHour + calEvent.duration;
-                            if (initHour < eventEndHour && eventEndHour < endHour) {
+                            eventEnd2 = (0, date_fns_1.addHours)(eventInit2, calEvent.duration);
+                            if (eventInit < eventEnd2 && eventEnd2 < eventEnd) {
                                 overlap = true;
+                                break;
                             }
                         }
                         return [2 /*return*/, overlap];

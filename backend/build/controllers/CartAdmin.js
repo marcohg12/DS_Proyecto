@@ -111,7 +111,6 @@ var CartAdmin = /** @class */ (function () {
                     case 0: return [4 /*yield*/, this.getCart(userId)];
                     case 1:
                         response = _a.sent();
-                        console.log(response);
                         lineProducts = response.products.map(function (product) { return ({
                             id: product._id,
                             name: product.name,

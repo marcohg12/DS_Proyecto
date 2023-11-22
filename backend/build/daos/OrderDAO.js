@@ -167,7 +167,7 @@ var OrderDAO = /** @class */ (function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, orderS_1.default.updateOne({ _id: orderId }, { $set: { deliveryDate: date } })];
+                    case 0: return [4 /*yield*/, orderS_1.default.updateOne({ _id: new mongoose_1.default.Types.ObjectId(orderId) }, { $set: { deliveryDate: date } })];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });

@@ -21,8 +21,8 @@ var DecoratedCalendarEvent = /** @class */ (function (_super) {
     __extends(DecoratedCalendarEvent, _super);
     function DecoratedCalendarEvent(e, fieldName, fieldValue) {
         var _this = _super.call(this, e) || this;
-        fieldName = _this.fieldName;
-        fieldValue = _this.fieldValue;
+        _this.fieldName = fieldName;
+        _this.fieldValue = fieldValue;
         return _this;
     }
     DecoratedCalendarEvent.prototype.getCustomFields = function () {

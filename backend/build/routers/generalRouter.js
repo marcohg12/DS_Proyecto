@@ -78,7 +78,6 @@ router.get("/get_publications", function (req, res) { return __awaiter(void 0, v
                 return [3 /*break*/, 9];
             case 8:
                 e_1 = _a.sent();
-                console.log(e_1);
                 res.send(JSON.stringify({
                     error: true,
                     message: "Ocurrió un error inesperado, intente de nuevo",
@@ -461,28 +460,26 @@ router.get("/get_unread_amount", function (req, res) { return __awaiter(void 0, 
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
+                _a.trys.push([0, 2, , 3]);
                 user = req.user;
                 userId = user.id;
-                _a.label = 1;
-            case 1:
-                _a.trys.push([1, 3, , 4]);
                 return [4 /*yield*/, controller.unreadAmount(userId)];
-            case 2:
+            case 1:
                 amount = _a.sent();
                 res.send(JSON.stringify({
                     error: false,
                     message: "Número de notificaciones no leídas consultadas exitosamente",
                     result: amount,
                 }));
-                return [3 /*break*/, 4];
-            case 3:
+                return [3 /*break*/, 3];
+            case 2:
                 e_15 = _a.sent();
                 res.send(JSON.stringify({
                     error: true,
                     message: "Ocurrió un error inesperado, intente de nuevo",
                 }));
-                return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
         }
     });
 }); });

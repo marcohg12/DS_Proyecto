@@ -23,7 +23,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(
   cors({
-    origin: "http://localhost:3000", // <-- Dirección de la aplicación de React
+    origin: "https://frontend-5glq.onrender.com", // <-- Dirección de la aplicación de React
     credentials: true,
   })
 );
@@ -33,6 +33,10 @@ app.use(
     secret: "secretcode",
     resave: true,
     saveUninitialized: true,
+    cookie: {
+      secure: true,
+      sameSite: "none",
+    },
   })
 );
 
@@ -40,6 +44,7 @@ app.use(cookieParser("secretcode"));
 app.use(passport.initialize());
 app.use(passport.session());
 initializePassport(passport);
+app.enable("trust proxy");
 
 // Rutas ----------------------------------------------------------------------------------------
 

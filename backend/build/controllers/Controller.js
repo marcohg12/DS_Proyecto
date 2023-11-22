@@ -522,24 +522,24 @@ var Controller = /** @class */ (function () {
             });
         });
     };
-    Controller.prototype.getEventsInRange = function (initDate, endDate) {
+    Controller.prototype.getEvents = function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.calendarAdmin.getEventsInRange(initDate, endDate)];
+                    case 0: return [4 /*yield*/, this.calendarAdmin.getEvents()];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
         });
     };
-    Controller.prototype.overlap = function (date, duration, description, type) {
+    Controller.prototype.overlaps = function (date, duration, description, type, eventId) {
         return __awaiter(this, void 0, void 0, function () {
             var event;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        event = new CalendarEvent_1.CalendarEvent(date, duration, description, type);
-                        return [4 /*yield*/, this.calendarAdmin.overlap(event)];
+                        event = new CalendarEvent_1.CalendarEvent(date, duration, description, type, eventId);
+                        return [4 /*yield*/, this.calendarAdmin.overlaps(event)];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });

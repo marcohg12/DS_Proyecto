@@ -156,7 +156,6 @@ router.post("/confirm_order", paymentUpload.single("photo"), function (req, res)
                 return [3 /*break*/, 4];
             case 3:
                 e_4 = _b.sent();
-                console.log(e_4);
                 res.send(JSON.stringify({
                     error: true,
                     message: "Ocurrió un error inesperado, intente de nuevo",

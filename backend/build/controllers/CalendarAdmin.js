@@ -82,21 +82,21 @@ var CalendarAdmin = /** @class */ (function () {
             });
         });
     };
-    CalendarAdmin.prototype.getEventsInRange = function (initDate, endDate) {
+    CalendarAdmin.prototype.getEvents = function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.calendarDAO.getEventsInRange(initDate, endDate)];
+                    case 0: return [4 /*yield*/, this.calendarDAO.getEvents()];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
         });
     };
-    CalendarAdmin.prototype.overlap = function (event) {
+    CalendarAdmin.prototype.overlaps = function (event) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.calendarDAO.overlap(event)];
+                    case 0: return [4 /*yield*/, this.calendarDAO.overlaps(event)];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
