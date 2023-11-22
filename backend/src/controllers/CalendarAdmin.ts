@@ -11,6 +11,7 @@ class CalendarAdmin {
   }
 
   public async updateEvent(event: CalendarEventI) {
+    console.log(event.getDate());
     return await this.calendarDAO.updateEvent(event);
   }
 

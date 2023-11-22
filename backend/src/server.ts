@@ -1,6 +1,7 @@
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
+const MemoryStore = require("memorystore")(session);
 const bodyParser = require("body-parser");
 const passport = require("passport");
 import { Database } from "./mongo-config";
@@ -32,6 +33,9 @@ app.use(
 
 app.use(
   session({
+    store: new MemoryStore({
+      checkPeriod: 86400000,
+    }),
     secret: "secretcode",
     resave: true,
     saveUninitialized: true,

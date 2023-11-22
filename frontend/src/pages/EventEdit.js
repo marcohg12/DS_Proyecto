@@ -36,6 +36,7 @@ function EventEdit() {
   }, [id]);
 
   const checkForOverlap = (event) => {
+    console.log(date);
     event.preventDefault();
     axios({
       method: "post",
