@@ -36,9 +36,6 @@ function EventEdit() {
   }, [id]);
 
   const checkForOverlap = (event) => {
-    console.log(new Date());
-    const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    console.log("User Time Zone:", userTimeZone);
     event.preventDefault();
     axios({
       method: "post",

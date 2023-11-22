@@ -136,7 +136,7 @@ class OrderAdmin {
       const orderPriceField = new DecoratedCalendarEvent(
         orderAddressField,
         "Precio",
-        order.price
+        "₡" + Intl.NumberFormat("en-US").format(order.price)
       );
 
       // Registramos el evento en la agenda
