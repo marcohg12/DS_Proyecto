@@ -81,7 +81,7 @@ function CartView() {
   };
 
   return (
-    <ClientWindow>
+    <>
       <MessageModal
         message={modalMessage}
         is_open={showModal}
@@ -99,19 +99,6 @@ function CartView() {
               </p>
             </div>
           </div>
-          <div className="float-end">
-            {products.length > 0 ? (
-              <Link
-                to="/pay_cart"
-                className="btn"
-                style={{ backgroundColor: "#73E2A7", width: "150px" }}
-              >
-                Comprar carrito
-              </Link>
-            ) : (
-              <></>
-            )}
-          </div>
         </div>
         <div className="mt-4">
           <h2>Productos</h2>
@@ -119,7 +106,11 @@ function CartView() {
         <div className="mt-4">
           {products.map((product) => {
             return (
-              <div className="card mb-3" key={product._id}>
+              <div
+                className="card mb-3"
+                key={product._id}
+                data-testid={product._id}
+              >
                 <div className="row g-0">
                   <div
                     className="col-md-4"
@@ -202,7 +193,7 @@ function CartView() {
           })}
         </div>
       </div>
-    </ClientWindow>
+    </>
   );
 }
 
