@@ -22,6 +22,8 @@ import {
   axiosStubGetWithErrorEqualToFalse,
   axiosStubGetWithErrorEqualToTrue,
   testingSomethingFunney,
+  axiosStubGetDecreaseProductErrorEqualToFalse,
+  axiosStubGetDecreaseProductErrorEqualToTrue,
 } from "./BackEndStub"; // Import helper functions
 
 jest.mock("axios");
@@ -145,7 +147,7 @@ describe("CartView component", () => {
   });
 
   //Test Case id 9
-  it("The component reloads itself with the new quantity of a product after increasing the product", async () => {
+  it("The component reloads the window with the new quantity of a product after increasing the product", async () => {
     axiosStubGetWithErrorEqualToFalse();
     await act(async () => {
       render(<CartView />);
@@ -188,5 +190,136 @@ describe("CartView component", () => {
     });
 
     expect(screen.getByText("Ha ocurrido un error")).toBeInTheDocument();
+  });
+
+  //Test Case id 11
+  it("The component reloads the window with the new quantity of a product after decreasing the product", async () => {
+    axiosStubGetWithErrorEqualToFalse();
+    await act(async () => {
+      render(<CartView />);
+    });
+
+    //Mock de la funcion reload de la pantalla
+    Object.defineProperty(window, "location", {
+      configurable: true,
+      value: { reload: jest.fn() },
+    });
+    await act(async () => {
+      axiosStubGetDecreaseProductErrorEqualToFalse();
+      const decreaseButton = await screen.getAllByText("-")[1];
+      fireEvent.click(decreaseButton);
+      //AXIOS.get != axios, en este se hace con el segundo
+      //expect(axios).toBeCalledTimes(1);
+    });
+    //Para verificar que se volvio a recargar la ventana despues de hacer el incremento
+    expect(window.location.reload).toHaveBeenCalled();
+  });
+
+  //Test Case id 12
+  it("The component reloads itself with its state changed when there is an error decreasing the product quantity", async () => {
+    MessageModal.mockImplementation(({ message, is_open, error }) => (
+      <>
+        <div>
+          {message} {is_open} {error}
+        </div>
+      </>
+    ));
+    axiosStubGetWithErrorEqualToFalse();
+    await act(async () => {
+      render(<CartView />);
+    });
+
+    await act(async () => {
+      axiosStubGetDecreaseProductErrorEqualToTrue();
+      const decreaseButton = await screen.getAllByText("-")[1];
+      fireEvent.click(decreaseButton);
+    });
+
+    expect(screen.getByText("Ha ocurrido un error")).toBeInTheDocument();
+  });
+
+  //Test Case id 13
+  it("The function that handles the response sets the error state variable correctly.", async () => {
+    MessageModal.mockImplementation(({ message, is_open, error }) => (
+      <>{error ? <div>{message}</div> : <div></div>}</>
+    ));
+    axiosStubGetWithErrorEqualToFalse();
+    await act(async () => {
+      render(<CartView />);
+    });
+
+    await act(async () => {
+      axiosStubGetDecreaseProductErrorEqualToTrue();
+      const decreaseButton = await screen.getAllByText("-")[1];
+      fireEvent.click(decreaseButton);
+    });
+
+    expect(screen.getByText("Ha ocurrido un error")).toBeInTheDocument();
+  });
+
+  //Test Case id 14
+  it("The function that handles the response sets the showModal state variable correctly", async () => {
+    MessageModal.mockImplementation(({ message, is_open, error }) => (
+      <>
+        {error ? (
+          <div data-testid="mock-modal" is_open={is_open.toString()}>
+            <p>{is_open.toString()}</p>
+          </div>
+        ) : (
+          <div>{message}</div>
+        )}
+      </>
+    ));
+    axiosStubGetWithErrorEqualToFalse();
+    await act(async () => {
+      render(<CartView />);
+    });
+
+    await act(async () => {
+      axiosStubGetDecreaseProductErrorEqualToTrue();
+      const decreaseButton = await screen.getAllByText("-")[1];
+      fireEvent.click(decreaseButton);
+    });
+
+    expect(screen.getByText("true")).toBeInTheDocument();
+  });
+
+  //Test Case id 15
+  it("The function that handles the response sets the error state variable correctly", async () => {
+    MessageModal.mockImplementation(({ message, is_open, error }) => (
+      <>
+        {error ? (
+          <div data-testid="mock-modal" is_open={is_open.toString()}>
+            {Message}
+          </div>
+        ) : (
+          <div>
+            <p>{error.toString()}</p>
+          </div>
+        )}
+      </>
+    ));
+    axiosStubGetWithErrorEqualToFalse();
+    await act(async () => {
+      render(<CartView />);
+    });
+
+    await act(async () => {
+      axiosStubGetDecreaseProductErrorEqualToFalse();
+      const decreaseButton = await screen.getAllByText("-")[1];
+      fireEvent.click(decreaseButton);
+    });
+
+    expect(screen.getByText("false")).toBeInTheDocument();
+  });
+
+  //Test Case id 16
+  it("The function that calculates the total cart price does so correctly", async () => {
+    axiosStubGetWithErrorEqualToFalse();
+    await act(async () => {
+      render(<CartView />);
+    });
+
+    expect(screen.getByText("Precio del carrito: ₡90"));
   });
 });

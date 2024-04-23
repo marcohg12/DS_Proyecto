@@ -50,6 +50,18 @@ export const axiosStubGetIncreaseProductErrorEqualToTrue = () => {
   });
 };
 
+export const axiosStubGetDecreaseProductErrorEqualToFalse = () => {
+  axios.mockResolvedValueOnce({
+    data: { error: false, message: "Producto eliminado del carrito" },
+  });
+};
+
+export const axiosStubGetDecreaseProductErrorEqualToTrue = () => {
+  axios.mockResolvedValueOnce({
+    data: { error: true, message: "Ha ocurrido un error" },
+  });
+};
+
 /*export const testingSomethingFunney = () => {
   const mockCartData = {
     products: [
