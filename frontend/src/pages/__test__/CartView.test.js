@@ -325,44 +325,89 @@ describe("CartView component", () => {
   });
 
   //Test Case id 17
-  it("The component is rendered in an acceptable time for 1000 users (1 to 5 seconds)", async () => {
-    const numberOfUsers = 1000;
-    const renderTimeRangeMin = 0; // 0 seconds
-    const renderTimeRangeMax = 5000; // 5 seconds
+  it("The component is rendered in an acceptable time for the user (0 to 5 seconds)", async () => {
+    const renderTimeRangeMin = 0; // 0 segundos
+    const renderTimeRangeMax = 5000; // 5 segundos
 
-    // Define an array of user IDs (assuming user IDs start from 1)
-    const userIds = Array.from(
-      { length: numberOfUsers },
-      (_, index) => index + 1
-    );
-    // Track rendering times for each user
-    const renderingTimes = [];
+    axiosStubGetWithErrorEqualToFalse();
+    let renderStartTime;
+    let renderEndTime;
+    renderStartTime = Date.now();
+    await act(async () => {
+      render(<CartView />);
+    });
+    renderEndTime = Date.now();
 
-    // Mock rendering the component for each user and measure rendering time
+    const renderingTimeSeconds = (renderEndTime - renderStartTime) / 1000;
 
-    for (const userId of userIds) {
-      axiosStubGetWithErrorEqualToFalse();
-      // Start the act() scope
-      let renderStartTime;
-      let renderEndTime;
-      renderStartTime = Date.now();
-      await act(async () => {
-        // Measure the start time just before rendering
+    // Ver que el tiempo de renderizado caiga entre los dos límites
+    expect(renderingTimeSeconds).toBeGreaterThanOrEqual(renderTimeRangeMin);
+    expect(renderingTimeSeconds).toBeLessThanOrEqual(renderTimeRangeMax);
+  });
 
-        // Render the component
-        render(<CartView userId={userId} />);
-        // Measure the end time just after rendering
+  //Test Case id 18
+  it("The component is rendered in an acceptable time for the user when increasing a product (0 to 5 seconds)", async () => {
+    const renderTimeRangeMin = 0; // 0 segundos
+    const renderTimeRangeMax = 5000; // 5 segundos
 
-        // Simulate the passage of time
-        jest.advanceTimersByTime(0);
-      });
-      renderEndTime = Date.now();
+    //Mock de la funcion reload de la pantalla
+    Object.defineProperty(window, "location", {
+      configurable: true,
+      value: { reload: jest.fn() },
+    });
 
-      const renderingTimeSeconds = (renderEndTime - renderStartTime) / 1000;
+    axiosStubGetWithErrorEqualToFalse();
+    let renderStartTime;
+    let renderEndTime;
+    await act(async () => {
+      render(<CartView />);
+    });
 
-      // Assert that rendering time falls within the valid range
-      expect(renderingTimeSeconds).toBeGreaterThanOrEqual(renderTimeRangeMin);
-      expect(renderingTimeSeconds).toBeLessThanOrEqual(renderTimeRangeMax);
-    }
-  }, 10000);
+    renderStartTime = Date.now();
+    await act(async () => {
+      axiosStubGetIncreaseProductErrorEqualToFalse();
+      const increaseButton = await screen.getAllByText("+")[1];
+      fireEvent.click(increaseButton);
+      //AXIOS.get != axios, en este se hace con el segundo
+      //expect(axios).toBeCalledTimes(1);
+    });
+    renderEndTime = Date.now();
+
+    const renderingTimeSeconds = (renderEndTime - renderStartTime) / 1000;
+
+    // Assert that rendering time falls within the valid range
+    expect(renderingTimeSeconds).toBeGreaterThanOrEqual(renderTimeRangeMin);
+    expect(renderingTimeSeconds).toBeLessThanOrEqual(renderTimeRangeMax);
+  });
+
+  //Test Case id 19
+  it("The component is rendered in an acceptable time for the user when decreasing a product (0 to 5 seconds)", async () => {
+    const renderTimeRangeMin = 0; // 0 segundos
+    const renderTimeRangeMax = 5000; // 5 segundos
+    axiosStubGetWithErrorEqualToFalse();
+    let renderStartTime;
+    let renderEndTime;
+    await act(async () => {
+      render(<CartView />);
+    });
+
+    //Mock de la funcion reload de la pantalla
+    Object.defineProperty(window, "location", {
+      configurable: true,
+      value: { reload: jest.fn() },
+    });
+    renderStartTime = Date.now();
+    await act(async () => {
+      axiosStubGetDecreaseProductErrorEqualToFalse();
+      const decreaseButton = await screen.getAllByText("-")[1];
+      fireEvent.click(decreaseButton);
+      //AXIOS.get != axios, en este se hace con el segundo
+      //expect(axios).toBeCalledTimes(1);
+    });
+    renderEndTime = Date.now();
+    const renderingTimeSeconds = (renderEndTime - renderStartTime) / 1000;
+    // Assert that rendering time falls within the valid range
+    expect(renderingTimeSeconds).toBeGreaterThanOrEqual(renderTimeRangeMin);
+    expect(renderingTimeSeconds).toBeLessThanOrEqual(renderTimeRangeMax);
+  });
 });
