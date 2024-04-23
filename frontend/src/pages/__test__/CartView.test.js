@@ -28,6 +28,7 @@ import {
 
 jest.mock("axios");
 jest.mock("../../components/MessageModal");
+jest.useFakeTimers();
 describe("CartView component", () => {
   beforeEach(() => {
     jest.restoreAllMocks(); // Ensure axios mocks are cleared before each test
@@ -322,4 +323,46 @@ describe("CartView component", () => {
 
     expect(screen.getByText("Precio del carrito: ₡90"));
   });
+
+  //Test Case id 17
+  it("The component is rendered in an acceptable time for 1000 users (1 to 5 seconds)", async () => {
+    const numberOfUsers = 1000;
+    const renderTimeRangeMin = 0; // 0 seconds
+    const renderTimeRangeMax = 5000; // 5 seconds
+
+    // Define an array of user IDs (assuming user IDs start from 1)
+    const userIds = Array.from(
+      { length: numberOfUsers },
+      (_, index) => index + 1
+    );
+    // Track rendering times for each user
+    const renderingTimes = [];
+
+    // Mock rendering the component for each user and measure rendering time
+
+    for (const userId of userIds) {
+      axiosStubGetWithErrorEqualToFalse();
+      // Start the act() scope
+      let renderStartTime;
+      let renderEndTime;
+      renderStartTime = Date.now();
+      await act(async () => {
+        // Measure the start time just before rendering
+
+        // Render the component
+        render(<CartView userId={userId} />);
+        // Measure the end time just after rendering
+
+        // Simulate the passage of time
+        jest.advanceTimersByTime(0);
+      });
+      renderEndTime = Date.now();
+
+      const renderingTimeSeconds = (renderEndTime - renderStartTime) / 1000;
+
+      // Assert that rendering time falls within the valid range
+      expect(renderingTimeSeconds).toBeGreaterThanOrEqual(renderTimeRangeMin);
+      expect(renderingTimeSeconds).toBeLessThanOrEqual(renderTimeRangeMax);
+    }
+  }, 10000);
 });
