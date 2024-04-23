@@ -14,18 +14,24 @@ import {
 import "@testing-library/jest-dom/extend-expect";
 import axios from "axios";
 import CartView from "../CartView";
+import MessageModal from "../../components/MessageModal";
 import { BACKEND_ROUTE } from "../../scripts/constants";
 import {
   axiosStubGetIncreaseProductErrorEqualToFalse,
+  axiosStubGetIncreaseProductErrorEqualToTrue,
   axiosStubGetWithErrorEqualToFalse,
   axiosStubGetWithErrorEqualToTrue,
   testingSomethingFunney,
 } from "./BackEndStub"; // Import helper functions
 
 jest.mock("axios");
+jest.mock("../../components/MessageModal");
 describe("CartView component", () => {
   beforeEach(() => {
     jest.restoreAllMocks(); // Ensure axios mocks are cleared before each test
+    MessageModal.mockImplementation(
+      jest.requireActual("../../components/MessageModal").default
+    );
   });
   //Test Case ID 1
   it("Renders name of each product correctly in the component", async () => {
@@ -139,7 +145,7 @@ describe("CartView component", () => {
   });
 
   //Test Case id 9
-  it("The component reloads itself with the new quantity of a product", async () => {
+  it("The component reloads itself with the new quantity of a product after increasing the product", async () => {
     axiosStubGetWithErrorEqualToFalse();
     await act(async () => {
       render(<CartView />);
@@ -159,5 +165,28 @@ describe("CartView component", () => {
     });
     //Para verificar que se volvio a recargar la ventana despues de hacer el incremento
     expect(window.location.reload).toHaveBeenCalled();
+  });
+
+  //Test case 10
+  it("The component reloads itself with its state changed when there is an error increasing the product quantity", async () => {
+    MessageModal.mockImplementation(({ message, is_open, error }) => (
+      <>
+        <div>
+          {message} {is_open} {error}
+        </div>
+      </>
+    ));
+    axiosStubGetWithErrorEqualToFalse();
+    await act(async () => {
+      render(<CartView />);
+    });
+
+    await act(async () => {
+      axiosStubGetIncreaseProductErrorEqualToTrue();
+      const increaseButton = await screen.getAllByText("+")[1];
+      fireEvent.click(increaseButton);
+    });
+
+    expect(screen.getByText("Ha ocurrido un error")).toBeInTheDocument();
   });
 });

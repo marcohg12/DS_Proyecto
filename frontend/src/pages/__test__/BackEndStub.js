@@ -44,6 +44,12 @@ export const axiosStubGetIncreaseProductErrorEqualToFalse = () => {
   });
 };
 
+export const axiosStubGetIncreaseProductErrorEqualToTrue = () => {
+  axios.mockResolvedValueOnce({
+    data: { error: true, message: "Ha ocurrido un error" },
+  });
+};
+
 /*export const testingSomethingFunney = () => {
   const mockCartData = {
     products: [
