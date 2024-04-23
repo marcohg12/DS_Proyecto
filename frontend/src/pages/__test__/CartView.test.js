@@ -9,16 +9,24 @@ import {
   getByText,
   findByText,
   queryAllByDisplayValue,
+  fireEvent,
 } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
-import Axios from "axios";
+import axios from "axios";
 import CartView from "../CartView";
+import { BACKEND_ROUTE } from "../../scripts/constants";
 import {
+  axiosStubGetIncreaseProductErrorEqualToFalse,
   axiosStubGetWithErrorEqualToFalse,
   axiosStubGetWithErrorEqualToTrue,
+  testingSomethingFunney,
 } from "./BackEndStub"; // Import helper functions
 
+jest.mock("axios");
 describe("CartView component", () => {
+  beforeEach(() => {
+    jest.restoreAllMocks(); // Ensure axios mocks are cleared before each test
+  });
   //Test Case ID 1
   it("Renders name of each product correctly in the component", async () => {
     axiosStubGetWithErrorEqualToFalse();
@@ -118,16 +126,38 @@ describe("CartView component", () => {
   });
 
   //Test Case id 8
-  it("Doesn't render the acumulated price of each product based on units and individual price when there is a backend error", async () => {
+  it("Doesn't render the accumulated price of each product based on units and individual price when there is a backend error", async () => {
     axiosStubGetWithErrorEqualToTrue();
     await act(async () => {
       render(<CartView />);
     });
-
     // Debugging
 
     //screen.debug();
     expect(screen.queryByText("₡50")).toBeNull();
     expect(screen.queryByText("₡40")).toBeNull();
+  });
+
+  //Test Case id 9
+  it("The component reloads itself with the new quantity of a product", async () => {
+    axiosStubGetWithErrorEqualToFalse();
+    await act(async () => {
+      render(<CartView />);
+    });
+
+    //Mock de la funcion reload de la pantalla
+    Object.defineProperty(window, "location", {
+      configurable: true,
+      value: { reload: jest.fn() },
+    });
+    await act(async () => {
+      axiosStubGetIncreaseProductErrorEqualToFalse();
+      const increaseButton = await screen.getAllByText("+")[1];
+      fireEvent.click(increaseButton);
+      //AXIOS.get != axios, en este se hace con el segundo
+      //expect(axios).toBeCalledTimes(1);
+    });
+    //Para verificar que se volvio a recargar la ventana despues de hacer el incremento
+    expect(window.location.reload).toHaveBeenCalled();
   });
 });
