@@ -68,6 +68,15 @@ export const axiosStubSendFormErrorEqualToFalse = () => {
   });
 };
 
+export const axiosStubSendFormErrorEqualToTrue = () => {
+  axios.mockResolvedValueOnce({
+    data: {
+      error: true,
+      message: "Ocurrió un error inesperado, intente de nuevo",
+    },
+  });
+};
+
 /*export const testingSomethingFunney = () => {
   const mockCartData = {
     products: [

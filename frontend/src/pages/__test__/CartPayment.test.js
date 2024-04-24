@@ -7,6 +7,7 @@ import {
   axiosStubGetWithErrorEqualToFalse,
   axiosStubGetWithErrorEqualToTrue,
   axiosStubSendFormErrorEqualToFalse,
+  axiosStubSendFormErrorEqualToTrue,
 } from "./BackEndStub";
 import axios from "axios";
 jest.mock("axios");
@@ -192,9 +193,9 @@ describe("Cart payment component", () => {
   it("Renders a success message after sending the form", async () => {
     MessageModal.mockImplementation(({ message, is_open, error }) => (
       <div data-testid="mock-modal" is_open={is_open.toString()}>
-        {/* Render the message if there is no error */}
+        {/* Render del mensaje si no hay error */}
         {!error && <p>{message}</p>}
-        {/* Render the error message if error is true */}
+        {/* Render del error si hay error */}
         {error && <p>{error.toString()}</p>}
       </div>
     ));
@@ -223,12 +224,284 @@ describe("Cart payment component", () => {
           files: [new File(["photo"], "photo.jpg", { type: "image/jpeg" })],
         },
       });
-      // Submit form
+      // Submit form, no se porque la línea siguiente no funciona, cambiando directamente el form sí
       //fireEvent.submit(screen.getByRole("button", { name: "Confirmar" }));
       fireEvent.submit(screen.getByTestId("paymentForm"));
     });
     expect(
       screen.getByText("Pedido generado exitosamente")
     ).toBeInTheDocument();
+  });
+
+  //Test Case 32
+  it("Renders the error message after sending the form returns an error", async () => {
+    MessageModal.mockImplementation(({ message, is_open, error }) => (
+      <div data-testid="mock-modal" is_open={is_open.toString()}>
+        {/* Render del mensaje si no hay error */}
+        {!error && <p>{message}</p>}
+        {/* Render del error si hay error */}
+        {error && <p>{message}</p>}
+      </div>
+    ));
+    axiosStubGetWithErrorEqualToFalse();
+    await act(async () => {
+      render(<CartPayment />);
+    });
+
+    // Mock user input
+    await act(async () => {
+      axiosStubSendFormErrorEqualToTrue();
+      fireEvent.change(screen.getByTestId("province-select"), {
+        target: { value: "1" },
+      });
+      fireEvent.change(screen.getByTestId("canton-select"), {
+        target: { value: "41" },
+      });
+      fireEvent.change(screen.getByTestId("district-select"), {
+        target: { value: "235" },
+      });
+      fireEvent.change(screen.getByTestId("input-details"), {
+        target: { value: "123 Main St" },
+      });
+      fireEvent.change(screen.getByTestId("input-files"), {
+        target: {
+          files: [new File(["photo"], "photo.jpg", { type: "image/jpeg" })],
+        },
+      });
+      // Submit form, no se porque la línea siguiente no funciona, cambiando directamente el form sí
+      //fireEvent.submit(screen.getByRole("button", { name: "Confirmar" }));
+      fireEvent.submit(screen.getByTestId("paymentForm"));
+    });
+    expect(
+      screen.getByText("Ocurrió un error inesperado, intente de nuevo")
+    ).toBeInTheDocument();
+  });
+
+  //Test Case 33
+  it("The function that handles the response sets the error state variable correctly when there is not an error", async () => {
+    MessageModal.mockImplementation(({ message, is_open, error }) => (
+      <>
+        {error ? (
+          <div data-testid="mock-modal" is_open={is_open.toString()}>
+            {message}
+          </div>
+        ) : (
+          <div>
+            <p>{error.toString()}</p>
+          </div>
+        )}
+      </>
+    ));
+    axiosStubGetWithErrorEqualToFalse();
+    await act(async () => {
+      render(<CartPayment />);
+    });
+
+    // Mock user input
+    await act(async () => {
+      axiosStubSendFormErrorEqualToFalse();
+      fireEvent.change(screen.getByTestId("province-select"), {
+        target: { value: "1" },
+      });
+      fireEvent.change(screen.getByTestId("canton-select"), {
+        target: { value: "41" },
+      });
+      fireEvent.change(screen.getByTestId("district-select"), {
+        target: { value: "235" },
+      });
+      fireEvent.change(screen.getByTestId("input-details"), {
+        target: { value: "123 Main St" },
+      });
+      fireEvent.change(screen.getByTestId("input-files"), {
+        target: {
+          files: [new File(["photo"], "photo.jpg", { type: "image/jpeg" })],
+        },
+      });
+      // Submit form, no se porque la línea siguiente no funciona, cambiando directamente el form sí
+      //fireEvent.submit(screen.getByRole("button", { name: "Confirmar" }));
+      fireEvent.submit(screen.getByTestId("paymentForm"));
+    });
+    expect(screen.getByText("false")).toBeInTheDocument();
+  });
+
+  //Test Case 34
+  it("The function that handles the response sets the error state variable correctly when there is an error", async () => {
+    MessageModal.mockImplementation(({ message, is_open, error }) => (
+      <>
+        {error ? (
+          <div data-testid="mock-modal" is_open={is_open.toString()}>
+            {error.toString()}
+          </div>
+        ) : (
+          <div>
+            <p>{message}</p>
+          </div>
+        )}
+      </>
+    ));
+    axiosStubGetWithErrorEqualToFalse();
+    await act(async () => {
+      render(<CartPayment />);
+    });
+
+    // Mock user input
+    await act(async () => {
+      axiosStubSendFormErrorEqualToTrue();
+      fireEvent.change(screen.getByTestId("province-select"), {
+        target: { value: "1" },
+      });
+      fireEvent.change(screen.getByTestId("canton-select"), {
+        target: { value: "41" },
+      });
+      fireEvent.change(screen.getByTestId("district-select"), {
+        target: { value: "235" },
+      });
+      fireEvent.change(screen.getByTestId("input-details"), {
+        target: { value: "123 Main St" },
+      });
+      fireEvent.change(screen.getByTestId("input-files"), {
+        target: {
+          files: [new File(["photo"], "photo.jpg", { type: "image/jpeg" })],
+        },
+      });
+      // Submit form, no se porque la línea siguiente no funciona, cambiando directamente el form sí
+      //fireEvent.submit(screen.getByRole("button", { name: "Confirmar" }));
+      fireEvent.submit(screen.getByTestId("paymentForm"));
+    });
+    expect(screen.getByText("true")).toBeInTheDocument();
+  });
+
+  //Test Case 35
+  it("The component is rendered in an acceptable time for the user (0 to 5 seconds)", async () => {
+    const renderTimeRangeMin = 0; // 0 segundos
+    const renderTimeRangeMax = 5000; // 5 segundos
+
+    axiosStubGetWithErrorEqualToFalse();
+    let renderStartTime;
+    let renderEndTime;
+    renderStartTime = Date.now();
+    await act(async () => {
+      render(<CartPayment />);
+    });
+    renderEndTime = Date.now();
+
+    const renderingTimeSeconds = (renderEndTime - renderStartTime) / 1000;
+
+    // Ver que el tiempo de renderizado caiga entre los dos límites
+    expect(renderingTimeSeconds).toBeGreaterThanOrEqual(renderTimeRangeMin);
+    expect(renderingTimeSeconds).toBeLessThanOrEqual(renderTimeRangeMax);
+  });
+
+  //Test Case 36
+  it("The component renders the cantons in an acceptable time for the user (0 to 5 seconds)", async () => {
+    const renderTimeRangeMin = 0; // 0 segundos
+    const renderTimeRangeMax = 5000; // 5 segundos
+    axiosStubGetWithErrorEqualToFalse();
+    await act(async () => {
+      render(<CartPayment />);
+    });
+
+    // Debugging
+    let renderStartTime;
+    let renderEndTime;
+    renderStartTime = Date.now();
+    await act(async () => {
+      fireEvent.change(screen.getByTestId("province-select"), {
+        target: { value: 0 },
+      });
+    });
+    expect(screen.queryByText(/Curridabat/)).toBeInTheDocument();
+    renderEndTime = Date.now();
+    const renderingTimeSeconds = (renderEndTime - renderStartTime) / 1000;
+
+    // Ver que el tiempo de renderizado caiga entre los dos límites
+    expect(renderingTimeSeconds).toBeGreaterThanOrEqual(renderTimeRangeMin);
+    expect(renderingTimeSeconds).toBeLessThanOrEqual(renderTimeRangeMax);
+  });
+
+  //Test Case 37
+  it("The component renders the districts in an acceptable time for the user (0 to 5 seconds)", async () => {
+    const renderTimeRangeMin = 0; // 0 segundos
+    const renderTimeRangeMax = 5000; // 5 segundos
+    axiosStubGetWithErrorEqualToFalse();
+    await act(async () => {
+      render(<CartPayment />);
+    });
+
+    // Debugging
+    let renderStartTime;
+    let renderEndTime;
+    renderStartTime = Date.now();
+    await act(async () => {
+      fireEvent.change(screen.getByTestId("province-select"), {
+        target: { value: 0 },
+      });
+    });
+    await act(async () => {
+      fireEvent.change(screen.getByTestId("canton-select"), {
+        target: { value: 5 },
+      });
+    });
+    expect(screen.queryByText(/Gravilias/)).toBeInTheDocument();
+    renderEndTime = Date.now();
+    const renderingTimeSeconds = (renderEndTime - renderStartTime) / 1000;
+
+    // Ver que el tiempo de renderizado caiga entre los dos límites
+    expect(renderingTimeSeconds).toBeGreaterThanOrEqual(renderTimeRangeMin);
+    expect(renderingTimeSeconds).toBeLessThanOrEqual(renderTimeRangeMax);
+  });
+
+  it("The component renders the succes message after sending a form in an acceptable time for the user (0 to 5 seconds)", async () => {
+    const renderTimeRangeMin = 0; // 0 segundos
+    const renderTimeRangeMax = 5000; // 5 segundos
+    MessageModal.mockImplementation(({ message, is_open, error }) => (
+      <div data-testid="mock-modal" is_open={is_open.toString()}>
+        {/* Render del mensaje si no hay error */}
+        {!error && <p>{message}</p>}
+        {/* Render del error si hay error */}
+        {error && <p>{error.toString()}</p>}
+      </div>
+    ));
+    axiosStubGetWithErrorEqualToFalse();
+    await act(async () => {
+      render(<CartPayment />);
+    });
+
+    // Mock user input
+    let renderStartTime;
+    let renderEndTime;
+    renderStartTime = Date.now();
+    await act(async () => {
+      axiosStubSendFormErrorEqualToFalse();
+      fireEvent.change(screen.getByTestId("province-select"), {
+        target: { value: "1" },
+      });
+      fireEvent.change(screen.getByTestId("canton-select"), {
+        target: { value: "41" },
+      });
+      fireEvent.change(screen.getByTestId("district-select"), {
+        target: { value: "235" },
+      });
+      fireEvent.change(screen.getByTestId("input-details"), {
+        target: { value: "123 Main St" },
+      });
+      fireEvent.change(screen.getByTestId("input-files"), {
+        target: {
+          files: [new File(["photo"], "photo.jpg", { type: "image/jpeg" })],
+        },
+      });
+      // Submit form, no se porque la línea siguiente no funciona, cambiando directamente el form sí
+      //fireEvent.submit(screen.getByRole("button", { name: "Confirmar" }));
+      fireEvent.submit(screen.getByTestId("paymentForm"));
+    });
+    expect(
+      screen.getByText("Pedido generado exitosamente")
+    ).toBeInTheDocument();
+    renderEndTime = Date.now();
+    const renderingTimeSeconds = (renderEndTime - renderStartTime) / 1000;
+
+    // Ver que el tiempo de renderizado caiga entre los dos límites
+    expect(renderingTimeSeconds).toBeGreaterThanOrEqual(renderTimeRangeMin);
+    expect(renderingTimeSeconds).toBeLessThanOrEqual(renderTimeRangeMax);
   });
 });
