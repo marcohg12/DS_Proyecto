@@ -1,21 +1,10 @@
 // CartPayment.test.js
 
 import React from "react";
-import {
-  render,
-  waitFor,
-  screen,
-  act,
-  getByText,
-  findByText,
-  queryAllByDisplayValue,
-  fireEvent,
-} from "@testing-library/react";
+import { render, screen, act, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
-import axios from "axios";
 import CartView from "../CartView";
 import MessageModal from "../../components/MessageModal";
-import { BACKEND_ROUTE } from "../../scripts/constants";
 import {
   axiosStubGetIncreaseProductErrorEqualToFalse,
   axiosStubGetIncreaseProductErrorEqualToTrue,
@@ -79,7 +68,7 @@ describe("CartView component", () => {
   });
 
   //Test Case id 4
-  it("Renders the acumulated price of each product based on units and individual price", async () => {
+  it("Renders the accumulated price of each product based on units and individual price", async () => {
     axiosStubGetWithErrorEqualToFalse();
     await act(async () => {
       render(<CartView />);

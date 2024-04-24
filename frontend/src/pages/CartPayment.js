@@ -111,7 +111,7 @@ function CartPayment() {
   };
 
   return (
-    <ClientWindow>
+    <>
       <MessageModal
         message={modalMessage}
         is_open={showModal}
@@ -122,7 +122,11 @@ function CartPayment() {
         <div className="row">
           <div className="col md-4">
             <h3>Dirección de entrega</h3>
-            <form id="paymentForm" onSubmit={sendForm}>
+            <form
+              id="paymentForm"
+              onSubmit={sendForm}
+              data-testid="paymentForm"
+            >
               <div className="row mt-4">
                 <div className="col">
                   <select
@@ -130,6 +134,7 @@ function CartPayment() {
                     onChange={(event) => updateCantons(event.target.value)}
                     required
                     id="provinceSelect"
+                    data-testid="province-select"
                   >
                     <option value="">Provincia</option>
                     {provinces.map((province) => {
@@ -144,6 +149,7 @@ function CartPayment() {
                     className="form-select mt-4 mb-4"
                     required
                     id="districtSelect"
+                    data-testid="district-select"
                   >
                     <option value="">Distrito</option>
                     {districts.map((district) => {
@@ -161,6 +167,7 @@ function CartPayment() {
                     onChange={(event) => updateDistricts(event.target.value)}
                     required
                     id="cantonSelect"
+                    data-testid="canton-select"
                   >
                     <option value="">Cantón</option>
                     {cantons.map((canton) => {
@@ -180,6 +187,7 @@ function CartPayment() {
                   className="form-control"
                   onChange={(e) => setAddress(e.target.value)}
                   required
+                  data-testid="input-details"
                 />
                 <label className="form-label">Detalles</label>
               </div>
@@ -193,6 +201,7 @@ function CartPayment() {
                   }
                   accept=".png,.jpg,.jpeg"
                   required
+                  data-testid="input-files"
                 />
                 <label className="form-label">Foto</label>
               </div>
@@ -206,9 +215,6 @@ function CartPayment() {
             </p>
 
             <div className="d-flex mt-4">
-              <Link to="/my_cart" className="btn btn-danger me-4">
-                Cancelar
-              </Link>
               <button
                 type="submit"
                 form="paymentForm"
@@ -223,7 +229,7 @@ function CartPayment() {
             <h4 className="mb-4">Productos</h4>
             {products.map((product) => {
               return (
-                <p className="mt-4">
+                <p className="mt-4" key={product._id}>
                   {product.name} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Unidades:{" "}
                   {product.units} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Subtotal:
                   ₡
@@ -236,7 +242,7 @@ function CartPayment() {
           </div>
         </div>
       </div>
-    </ClientWindow>
+    </>
   );
 }
 

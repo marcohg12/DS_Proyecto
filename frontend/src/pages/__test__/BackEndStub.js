@@ -62,6 +62,12 @@ export const axiosStubGetDecreaseProductErrorEqualToTrue = () => {
   });
 };
 
+export const axiosStubSendFormErrorEqualToFalse = () => {
+  axios.mockResolvedValueOnce({
+    data: { error: false, message: "Pedido generado exitosamente" },
+  });
+};
+
 /*export const testingSomethingFunney = () => {
   const mockCartData = {
     products: [
