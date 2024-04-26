@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React from "react";
 import { render, screen, act, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect"; // Import this line to extend Jest matchers
