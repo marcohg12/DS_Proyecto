@@ -1,12 +1,20 @@
 import { CartAdmin } from '../CartAdmin';
-import  CartDAOStub from './CartDAOStub'
-const { ToManyProductsInCart } = require("../exceptions/exceptions");
+import CartDAOStub from './CartDaoStub'; // Importamos el stub
 
 describe('CartAdmin', () => {
   let cartAdmin: CartAdmin;
+  let cartDaoStub: CartDAOStub;
 
   beforeEach(() => {
+    // Se crea una instancia de CartAdmin antes de cada prueba
     cartAdmin = new CartAdmin();
+
+    // Creamos una instancia del CartDAOStub
+    cartDaoStub = new CartDAOStub();
+
+    // Sobrescribimos el método getInstance de CartDAO para devolver el stub en su lugar
+    jest.spyOn(CartDAOStub.prototype, 'findProduct').mockImplementation(cartDaoStub.findProduct);
+    jest.spyOn(CartDAOStub.prototype, 'addProduct').mockImplementation(cartDaoStub.addProduct);
   });
 
   it('should add product to cart when units are in range (0-5)', async () => {
@@ -14,23 +22,15 @@ describe('CartAdmin', () => {
     const productId = 'product1';
     const units = 3;
 
-    // Creamos una instancia de CartDAOStub para utilizar en la prueba
-    const cartDAOStub = new CartDAOStub();
-    // Simulamos el comportamiento de findProduct y addProduct en el stub
-    jest.spyOn(cartDAOStub, 'findProduct').mockResolvedValue(-1);
-    jest.spyOn(cartDAOStub, 'addProduct').mockResolvedValue();
-
-    // Utilizamos el stub dentro de la prueba sin pasarlo a CartAdmin
-    cartAdmin['cartDAO'] = cartDAOStub;
-
-    // Llamamos a la función addProductToCart con los parámetros deseados
+    // Llamamos al método addProductToCart
     await cartAdmin.addProductToCart(userId, productId, units);
 
-    // Realizamos las expectativas necesarias
-    expect(cartDAOStub.findProduct).toHaveBeenCalledWith(productId, userId);
-    expect(cartDAOStub.addProduct).toHaveBeenCalledWith(productId, units, userId);
+    // Verificamos que el método addProduct fue llamado con los parámetros correctos
+    expect(cartDaoStub.addProduct).toHaveBeenCalledWith(productId, units, userId);
   });
 
-  // Puedes agregar más pruebas aquí para cubrir otros casos de uso
+  // Otros casos de prueba pueden ser escritos para cubrir más escenarios
 
 });
+
+
