@@ -13,7 +13,7 @@ describe("CartAdmin", () => {
   });
 
   //Test Case ID: 1
-  it("should add product to cart when units are in range (0-5)", async () => {
+  it("Test should add product to cart when units are in range (0-5)", async () => {
     const userId = "user1";
     const productId = "product1";
     const units = 3;
@@ -25,7 +25,7 @@ describe("CartAdmin", () => {
   });
 
   //Test Case ID: 2
-  it("should not add product to cart when units are lower tan 5)", async () => {
+  it("Test should not add product to cart when units are lower tan 5)", async () => {
     const userId = "user1";
     const productId = "product1";
     const units = -2;
@@ -37,7 +37,7 @@ describe("CartAdmin", () => {
   });
 
   //Test Case ID: 3
-  it("should not add product to cart when units are higher tan 5)", async () => {
+  it("Test should not add product to cart when units are higher tan 5)", async () => {
     const userId = "user1";
     const productId = "product1";
     const units = 70;
@@ -53,7 +53,7 @@ describe("CartAdmin", () => {
   //Asumimos que pasa porque no deja correr si quiera con las unidades como string
 
   //Test Case ID: 5
-  it("should not generate an order when cart is empty", async () => {
+  it("Test should not generate an order when cart is empty", async () => {
     const userId = "user1";
     const address = "Guacima";
     const totalPrice = 5000;
@@ -66,7 +66,7 @@ describe("CartAdmin", () => {
    });
 
    //Test Case ID: 6
-   it("should generate an order whit products in the cart", async () => {
+   it("Test should generate an order whit products in the cart", async () => {
     const userId = "user1";
     const address = "Guacima";
     const totalPrice = 5000;
@@ -80,7 +80,7 @@ describe("CartAdmin", () => {
    });
 
      //Test Case ID: 7
-  it("should generate an order whit products in the car and handle error when registering the order.", async () => {
+  it("Test should generate an order whit products in the car and handle error when registering the order.", async () => {
     const userId = "user1";
     const address = "Guacima";
     const totalPrice = 5000;
