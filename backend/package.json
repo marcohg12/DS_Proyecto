@@ -55,8 +55,8 @@
     "ts-jest": "^29.1.2"
   },
   "jest": {
-    "present": "ts-jest",
-    "testEnviroment": "node",
+    "preset": "ts-jest",
+    "testEnvironment": "node",
     "collectCoverage": true,
     "coveragePathIgnorePatterns": [
       "/node_modules/",

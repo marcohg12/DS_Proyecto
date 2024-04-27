@@ -1,16 +1,36 @@
-class CartDAOStub {
+import { ICartDAO } from "./ICartDAO";
+class CartDAOStub implements ICartDAO {
+  private addProductValue: number;
+  private findProductValue: number;
+
   async findProduct(productId: string, userId: string): Promise<number> {
-    return -1; // Simulamos que el producto no está en el carrito
+    return Promise.resolve(this.findProductValue);
   }
 
-  async addProduct(productId: string, units: number, userId: string): Promise<void> {
+  async addProduct(
+    productId: string,
+    units: number,
+    userId: string
+  ): Promise<any> {
     // Simulamos la adición de un producto al carrito
-    return Promise.resolve();
+    return Promise.resolve(this.addProductValue + units);
   }
 
-  async updateUnits(productId: string, units: number, userId: string): Promise<void> {
+  public setAddProductValue(val: number): void {
+    this.addProductValue = val;
+  }
+
+  public setFindProductValue(val: number): void {
+    this.findProductValue = val;
+  }
+
+  async updateUnits(
+    productId: string,
+    units: number,
+    userId: string
+  ): Promise<any> {
     // Simulamos la actualización de unidades de un producto en el carrito
-    return Promise.resolve();
+    return Promise.resolve(units);
   }
 
   // Stub para el método getCart
@@ -29,8 +49,15 @@ class CartDAOStub {
   }
 
   // Stub para el método registerOrder
-  async registerOrder(userId: string): Promise<void> {
-    return Promise.resolve();
+  async registerOrder(
+    client: string,
+    orderDate: Date,
+    address: string,
+    priceWithDelivery: Number,
+    lineProducts: { id: string; name: string; units: Number; price: Number }[],
+    state: Number
+  ): Promise<string> {
+    return Promise.resolve("Hello");
   }
 }
 
