@@ -1,36 +1,60 @@
 import { CartAdmin } from '../CartAdmin';
-import CartDAOStub from './CartDaoStub'; // Importamos el stub
+import { CartDAO } from '../../daos/CartDAO';
+import { ToManyProductsInCart } from '../../exceptions/exceptions';
+
+// Mock the fs module
+jest.mock('fs');
+
+// Create a mock implementation for CartDAO
+jest.mock('../../daos/CartDAO', () => {
+  return {
+    CartDAO: jest.fn().mockImplementation(() => ({
+      findProduct: jest.fn(),
+      addProduct: jest.fn(),
+      updateUnits: jest.fn(),
+      deleteProduct: jest.fn(),
+      getCart: jest.fn(),
+      registerOrder: jest.fn(),
+      deleteAll: jest.fn(),
+    })),
+  };
+});
 
 describe('CartAdmin', () => {
   let cartAdmin: CartAdmin;
-  let cartDaoStub: CartDAOStub;
-
+  let cartDAO: CartDAO;
+  
   beforeEach(() => {
-    // Se crea una instancia de CartAdmin antes de cada prueba
+    cartDAO = new CartDAO();
     cartAdmin = new CartAdmin();
-
-    // Creamos una instancia del CartDAOStub
-    cartDaoStub = new CartDAOStub();
-
-    // Sobrescribimos el método getInstance de CartDAO para devolver el stub en su lugar
-    jest.spyOn(CartDAOStub.prototype, 'findProduct').mockImplementation(cartDaoStub.findProduct);
-    jest.spyOn(CartDAOStub.prototype, 'addProduct').mockImplementation(cartDaoStub.addProduct);
   });
 
-  it('should add product to cart when units are in range (0-5)', async () => {
-    const userId = 'user1';
-    const productId = 'product1';
-    const units = 3;
+  describe('addProductToCart', () => {
+    it('should add product to cart if units are less than or equal to 5', async () => {
+      cartDAO.findProduct.mockResolvedValue(-1);
+      await cartAdmin.addProductToCart('userId', 'productId', 3);
+      expect(cartDAO.addProduct).toHaveBeenCalledWith('productId', 3, 'userId');
+    });
 
-    // Llamamos al método addProductToCart
-    await cartAdmin.addProductToCart(userId, productId, units);
+    it('should throw exception if units exceed 5', async () => {
+      cartDAO.findProduct.mockResolvedValue(2); // Assuming there are already 2 units in cart
+      await expect(cartAdmin.addProductToCart('userId', 'productId', 4)).rejects.toThrow(ToManyProductsInCart);
+    });
 
-    // Verificamos que el método addProduct fue llamado con los parámetros correctos
-    expect(cartDaoStub.addProduct).toHaveBeenCalledWith(productId, units, userId);
+    // Add more test cases as needed
   });
 
-  // Otros casos de prueba pueden ser escritos para cubrir más escenarios
+  describe('deleteProductFromCart', () => {
+    // Write test cases for deleteProductFromCart method
+  });
 
+  describe('getCart', () => {
+    // Write test cases for getCart method
+  });
+
+  describe('sendOrder', () => {
+    // Write test cases for sendOrder method
+  });
 });
 
 

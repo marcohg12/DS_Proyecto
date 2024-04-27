@@ -1,6 +1,6 @@
 class CartDAOStub {
   async findProduct(productId: string, userId: string): Promise<number> {
-    return -1; // Simulamos que el producto no está en el carrito
+    return 1; // Simulamos que el producto no está en el carrito
   }
 
   async addProduct(productId: string, units: number, userId: string): Promise<void> {
@@ -29,7 +29,7 @@ class CartDAOStub {
   }
 
   // Stub para el método registerOrder
-  async registerOrder(userId: string): Promise<void> {
+  async registerOrder(userId: string, date: Date, address: string, totalPrice: Number, lineProducts: any, state: Number): Promise<void> {
     return Promise.resolve();
   }
 }

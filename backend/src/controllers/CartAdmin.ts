@@ -1,4 +1,4 @@
-import { CartDAO } from "../daos/CartDAO";
+import { CartDAO } from "./__mocks__/CartDao";
 const { ToManyProductsInCart } = require("../exceptions/exceptions");
 const fs = require("fs");
 
